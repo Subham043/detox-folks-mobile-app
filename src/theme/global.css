@@ -1,0 +1,51 @@
+.no-underline{
+    text-decoration: none;
+}
+.text-center{
+    text-align: center;
+}
+.mb-1{
+    margin-bottom: 1rem;
+}
+.swiper{
+    padding-bottom: 25px;
+}
+
+.swiper .swiper-pagination-bullet{
+    background: #cccccc;
+    opacity: 1;
+}
+
+.swiper .swiper-pagination-bullet-active{
+    background: #222;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.m-0{
+    margin: 0;
+}
+.mt-1{
+    margin-top: 1rem;
+}
+.w-100{
+    width: 100%;
+}
+
+.Toastify__toast-container{
+    z-index: 9999999999;
+}
+
+.Toastify__toast-container--bottom-center {
+    bottom: var(--ion-safe-area-bottom);
+}
+
+.Toastify__toast-container--top-center{
+    top: var(--ion-safe-area-top);
+}
