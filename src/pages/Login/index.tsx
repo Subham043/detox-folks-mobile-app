@@ -4,7 +4,7 @@ import MainHeader from '../../components/MainHeader';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import Input from '../../components/Input';
 import { axiosPublic } from '../../../axios';
@@ -40,6 +40,7 @@ const Login: React.FC = () =>{
     const [loading, setLoading] = useState<boolean>(false);
     const {setAuth} = useContext(AuthContext);
     const {toastSuccess, toastError} = useToast();
+    const history = useHistory();
 
     const {
         handleSubmit,
@@ -69,6 +70,7 @@ const Login: React.FC = () =>{
             token_type: response.data.token_type,
             user: response.data.user
           }})
+          history.push('/account');
         } catch (error: any) {
           if (error?.response?.data?.message) {
             toastError(error?.response?.data?.message);

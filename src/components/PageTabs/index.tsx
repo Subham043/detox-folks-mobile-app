@@ -16,8 +16,14 @@ import ForgotPassword from "../../pages/ForgotPassword";
 import Profile from "../../pages/Profile";
 import Setting from "../../pages/Setting";
 import Account from "../../pages/Account";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import GuestRoute from "../GuestRoute";
+import ProtectedRoute from "../ProtectedRoute";
 
 const PageTabs: React.FC = () => {
+
+  const {auth} = useContext(AuthContext);
 
   return (
     <IonApp>
@@ -31,12 +37,12 @@ const PageTabs: React.FC = () => {
             <Route exact path="/product-detail" component={ProductDetail}></Route>
             <Route exact path="/search" component={Search}></Route>
             <Route exact path="/cart" component={Cart}></Route>
-            <Route exact path="/login" component={Login}></Route>
-            <Route exact path="/register" component={Register}></Route>
-            <Route exact path="/forgot-password" component={ForgotPassword}></Route>
-            <Route exact path="/profile" component={Profile}></Route>
-            <Route exact path="/setting" component={Setting}></Route>
-            <Route exact path="/account" component={Account}></Route>
+            <ProtectedRoute exact path="/profile" component={Profile}></ProtectedRoute>
+            <ProtectedRoute exact path="/setting" component={Setting}></ProtectedRoute>
+            <ProtectedRoute exact path="/account" component={Account}></ProtectedRoute>
+            <GuestRoute exact path="/login" component={Login}></GuestRoute>
+            <GuestRoute exact path="/register" component={Register}></GuestRoute>
+            <GuestRoute exact path="/forgot-password" component={ForgotPassword}></GuestRoute>
             <Route exact path="/">
               <Redirect to="/home" />
             </Route>
@@ -60,7 +66,7 @@ const PageTabs: React.FC = () => {
               <IonLabel>Cart</IonLabel>
             </IonTabButton>
 
-            <IonTabButton className='main-tabs' tab="account" href="/account">
+            <IonTabButton className='main-tabs' tab={auth.authenticated ? "account" : "login"} href={auth.authenticated ? "/account" : "/login"}>
               <IonIcon icon={personCircleOutline} />
               <IonLabel>Account</IonLabel>
             </IonTabButton>

@@ -91,15 +91,13 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
       await setAuthLocally({...data});
     }
 
-    const logout = () => {
+    const logout = async () => {
       try {
-          setAuth({auth:authData})
+          await setAuth({auth:authData})
       } catch (error) {
           console.log(error);
       }
     }
-
-    console.log('rendered')
     
     return (
       <AuthContext.Provider value={{...auth, setAuth, logout}}>
