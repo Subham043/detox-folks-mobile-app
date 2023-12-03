@@ -57,11 +57,11 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
     
       const auth:AType = await JSON.parse(ret.value);
       
-      if(!auth.auth.authenticated){
-        setAuth({auth:authData})
+      if(auth.auth.authenticated){
+        // setAuth({auth:authData})
+        await getUserDetails(auth)
         return;
       }
-      await getUserDetails(auth)
       
     }
 
@@ -81,9 +81,7 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
           user: response.data.user
         }};
         setAuth({...data})
-      } catch (error) {
-        setAuth({auth:authData})
-      }
+      } catch (error) {}
     }
     
 
@@ -95,9 +93,7 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
     const logout = async () => {
       try {
           await setAuth({auth:authData})
-      } catch (error) {
-          console.log(error);
-      }
+      } catch (error) {}
     }
     
     return (
