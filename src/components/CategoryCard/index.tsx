@@ -10,7 +10,7 @@ type Props = {
 
 const CategoryCard: React.FC<Props> = ({text, image, link}) => <Link className="no-underline" to={link}>
     <IonCard className="category-card">
-        <IonImg alt="category" src={image} />
+        <IonImg alt="category" src={image} class="category-card-image" />
         <IonCardHeader className="category-card-header">
             <IonText color="dark">
                 <p className="category-card-text">{text}</p>
