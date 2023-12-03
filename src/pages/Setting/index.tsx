@@ -115,7 +115,7 @@ const Setting: React.FC = () => {
 
     return (
         <IonPage>
-            <MainHeader isMainHeader={false} name="Password" link="/account" />
+            <MainHeader isMainHeader={false} name="Password" />
             <IonContent fullscreen={false} forceOverscroll={true}>
                 <CommonHeading text="Password Update" />
                 <IonCard>

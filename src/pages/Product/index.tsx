@@ -7,7 +7,7 @@ import ProductCard from '../../components/ProductCard';
 const Product: React.FC = () => {
   return (
     <IonPage>
-        <MainHeader isMainHeader={false} name='Product' link='/sub-category' />
+        <MainHeader isMainHeader={false} name='Product' />
         <IonContent
           fullscreen={false}
           forceOverscroll={false}

@@ -9,7 +9,7 @@ import ProductCard from '../../components/ProductCard';
 const ProductDetail: React.FC = () => {
   return (
     <IonPage>
-        <MainHeader isMainHeader={false} name='Product' link='/home' />
+        <MainHeader isMainHeader={false} name='Product' />
         <IonContent
           fullscreen={false}
           forceOverscroll={false}

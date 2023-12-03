@@ -81,14 +81,14 @@ export interface MetaLinkType<> {
 }
 
 export interface MetaType<> {
-    current_page?: number | undefined;
-    from?: number | undefined;
-    last_page?: number | undefined;
-    per_page?: number | undefined;
-    to?: number | undefined;
-    total?: number | undefined;
-    path?: string | undefined;
-    links?: MetaLinkType[] | undefined;
+    current_page: number | null;
+    from: number | null;
+    last_page: number | null;
+    per_page: number | null;
+    to: number | null;
+    total: number | null;
+    path: string | null;
+    links: MetaLinkType[] | null;
 }
 
 export interface BlogResponseType<> {

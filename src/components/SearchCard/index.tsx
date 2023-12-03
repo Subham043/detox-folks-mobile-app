@@ -9,12 +9,14 @@ type Props = {
     image: string;
 }
 
-const SearchCard: React.FC<Props> = ({text, image, link, type}) => <Link className="no-underline search-card" to={link}>
-    <IonImg class='search-card-img' alt="product" src={image} />
-    <IonText color="dark">
-        <p className="search-card-text">{text}</p>
-        <p className="search-card-price">{type}</p>
-    </IonText>
-</Link>
+const SearchCard: React.FC<Props> = ({text, image, link, type}) => <div className="search-holder">
+        <Link className="no-underline search-card" to={link}>
+            <IonImg class='search-card-img' alt="product" src={image} />
+            <IonText color="dark" className="search-card-text-wrapper">
+                <p className="search-card-text">{text}</p>
+                <p className="search-card-price">{type}</p>
+            </IonText>
+        </Link>
+    </div>
 
 export default SearchCard

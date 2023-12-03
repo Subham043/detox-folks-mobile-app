@@ -8,7 +8,7 @@ import ShowMoreButton from '../../components/ShowMoreButton';
 const SubCategory: React.FC = () => {
   return (
     <IonPage>
-        <MainHeader isMainHeader={false} name='Sub Category' link='/category' />
+        <MainHeader isMainHeader={false} name='Sub Category' />
         <IonContent
           fullscreen={false}
           forceOverscroll={false}

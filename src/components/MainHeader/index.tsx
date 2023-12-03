@@ -1,22 +1,23 @@
 import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonImg, IonText, IonTitle, IonToolbar } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import './MainHeader.css'
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 type Props = {
     isMainHeader: true;
 } | {
     isMainHeader: false;
     name: string;
-    link: string;
 }
 
-const MainHeader: React.FC<Props> = (props) => <IonHeader translucent={true} className='main-header'>
+const MainHeader: React.FC<Props> = (props) => {
+    const history = useHistory();
+return <IonHeader translucent={true} className='main-header'>
     <IonToolbar className='main-header-toolbar'>
         {
             !props.isMainHeader ? <>
                 <IonButtons slot="start">
-                    <IonBackButton defaultHref={props.link}></IonBackButton>
+                    <IonButton onClick={()=>history.goBack()}></IonButton>
                 </IonButtons>
                 <IonTitle>{props.name}</IonTitle>
             </> :
@@ -33,5 +34,6 @@ const MainHeader: React.FC<Props> = (props) => <IonHeader translucent={true} cla
     </IonButtons>
     </IonToolbar>
 </IonHeader>
+}
 
 export default MainHeader;

@@ -38,6 +38,14 @@
     width: 100%;
 }
 
+.h-100{
+    height: 100%;
+}
+
+.pb-1{
+    padding-bottom: 1rem;
+}
+
 .Toastify__toast-container{
     z-index: 9999999999;
 }
