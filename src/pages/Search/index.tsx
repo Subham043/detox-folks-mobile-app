@@ -65,7 +65,7 @@ const Search: React.FC = () => {
                     overscan={searchData ? searchData.flat().length: PAGE_SIZE}
                     style={{ flex: 1 }}
                     atBottomStateChange={(atBottom)=> atBottom && setSize(size+1)}
-                    itemContent={(index, item) => (<SearchCard link={item.search_type=='PRODUCT' ? `/products/${item.slug}` : (item.search_type=='CATEGORY' ? `/category/${item.slug}/product` : `/sub-category/${item.slug}/product`)} image={item.image} text={item.name} type={item.search_type} key={index} />)}
+                    itemContent={(index, item) => (<SearchCard link={item.search_type=='PRODUCT' ? `/product-detail/${item.slug}` : (item.search_type=='CATEGORY' ? `/product?category_slug=${item.slug}` : `/product?sub_category_slug=${item.slug}`)} image={item.image} text={item.name} type={item.search_type} key={index} />)}
                     components={{Footer: isSearchLoading ? Footer : Spacing}}
                 />
             </IonContent>

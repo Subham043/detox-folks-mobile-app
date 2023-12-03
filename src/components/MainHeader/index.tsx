@@ -1,5 +1,5 @@
-import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonImg, IonText, IonTitle, IonToolbar } from "@ionic/react";
-import { searchOutline } from "ionicons/icons";
+import { IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar } from "@ionic/react";
+import { arrowBack, searchOutline } from "ionicons/icons";
 import './MainHeader.css'
 import { Link, useHistory } from "react-router-dom";
 
@@ -17,7 +17,9 @@ return <IonHeader translucent={true} className='main-header'>
         {
             !props.isMainHeader ? <>
                 <IonButtons slot="start">
-                    <IonButton onClick={()=>history.goBack()}></IonButton>
+                    <IonButton onClick={()=>history.goBack()}>
+                        <IonIcon icon={arrowBack} />
+                    </IonButton>
                 </IonButtons>
                 <IonTitle>{props.name}</IonTitle>
             </> :

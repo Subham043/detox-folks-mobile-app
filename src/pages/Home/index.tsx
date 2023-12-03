@@ -1,11 +1,8 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
 import './Home.css';
 import MainHeader from '../../components/MainHeader';
-import CommonHeading from '../../components/CommonHeading';
-import CategoryCard from '../../components/CategoryCard';
-import ShowMoreButton from '../../components/ShowMoreButton';
-import ProductCard from '../../components/ProductCard';
 import CategorySection from '../../components/CategorySection';
+import SpecialProductSection from '../../components/SpecialProductSection';
 
 const Home: React.FC = () => {
   return (
@@ -16,52 +13,9 @@ const Home: React.FC = () => {
           forceOverscroll={false}
         >
             <CategorySection />
-            <CommonHeading text='Our Featured Products' />
-            <IonGrid>
-                <IonRow className="ion-align-items-center ion-justify-content-between">
-                    <IonCol
-                        size="6"
-                        size-xl="3"
-                        size-lg="3"
-                        size-md="4"
-                        size-sm="6"
-                        size-xs="6"
-                    >
-                        <ProductCard image='https://server-api.parcelcounter.in/storage/categories/ZcNbbUfRJLes1OME1OZWJGBnMPQJGzSHMEpoAjm7.jpg' link='/category/1' text='Product 1' />
-                    </IonCol>
-                    <IonCol
-                        size="6"
-                        size-xl="3"
-                        size-lg="3"
-                        size-md="4"
-                        size-sm="6"
-                        size-xs="6"
-                    >
-                        <ProductCard image='https://server-api.parcelcounter.in/storage/categories/ZcNbbUfRJLes1OME1OZWJGBnMPQJGzSHMEpoAjm7.jpg' link='/category/1' text='Product 1' />
-                    </IonCol>
-                    <IonCol
-                        size="6"
-                        size-xl="3"
-                        size-lg="3"
-                        size-md="4"
-                        size-sm="6"
-                        size-xs="6"
-                    >
-                        <ProductCard image='https://server-api.parcelcounter.in/storage/categories/ZcNbbUfRJLes1OME1OZWJGBnMPQJGzSHMEpoAjm7.jpg' link='/category/1' text='Product 1' />
-                    </IonCol>
-                    <IonCol
-                        size="6"
-                        size-xl="3"
-                        size-lg="3"
-                        size-md="4"
-                        size-sm="6"
-                        size-xs="6"
-                    >
-                        <ProductCard image='https://server-api.parcelcounter.in/storage/categories/ZcNbbUfRJLes1OME1OZWJGBnMPQJGzSHMEpoAjm7.jpg' link='/category/1' text='Product 1' />
-                    </IonCol>
-                </IonRow>
-            </IonGrid>
-            <ShowMoreButton link='/home' />
+            <SpecialProductSection slug='is_featured' name='Our Featured Products' />
+            <SpecialProductSection slug='is_new' name='Our New Products' />
+            <SpecialProductSection slug='is_on_sale' name='On Sale Products' />
         </IonContent>
     </IonPage>
   );

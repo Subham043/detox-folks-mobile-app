@@ -20,6 +20,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import GuestRoute from "../GuestRoute";
 import ProtectedRoute from "../ProtectedRoute";
+import SpecialProduct from "../../pages/SpecialProduct";
 
 const PageTabs: React.FC = () => {
 
@@ -37,6 +38,7 @@ const PageTabs: React.FC = () => {
             <Route exact path="/product-detail" component={ProductDetail}></Route>
             <Route exact path="/search" component={Search}></Route>
             <Route exact path="/cart" component={Cart}></Route>
+            <Route exact path="/special-product/:slug" component={SpecialProduct}></Route>
             <ProtectedRoute exact path="/profile" component={Profile}></ProtectedRoute>
             <ProtectedRoute exact path="/setting" component={Setting}></ProtectedRoute>
             <ProtectedRoute exact path="/account" component={Account}></ProtectedRoute>

@@ -11,7 +11,7 @@ type Props = {
 
 const ProductCard: React.FC<Props> = ({text, image, link}) => <IonCard className="product-card">
     <Link className="no-underline" to={link}>
-        <IonImg alt="product" src={image} />
+        <IonImg alt="product" src={image} className="product-card-image" />
     </Link>
     <IonCardHeader className="product-card-header">
         <IonText color="dark">

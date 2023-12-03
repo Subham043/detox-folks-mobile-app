@@ -1,6 +1,5 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow } from '@ionic/react';
+import { IonCol, IonGrid, IonRow } from '@ionic/react';
 import './CategorySection.css';
-import MainHeader from '../../components/MainHeader';
 import CommonHeading from '../../components/CommonHeading';
 import CategoryCard from '../../components/CategoryCard';
 import LoadMoreButton from '../../components/LoadMoreButton';
@@ -39,12 +38,11 @@ const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => 
         parallel: false
     });
     
-
     return (
         <>
             <CommonHeading text='Our Category' />
             <IonGrid>
-                <IonRow className="ion-align-items-center ion-justify-content-between">
+                <IonRow className="ion-align-items-center ion-justify-content-center">
                     {
                         (data ? data.flat(): []).map((item, i) => <IonCol
                         size="6"
@@ -55,7 +53,7 @@ const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => 
                         size-xs="6"
                         key={i}
                     >
-                        <CategoryCard image={item.image} text={item.name} link={item.sub_categories.length>0 ? `/category/${item.slug}` : `/category/${item.slug}/product`}  />
+                        <CategoryCard image={item.image} text={item.name} link={item.sub_categories.length>0 ? `/sub-category?category_slug=${item.slug}` : `/product?category_slug=${item.slug}`}  />
                     </IonCol>)
                     }
                 </IonRow>
