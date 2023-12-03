@@ -44,7 +44,7 @@ const Search: React.FC = () => {
     });
 
     const searchFieldHandler = (ev:CustomEvent<SearchbarInputEventDetail>) => setSearch(ev.detail.value ? ev.detail.value : '');
-
+    
     return (
         <IonPage>
             <IonHeader translucent={true}>

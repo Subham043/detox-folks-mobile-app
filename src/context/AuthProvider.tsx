@@ -43,9 +43,10 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
     });
 
     useEffect(() => {
-      getAuthFromPreferences();
+      let isMounted = true;
+      isMounted && getAuthFromPreferences();
       
-      return () => {}
+      return () => {isMounted=false}
     }, [])
     
     const getAuthFromPreferences = async() => {
