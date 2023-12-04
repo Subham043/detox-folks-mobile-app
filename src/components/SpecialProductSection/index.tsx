@@ -1,14 +1,13 @@
-import { IonCol, IonGrid, IonRow } from '@ionic/react';
+import { IonCol, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonRow } from '@ionic/react';
 import './SpecialProductSection.css';
 import CommonHeading from '../../components/CommonHeading';
 import ProductCard from '../../components/ProductCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback } from 'react';
-import { ProductResponseType } from '../../helper/types';
+import { ProductType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
-import LoadMoreButton from '../../components/LoadMoreButton';
 import ShowMoreButton from '../ShowMoreButton';
 
 const PAGE_SIZE = 20;
@@ -21,7 +20,7 @@ type Props = {
 
 const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) => {
     const axiosPrivate = useAxiosPrivate();
-    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data);
+    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if (previousPageData && previousPageData.length===0) return null;
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${slug ? `&filter[${slug}]=true` : ''}`;
@@ -32,7 +31,7 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
         size,
         setSize,
         isLoading
-    } = useSWRInfinite<ProductResponseType>(getKey, fetcher,{
+    } = useSWRInfinite<ProductType>(getKey, fetcher,{
         initialSize:1,
         revalidateAll: false,
         revalidateFirstPage: false,
@@ -46,17 +45,17 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
             <IonGrid>
                 <IonRow className="ion-align-items-center ion-justify-content-between">
                     {
-                        (data ? data: []).map((item, i) => item.data.map((itm, index) =><IonCol
-                        size="6"
-                        size-xl="3"
-                        size-lg="3"
-                        size-md="4"
-                        size-sm="6"
-                        size-xs="6"
-                        key={index}
-                    >
-                        <ProductCard {...itm} />
-                    </IonCol>))
+                        (data ? data.flat(): []).map((item, i) => <IonCol
+                            size="6"
+                            size-xl="3"
+                            size-lg="3"
+                            size-md="4"
+                            size-sm="6"
+                            size-xs="6"
+                            key={i}
+                        >
+                            <ProductCard {...item} />
+                        </IonCol>)
                     }
                 </IonRow>
             </IonGrid>
@@ -65,7 +64,14 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
             }
             {
                 inHomePage ? <ShowMoreButton link={`/special-product/${slug}`} /> : 
-                (data && data[data.length-1].meta && data[data.length-1].meta.current_page!==data[data.length-1].meta.last_page) && <LoadMoreButton clickHandler={()=>setSize(size+1)} />
+                <IonInfiniteScroll
+                    onIonInfinite={(ev) => {
+                    setSize(size+1);
+                    ev.target.complete()
+                  }}
+                >
+                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
+                </IonInfiniteScroll>
             }
         </>
     );

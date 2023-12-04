@@ -1,15 +1,14 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonRow } from '@ionic/react';
 import './Product.css';
 import MainHeader from '../../components/MainHeader';
 import CommonHeading from '../../components/CommonHeading';
 import ProductCard from '../../components/ProductCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback } from 'react';
-import { CategoryType, ProductResponseType, SubCategoryType } from '../../helper/types';
+import { CategoryType, ProductType, SubCategoryType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
-import LoadMoreButton from '../../components/LoadMoreButton';
 import { useLocation } from 'react-router';
 import useSWR from 'swr'
 
@@ -23,7 +22,7 @@ const Product: React.FC = () => {
     const axiosPrivate = useAxiosPrivate();
     const { data:categoryData, isLoading:isCategoryLoading } = useSWR<{category: CategoryType}>(category_slug ? api_routes.categories + `/${category_slug}` : null);
     const { data:subCategoryData, isLoading:isSubCategoryLoading } = useSWR<{subCategory: SubCategoryType}>(sub_category_slug ? api_routes.sub_categories + `/${sub_category_slug}` : null);
-    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data);
+    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!categoryData && !subCategoryData) return null;
         if (previousPageData && previousPageData.length===0) return null;
@@ -35,7 +34,7 @@ const Product: React.FC = () => {
         size,
         setSize,
         isLoading
-    } = useSWRInfinite<ProductResponseType>(getKey, fetcher,{
+    } = useSWRInfinite<ProductType>(getKey, fetcher,{
         initialSize:1,
         revalidateAll: false,
         revalidateFirstPage: false,
@@ -54,26 +53,31 @@ const Product: React.FC = () => {
                 <IonGrid>
                     <IonRow className="ion-align-items-center ion-justify-content-between">
                         {
-                            (data ? data: []).map((item, i) => item.data.map((itm, index) => <IonCol
-                            size="6"
-                            size-xl="3"
-                            size-lg="3"
-                            size-md="4"
-                            size-sm="6"
-                            size-xs="6"
-                            key={index}
-                        >
-                            <ProductCard {...itm} />
-                        </IonCol>))
+                            (data ? data.flat(): []).map((item, i) => <IonCol
+                                size="6"
+                                size-xl="3"
+                                size-lg="3"
+                                size-md="4"
+                                size-sm="6"
+                                size-xs="6"
+                                key={i}
+                            >
+                                <ProductCard {...item} />
+                            </IonCol>)
                         }
                     </IonRow>
                 </IonGrid>
                 {
                     (isLoading || isCategoryLoading || isSubCategoryLoading) && <LoadingCard itemCount={6} column={6} />
                 }
-                {
-                    (data && data[data.length-1].meta && data[data.length-1].meta.current_page!==data[data.length-1].meta.last_page) && <LoadMoreButton clickHandler={()=>setSize(size+1)} />
-                }
+                <IonInfiniteScroll
+                    onIonInfinite={(ev) => {
+                    setSize(size+1);
+                    ev.target.complete()
+                  }}
+                >
+                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
+                </IonInfiniteScroll>
             </IonContent>
         </IonPage>
     );

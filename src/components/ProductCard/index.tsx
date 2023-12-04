@@ -7,7 +7,7 @@ import { useCart } from "../../hooks/useCart";
 
 
 const ProductCard: React.FC<ProductType> = ({image,name, id, slug, product_prices, min_cart_quantity, cart_quantity_interval}) => {
-    const {quantity, cartLoading, cartItemLoading, cart_product_item, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id, product_prices, min_cart_quantity, cart_quantity_interval});
+    const {quantity, cartItemLoading, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id, product_prices, min_cart_quantity, cart_quantity_interval});
     return <IonCard className="product-card">
         <Link className="no-underline" to={`/product-detail/${slug}`}>
             <IonImg alt="product" src={image} className="product-card-image" />

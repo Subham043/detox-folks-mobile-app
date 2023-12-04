@@ -5,8 +5,8 @@ import { CartType } from "../../helper/types";
 import { useCart } from "../../hooks/useCart";
 import './CartItem.css';
 
-const CartItem: React.FC<CartType> = ({ id, product, product_price, amount }) => {
-    const {quantity, cartLoading, cartItemLoading, cart_product_item, incrementQuantity, changeQuantity, decrementQuantity, deleteItemCart} = useCart({id: product.id, product_prices: product.product_prices, min_cart_quantity: product.min_cart_quantity, cart_quantity_interval: product.cart_quantity_interval});
+const CartItem: React.FC<CartType> = ({ product, product_price, amount }) => {
+    const {quantity, cartItemLoading, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id: product.id, product_prices: product.product_prices, min_cart_quantity: product.min_cart_quantity, cart_quantity_interval: product.cart_quantity_interval});
 
     return <IonItemDivider className="cart-divider">
         <IonRow className="ion-align-items-center ion-justify-content-between w-100">
