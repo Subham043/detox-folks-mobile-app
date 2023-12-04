@@ -55,7 +55,7 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
                         size-xs="6"
                         key={index}
                     >
-                        <ProductCard image={itm.image} link={`/product-detail/${itm.id}`} text={itm.name} />
+                        <ProductCard {...itm} />
                     </IonCol>))
                     }
                 </IonRow>

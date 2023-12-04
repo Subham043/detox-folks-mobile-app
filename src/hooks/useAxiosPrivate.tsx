@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { axiosPublic } from "../../axios";
 import { AuthContext } from "../context/AuthProvider";
+import { useSWRConfig } from "swr";
 
 export function useAxiosPrivate(){
     const {auth} = useContext(AuthContext);

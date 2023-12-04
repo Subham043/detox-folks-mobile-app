@@ -21,10 +21,12 @@ import { AuthContext } from "../../context/AuthProvider";
 import GuestRoute from "../GuestRoute";
 import ProtectedRoute from "../ProtectedRoute";
 import SpecialProduct from "../../pages/SpecialProduct";
+import { CartContext } from "../../context/CartProvider";
 
 const PageTabs: React.FC = () => {
 
   const {auth} = useContext(AuthContext);
+  const { cart } = useContext(CartContext);
 
   return (
     <IonApp>
@@ -35,7 +37,7 @@ const PageTabs: React.FC = () => {
             <Route exact path="/category" component={Category}></Route>
             <Route exact path="/sub-category" component={SubCategory}></Route>
             <Route exact path="/product" component={Product}></Route>
-            <Route exact path="/product-detail" component={ProductDetail}></Route>
+            <Route exact path="/product-detail/:slug" component={ProductDetail}></Route>
             <Route exact path="/search" component={Search}></Route>
             <Route exact path="/cart" component={Cart}></Route>
             <Route exact path="/special-product/:slug" component={SpecialProduct}></Route>
@@ -63,7 +65,7 @@ const PageTabs: React.FC = () => {
             <IonTabButton className='main-tabs' tab="cart" href="/cart">
               <>
                 <IonIcon icon={cartOutline} />
-                <IonBadge color="dark">1</IonBadge>
+                <IonBadge color="dark">{cart.cart.length}</IonBadge>
               </>
               <IonLabel>Cart</IonLabel>
             </IonTabButton>
