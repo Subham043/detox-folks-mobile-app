@@ -7,6 +7,9 @@
 .mb-1{
     margin-bottom: 1rem;
 }
+.mb-2{
+    margin-bottom: 2rem;
+}
 .swiper{
     padding-bottom: 25px;
 }
@@ -33,6 +36,9 @@
 }
 .mt-1{
     margin-top: 1rem;
+}
+.mt-2{
+    margin-top: 2rem;
 }
 .w-100{
     width: 100%;
