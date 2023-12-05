@@ -121,7 +121,7 @@ const Profile: React.FC = () => {
     return (
         <IonPage>
             <MainHeader isMainHeader={false} name="Profile" />
-            <IonContent fullscreen={false} forceOverscroll={true}>
+            <IonContent fullscreen={false} forceOverscroll={false}>
                 <CommonHeading text="Profile" />
                 <IonCard>
                     <IonCardContent>

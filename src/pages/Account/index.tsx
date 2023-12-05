@@ -40,7 +40,7 @@ const Account: React.FC = () => {
     return (
         <IonPage>
             <MainHeader isMainHeader={true} />
-            <IonContent fullscreen={false} forceOverscroll={true}>
+            <IonContent fullscreen={false} forceOverscroll={false}>
                 <Link className="no-underline" to="/profile">
                     <IonItem lines="full" detail={true}>
                         <IonLabel>Profile</IonLabel>

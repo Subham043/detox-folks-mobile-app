@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
 import CommonHeading from '../../components/CommonHeading';
 import './BillingAddress.css';
 import MainHeader from '../../components/MainHeader';
@@ -75,7 +75,16 @@ const BillingAddress: React.FC = () => {
     return (
         <IonPage>
             <MainHeader isMainHeader={false} name='Billing Address' />
-            <IonContent fullscreen={false} forceOverscroll={true}>
+            <IonContent fullscreen={false} forceOverscroll={false}>
+                <IonRefresher slot="fixed" onIonRefresh={(event: CustomEvent<RefresherEventDetail>)=>{
+                    setTimeout(() => {
+                        // Any calls to load data go here
+                        auth.authenticated && mutate();
+                        event.detail.complete();
+                    }, 1500);
+                }}>
+                    <IonRefresherContent></IonRefresherContent>
+                </IonRefresher>
                 <CommonHeading text='Billing Address' />
                 <IonList>
                     {
