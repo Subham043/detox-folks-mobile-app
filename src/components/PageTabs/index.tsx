@@ -22,6 +22,8 @@ import GuestRoute from "../GuestRoute";
 import ProtectedRoute from "../ProtectedRoute";
 import SpecialProduct from "../../pages/SpecialProduct";
 import { CartContext } from "../../context/CartProvider";
+import BillingAddress from "../../pages/BillingAddress";
+import BillingInformation from "../../pages/BillingInformation";
 
 const PageTabs: React.FC = () => {
 
@@ -44,6 +46,8 @@ const PageTabs: React.FC = () => {
             <ProtectedRoute exact path="/profile" component={Profile}></ProtectedRoute>
             <ProtectedRoute exact path="/setting" component={Setting}></ProtectedRoute>
             <ProtectedRoute exact path="/account" component={Account}></ProtectedRoute>
+            <ProtectedRoute exact path="/billing-address" component={BillingAddress}></ProtectedRoute>
+            <ProtectedRoute exact path="/billing-information" component={BillingInformation}></ProtectedRoute>
             <GuestRoute exact path="/login" component={Login}></GuestRoute>
             <GuestRoute exact path="/register" component={Register}></GuestRoute>
             <GuestRoute exact path="/forgot-password" component={ForgotPassword}></GuestRoute>

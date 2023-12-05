@@ -11,6 +11,7 @@ import { axiosPublic } from '../../../axios';
 import { api_routes } from '../../helper/routes';
 import { useToast } from '../../hooks/useToast';
 import { AuthContext } from '../../context/AuthProvider';
+import { useSWRConfig } from 'swr';
 
 const schema = yup
   .object({
@@ -41,6 +42,7 @@ const Login: React.FC = () =>{
     const {setAuth} = useContext(AuthContext);
     const {toastSuccess, toastError} = useToast();
     const history = useHistory();
+    const { mutate } = useSWRConfig()
 
     const {
         handleSubmit,
@@ -70,6 +72,7 @@ const Login: React.FC = () =>{
             token_type: response.data.token_type,
             user: response.data.user
           }})
+          mutate(api_routes.cart_all)
           history.push('/account');
         } catch (error: any) {
           if (error?.response?.data?.message) {

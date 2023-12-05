@@ -6,7 +6,7 @@ import {
     IonIcon,
     IonSpinner,
 } from "@ionic/react";
-import { bagCheckOutline, cogOutline, logOutOutline, personCircleOutline } from "ionicons/icons";
+import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, peopleCircleOutline, personCircleOutline } from "ionicons/icons";
 import { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
@@ -51,6 +51,18 @@ const Account: React.FC = () => {
                     <IonItem lines="full" detail={true}>
                         <IonLabel>Setting</IonLabel>
                         <IonIcon icon={cogOutline} slot="start"></IonIcon>
+                    </IonItem>
+                </Link>
+                <Link className="no-underline" to="/billing-information">
+                    <IonItem lines="full" detail={true}>
+                        <IonLabel>Billing Information</IonLabel>
+                        <IonIcon icon={peopleCircleOutline} slot="start"></IonIcon>
+                    </IonItem>
+                </Link>
+                <Link className="no-underline" to="/billing-address">
+                    <IonItem lines="full" detail={true}>
+                        <IonLabel>Billing Address</IonLabel>
+                        <IonIcon icon={locationOutline} slot="start"></IonIcon>
                     </IonItem>
                 </Link>
                 <Link className="no-underline" to="/orders">
