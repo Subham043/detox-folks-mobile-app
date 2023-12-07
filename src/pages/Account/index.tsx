@@ -6,7 +6,7 @@ import {
     IonIcon,
     IonSpinner,
 } from "@ionic/react";
-import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, peopleCircleOutline, personCircleOutline } from "ionicons/icons";
+import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, newspaperOutline, peopleCircleOutline, personCircleOutline } from "ionicons/icons";
 import { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
@@ -14,10 +14,14 @@ import { useToast } from "../../hooks/useToast";
 import { api_routes } from "../../helper/routes";
 import { AuthContext } from "../../context/AuthProvider";
 import MainHeader from "../../components/MainHeader";
+import { LegalResponseType } from "../../helper/types";
+import useSWR from 'swr'
+import { Browser } from "@capacitor/browser";
 
 
 const Account: React.FC = () => {
 
+    const { data } = useSWR<LegalResponseType>(api_routes.legal);
     const {logout} = useContext(AuthContext);
     const [loading, setLoading] = useState<boolean>(false);
     const {toastSuccess, toastError} = useToast();
@@ -36,6 +40,10 @@ const Account: React.FC = () => {
         }finally {
             setLoading(false);
         }
+    }
+
+    const loadPage = async(url:string) =>{
+        await Browser.open({ url });
     }
     return (
         <IonPage>
@@ -71,6 +79,12 @@ const Account: React.FC = () => {
                         <IonIcon icon={bagCheckOutline} slot="start"></IonIcon>
                     </IonItem>
                 </Link>
+                {
+                    data?.legal.map((item, i) => <IonItem lines="full" detail={true} onClick={()=>loadPage(`https://parcelcounter.in/legal/${item.slug}`)} key={i}>
+                        <IonLabel>{item.page_name}</IonLabel>
+                        <IonIcon icon={newspaperOutline} slot="start"></IonIcon>
+                    </IonItem>)
+                }
                 {loading ? (
                     <IonItem lines="full" detail={true}>
                         <IonSpinner name="crescent" color='dark'></IonSpinner>

@@ -1,8 +1,8 @@
-import { IonButton, IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonInput, IonItemDivider, IonPage, IonRow, IonText} from '@ionic/react';
+import { IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonPage, IonRow, IonText} from '@ionic/react';
 import './ProductDetail.css';
 import MainHeader from '../../components/MainHeader';
 import Slider from '../../components/Slider';
-import { cartOutline, checkmarkDoneOutline, informationCircleOutline } from 'ionicons/icons';
+import { checkmarkDoneOutline, informationCircleOutline } from 'ionicons/icons';
 import CommonHeading from '../../components/CommonHeading';
 import ProductCard from '../../components/ProductCard';
 import { RouteComponentProps } from 'react-router';
@@ -12,7 +12,6 @@ import { api_routes } from '../../helper/routes';
 import { useCart } from '../../hooks/useCart';
 import ProductPrice from '../../components/ProductPrice';
 import CartQuantity from '../../components/CartQuantity';
-import SpecialProductSection from '../../components/SpecialProductSection';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback } from 'react';
 import useSWRInfinite from "swr/infinite";
