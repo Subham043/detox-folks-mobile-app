@@ -9,6 +9,7 @@ import { AuthContext } from '../../context/AuthProvider';
 import useSWRInfinite from "swr/infinite";
 import { OrderType } from '../../helper/types';
 import LoadingCard from '../../components/LoadingCard';
+import OrderCard from '../../components/OrderCard';
 
 const PAGE_SIZE = 20;
 
@@ -50,9 +51,15 @@ const Orders: React.FC = () =>{
                 <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
             <CommonHeading text='Orders' />
+            <div className="order-card-wrapper">
+                {
+                    (data ? data.flat(): []).map((item, i) => <OrderCard {...item} key={i} />)
+                }
+            </div>
             {
                 isLoading && <LoadingCard itemCount={6} column={12} />
             }
+            <div className="cart-fixed-spacing-2"></div>
             <IonInfiniteScroll
                 onIonInfinite={(ev) => {
                 setSize(size+1);

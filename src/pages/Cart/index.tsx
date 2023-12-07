@@ -88,7 +88,7 @@ const Cart: React.FC = () => {
             toastSuccess(response.data.message);
             setIsOpen(false)
             mutate(api_routes.cart_all)
-            history.push('/orders');
+            history.push(`/order/${response.data?.order?.id}`);
           }else{
             makePayment(response.data?.order?.payment?.phone_pe_payment_link, response.data?.order?.id)
           }
@@ -111,7 +111,7 @@ const Cart: React.FC = () => {
                 toastSuccess('Order placed successfully.');
                 setIsOpen(false)
                 mutate(api_routes.cart_all)
-                history.push('/orders');
+                history.push(`/order/${response.data?.order?.id}`);
             }
           } catch (error) {
               console.log(error);
