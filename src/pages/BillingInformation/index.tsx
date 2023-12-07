@@ -64,7 +64,7 @@ const BillingInformation: React.FC = () => {
 
     useEffect(()=>{
         let isMounted = true;
-        if(isMounted && auth.authenticated && location.pathname==='/billing-address'){
+        if(isMounted && auth.authenticated && location.pathname==='/billing-information'){
             mutate();
         }
         return () => {
@@ -157,7 +157,7 @@ const BillingInformation: React.FC = () => {
                                 })
                                 setIsOpen(true);
                             }}>
-                                Add New Address
+                                Add New Information
                             </IonButton>
                         </IonCol>
                     </IonRow>
