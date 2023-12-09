@@ -6,6 +6,10 @@ import {
     IonList,
     IonSpinner,
     IonCardContent,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonTextarea,
 } from "@ionic/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -18,6 +22,9 @@ import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 import { api_routes } from "../../helper/routes";
 import Input from "../../components/Input";
 import CommonHeading from "../../components/CommonHeading";
+import { callOutline, mailOutline, locationOutline } from "ionicons/icons";
+import './Contact.css'
+import { ErrorMessage } from "@hookform/error-message";
 
 const fields = [
     {
@@ -47,6 +54,7 @@ const schema = yup
   .object({
     name: yup.string().required(),
     email: yup.string().email().required(),
+    message: yup.string().required(),
     phone: yup
       .string()
       .required()
@@ -55,7 +63,7 @@ const schema = yup
   })
   .required();
 
-const Profile: React.FC = () => {
+const Contact: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
     const {auth} = useContext(AuthContext);
@@ -66,6 +74,7 @@ const Profile: React.FC = () => {
         handleSubmit,
         register,
         getValues,
+        reset,
         setError,
         formState: { errors },
       } = useForm({
@@ -74,6 +83,7 @@ const Profile: React.FC = () => {
           name: auth.user ? auth.user.name : '',
           email: auth.user ? auth.user.email : '',
           phone: auth.user ? auth.user.phone : '',
+          message: '',
         }
       });
       
@@ -81,8 +91,11 @@ const Profile: React.FC = () => {
       const onSubmit = async () => {
         setLoading(true);
         try {
-          const response = await axiosPrivate.post(api_routes.profile_update, getValues());
-          toastSuccess('Profile updated seccessfully.');
+          const response = await axiosPrivate.post(api_routes.enquiry, {...getValues(), page_url: 'https://parcelcounter.in/contact'});
+          toastSuccess(response.data.message);
+          reset({
+            'message': ''
+          })
         } catch (error: any) {
           console.log(error);
           if (error?.response?.data?.message) {
@@ -106,6 +119,12 @@ const Profile: React.FC = () => {
               message: error?.response?.data?.errors?.phone[0],
             });
           }
+          if (error?.response?.data?.errors?.message) {
+            setError("message", {
+              type: "server",
+              message: error?.response?.data?.errors?.message[0],
+            });
+          }
         } finally {
           setLoading(false);
         }
@@ -114,11 +133,34 @@ const Profile: React.FC = () => {
 
     return (
         <IonPage>
-            <MainHeader isMainHeader={false} name="Profile" />
+            <MainHeader isMainHeader={false} name="Contact Us" />
             <IonContent fullscreen={false} forceOverscroll={false}>
-                <CommonHeading text="Profile" />
+                <CommonHeading text="Contact Us" />
                 <IonCard>
-                    <IonCardContent>
+                    <IonItem lines="inset">
+                        <IonIcon icon={mailOutline} slot="start" className='order-detail-billing-icon'></IonIcon>
+                        <IonLabel>
+                            <p className='order-detail-personal-info'>detoxfolks@gmail.com</p>
+                        </IonLabel>
+                    </IonItem>
+                    <IonItem lines="inset">
+                        <IonIcon icon={callOutline} slot="start" className='order-detail-billing-icon'></IonIcon>
+                        <IonLabel>
+                            <p className='order-detail-personal-info'>9380911495</p>
+                        </IonLabel>
+                    </IonItem>
+                    <IonItem lines="inset">
+                        <IonIcon icon={locationOutline} slot="start" className='order-detail-billing-icon'></IonIcon>
+                        <IonLabel className="ion-text-wrap">
+                            <p className='order-detail-personal-info'>2, OVH ROAD, BASAVANAGUDI, BENGALURU, Pin - 560004</p>
+                        </IonLabel>
+                    </IonItem>
+                </IonCard>
+                <IonCard>
+                    <div className='specification-heading mb-0'>
+                        <h6>Drop Your Thoughts</h6>
+                    </div>
+                    <IonCardContent className="pt-0">
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <IonList className="ion-no-padding">
                             {fields.map((item, i) => (
@@ -130,6 +172,26 @@ const Profile: React.FC = () => {
                                 />
                             ))}
                             </IonList>
+                            <IonList className="ion-no-padding">
+                                <>
+                                    <IonItem className="ion-no-padding">
+                                        <IonTextarea
+                                            className="ion-no-padding main-input"
+                                            labelPlacement="floating"
+                                            placeholder='Enter message'
+                                            label='Message'
+                                            inputmode="text"
+                                            {...register('message')}
+                                        >
+                                        </IonTextarea>
+                                    </IonItem>
+                                    <ErrorMessage
+                                        errors={errors}
+                                        name='message'
+                                        as={<div style={{ color: 'red' }} />}
+                                    />
+                                </>
+                            </IonList>
                             <div className='text-center'>
                                 <IonButton
                                     color="dark"
@@ -140,7 +202,7 @@ const Profile: React.FC = () => {
                                     {loading ? (
                                         <IonSpinner name="crescent"></IonSpinner>
                                     ) : (
-                                        "Update"
+                                        "Submit"
                                     )}
                                 </IonButton>
                             </div>
@@ -152,4 +214,4 @@ const Profile: React.FC = () => {
     );
 };
 
-export default Profile;
+export default Contact;

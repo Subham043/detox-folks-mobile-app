@@ -28,6 +28,7 @@ import Orders from "../../pages/Orders";
 import OrderDetail from "../../pages/OrderDetail";
 import { Network } from '@capacitor/network';
 import NoNetwork from "../NoNetwork";
+import Contact from "../../pages/Contact";
 
 const PageTabs: React.FC = () => {
 
@@ -74,6 +75,7 @@ const PageTabs: React.FC = () => {
             <Route exact path="/special-product/:slug" component={SpecialProduct}></Route>
             <ProtectedRoute exact path="/profile" component={Profile}></ProtectedRoute>
             <ProtectedRoute exact path="/setting" component={Setting}></ProtectedRoute>
+            <ProtectedRoute exact path="/contact" component={Contact}></ProtectedRoute>
             <ProtectedRoute exact path="/account" component={Account}></ProtectedRoute>
             <ProtectedRoute exact path="/billing-address" component={BillingAddress}></ProtectedRoute>
             <ProtectedRoute exact path="/billing-information" component={BillingInformation}></ProtectedRoute>

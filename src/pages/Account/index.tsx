@@ -6,7 +6,7 @@ import {
     IonIcon,
     IonSpinner,
 } from "@ionic/react";
-import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, newspaperOutline, peopleCircleOutline, personCircleOutline } from "ionicons/icons";
+import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, mailUnreadOutline, newspaperOutline, peopleCircleOutline, personCircleOutline } from "ionicons/icons";
 import { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
@@ -77,6 +77,12 @@ const Account: React.FC = () => {
                     <IonItem lines="full" detail={true}>
                         <IonLabel>Orders</IonLabel>
                         <IonIcon icon={bagCheckOutline} slot="start"></IonIcon>
+                    </IonItem>
+                </Link>
+                <Link className="no-underline" to="/contact">
+                    <IonItem lines="full" detail={true}>
+                        <IonLabel>Conact Us</IonLabel>
+                        <IonIcon icon={mailUnreadOutline} slot="start"></IonIcon>
                     </IonItem>
                 </Link>
                 {
