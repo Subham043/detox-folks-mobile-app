@@ -1,4 +1,4 @@
-import { IonApp, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge } from "@ionic/react";
+import { IonApp, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonPage, IonContent } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { homeOutline, fileTrayStackedOutline, cartOutline, personCircleOutline } from "ionicons/icons";
 import { Route, Redirect } from "react-router";
@@ -16,7 +16,7 @@ import ForgotPassword from "../../pages/ForgotPassword";
 import Profile from "../../pages/Profile";
 import Setting from "../../pages/Setting";
 import Account from "../../pages/Account";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import GuestRoute from "../GuestRoute";
 import ProtectedRoute from "../ProtectedRoute";
@@ -26,11 +26,38 @@ import BillingAddress from "../../pages/BillingAddress";
 import BillingInformation from "../../pages/BillingInformation";
 import Orders from "../../pages/Orders";
 import OrderDetail from "../../pages/OrderDetail";
+import { Network } from '@capacitor/network';
+import NoNetwork from "../NoNetwork";
 
 const PageTabs: React.FC = () => {
 
   const {auth} = useContext(AuthContext);
   const { cart } = useContext(CartContext);
+  const [hasNetwork, setHasNetwork] = useState<boolean>(true);
+
+  
+  useEffect(()=>{
+    let isMounted = true;
+    const logCurrentNetworkStatus = async () => {
+      const status = await Network.getStatus();
+    
+      console.log('Network status:', status);
+      setHasNetwork(status.connected);
+    };
+    if(isMounted){
+      Network.addListener('networkStatusChange', async (status) => await logCurrentNetworkStatus());
+      logCurrentNetworkStatus()
+    }
+
+    return () => {
+      Network.removeAllListeners()
+      isMounted=false;
+    }
+  }, [])
+
+  if(!hasNetwork) {
+    return <NoNetwork />
+  }
 
   return (
     <IonApp>
