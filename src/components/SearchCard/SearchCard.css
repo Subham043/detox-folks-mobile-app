@@ -33,7 +33,7 @@
 
 .search-card-text{
     width: 100%;
-    font-size: 20px;
+    font-size: 16px;
     margin-top: 0px;
     margin-bottom: 0px;
     text-overflow: ellipsis;
@@ -42,7 +42,7 @@
 }
 
 .search-card-price{
-    font-size: 16px;
+    font-size: 14px;
     margin: 0px;
     color: green;
 }

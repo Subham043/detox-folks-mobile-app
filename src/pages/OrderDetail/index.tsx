@@ -1,9 +1,9 @@
-import { IonBadge, IonCard, IonCol, IonContent, IonIcon, IonImg, IonItem, IonItemDivider, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonText, RefresherEventDetail } from '@ionic/react';
+import { IonBadge, IonCard, IonCol, IonContent, IonIcon, IonImg, IonItem, IonItemDivider, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
 import './OrderDetail.css';
 import MainHeader from '../../components/MainHeader';
 import useSWR from 'swr'
 import { OrderResponseType, OrderType } from '../../helper/types';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthProvider';
 import { api_routes } from '../../helper/routes';
 import { RouteComponentProps } from 'react-router';
@@ -17,6 +17,7 @@ interface OrderProps extends RouteComponentProps<{
 const OrderDetail: React.FC<OrderProps> = ({match}) =>{
 
     const {auth} = useContext(AuthContext);
+    const [imgLoading, setImgLoading] = useState<boolean>(true);
     const { data:order, isLoading:loading, mutate } = useSWR<{order: OrderType}>(auth.authenticated ? api_routes.place_order_detail + `/${match.params.slug}` : null);
 
     return <IonPage>
@@ -73,7 +74,13 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                                         className='text-left'
                                     >
                                         <div className='order-item-detail-wrapper'>
-                                            <IonImg alt="product" className='cart-card-item-img order-item-img' src={item.image} />
+                                            {
+                                                imgLoading &&
+                                                <div className="text-center mt-1">
+                                                    <IonSpinner color='dark' />
+                                                </div>
+                                            }
+                                            <IonImg alt="product" className='cart-card-item-img order-item-img' src={item.image} onIonImgDidLoad={()=>setImgLoading(false)} />
                                             <IonText color="dark" class='order-item-text'>
                                                 <p className="cart-card-item-text order-item-name">{item.name}</p>
                                                 <p className="cart-card-item-price"><b>&#8377;{item.discount_in_price}</b> / pieces</p>

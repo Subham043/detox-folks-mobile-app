@@ -11,7 +11,7 @@ const OrderCard: React.FC<OrderType> = ({id, total_price, products, statuses, cr
         <div className='order-card'>
             <IonRow className="ion-justify-content-between w-100">
                 <IonCol
-                    size="8"
+                    size="9"
                     className='text-left'
                 >
                     <IonLabel class='order-card-product-label'>
@@ -19,7 +19,7 @@ const OrderCard: React.FC<OrderType> = ({id, total_price, products, statuses, cr
                     </IonLabel>
                 </IonCol>
                 <IonCol
-                    size="4"
+                    size="3"
                     className='text-right'
                 >
                     <IonText>

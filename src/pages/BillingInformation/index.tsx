@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonItemDivider, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
 import CommonHeading from '../../components/CommonHeading';
 import './BillingInformation.css';
 import MainHeader from '../../components/MainHeader';
@@ -89,39 +89,38 @@ const BillingInformation: React.FC = () => {
                 <IonList>
                     {
                         (data ? data.flat(): []).map((item, i) => 
-                            <IonItem key={i}>
-                                <IonIcon aria-hidden="true" icon={peopleCircleOutline} slot="start" className='billing-address-location-icon'></IonIcon>
-                                <IonRow className="ion-align-items-center ion-justify-content-between w-100">
-                                    <IonCol
-                                        size="8"
-                                        className='text-left'
-                                    >
-                                        <IonLabel className='billing-address-text'>
-                                            <h6>{item.name}</h6>
-                                            <p>
-                                                {item.email}, {item.phone}, {item.gst}
-                                            </p>
-                                        </IonLabel>
-                                    </IonCol>
-                                    <IonCol
-                                        size="4"
-                                        className='text-right'
-                                    >
-                                            <IonButton color='dark' size='default' className='billing-address-btn' onClick={()=>{
-                                                setModalData({
-                                                    isEdit:true,
-                                                    data: {...item}
-                                                })
-                                                setIsOpen(true);
-                                            }}>
-                                                <IonIcon icon={createOutline} />
-                                            </IonButton>
-                                            <IonButton color='danger' size='default' className='billing-address-btn' disabled={deleteLoading} onClick={()=>deleteHandler(item.id)}>
-                                               {deleteLoading ? <IonSpinner color='light' />: <IonIcon icon={trashOutline} />}
-                                            </IonButton>
-                                    </IonCol>
-                                </IonRow>
-                            </IonItem>
+                            <IonItemSliding key={item.id}>
+                                <IonItem>
+                                    <IonIcon aria-hidden="true" icon={peopleCircleOutline} slot="start" className='billing-address-location-icon'></IonIcon>
+                                    <IonRow className="ion-align-items-center ion-justify-content-between w-100">
+                                        <IonCol
+                                            size="12"
+                                            className='text-left'
+                                        >
+                                            <IonLabel className='billing-address-text'>
+                                                <h6>{item.name}</h6>
+                                                <p>
+                                                    {item.email}, {item.phone}, {item.gst}
+                                                </p>
+                                            </IonLabel>
+                                        </IonCol>
+                                    </IonRow>
+                                </IonItem>
+                                <IonItemOptions>
+                                    <IonItemOption color='dark' onClick={()=>{
+                                        setModalData({
+                                            isEdit:true,
+                                            data: {...item}
+                                        })
+                                        setIsOpen(true);
+                                    }}>
+                                        <IonIcon slot="icon-only" icon={createOutline} />
+                                    </IonItemOption>
+                                    <IonItemOption color="danger" disabled={deleteLoading} onClick={()=>deleteHandler(item.id)}>
+                                        {deleteLoading ? <IonSpinner color='light' />: <IonIcon slot="icon-only" icon={trashOutline} />}
+                                    </IonItemOption>
+                                </IonItemOptions>
+                            </IonItemSliding>
                         )
                     }
                 </IonList>

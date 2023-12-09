@@ -41,8 +41,6 @@ const PageTabs: React.FC = () => {
     let isMounted = true;
     const logCurrentNetworkStatus = async () => {
       const status = await Network.getStatus();
-    
-      console.log('Network status:', status);
       setHasNetwork(status.connected);
     };
     if(isMounted){

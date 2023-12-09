@@ -52,12 +52,12 @@ const SubCategory: React.FC = () => {
                     <IonRow className="ion-align-items-center ion-justify-content-center">
                         {
                             (data ? data.flat(): []).map((item, i) => <IonCol
-                                size="4"
+                                size="6"
                                 size-xl="3"
                                 size-lg="3"
                                 size-md="4"
-                                size-sm="4"
-                                size-xs="4"
+                                size-sm="6"
+                                size-xs="6"
                                 key={i}
                             >
                                 <CategoryCard image={item.image} link={`/product?sub_category_slug=${item.slug}`} text={item.name} />

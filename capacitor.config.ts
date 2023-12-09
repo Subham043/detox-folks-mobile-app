@@ -18,8 +18,8 @@ const config: CapacitorConfig = {
       showSpinner: false,
       splashFullScreen: true,
       splashImmersive: true,
-      layoutName: "launch_screen",
-      useDialog: true,
+      // layoutName: "launch_screen",
+      // useDialog: true,
     },
   }
 };

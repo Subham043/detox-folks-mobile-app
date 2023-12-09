@@ -8,6 +8,9 @@
     padding-left: 5px;
     padding-left: 5px;
 }
+.cart-total-price-heading h6{
+    font-size: 16px;
+}
 
 .cart-message{
     text-align: center;
@@ -25,6 +28,7 @@
     margin-bottom: 0;
     font-weight: 500;
     letter-spacing: 1px;
+    font-size: 14px;
 }
 
 .billing-info-section{

@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardHeader, IonIcon, IonImg, IonModal, IonText } from "@ionic/react";
+import { IonButton, IonCard, IonCardHeader, IonIcon, IonImg, IonModal, IonSpinner, IonText } from "@ionic/react";
 import './ProductCard.css';
 import { Link } from "react-router-dom";
 import CartQuantity from "../CartQuantity";
@@ -12,12 +12,19 @@ import { useState } from "react";
 
 const ProductCard: React.FC<ProductType> = ({image,name, id, slug, product_prices, min_cart_quantity, cart_quantity_interval, cart_quantity_specification}) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [imgLoading, setImgLoading] = useState<boolean>(true);
     const {quantity, cartItemLoading, cart_product_item, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id, product_prices, min_cart_quantity, cart_quantity_interval});
     
     return <>
         <IonCard className="product-card">
             <Link className="no-underline" to={`/product-detail/${slug}`}>
-                <IonImg alt="product" src={image} className="product-card-image" />
+                {
+                    imgLoading &&
+                    <div className="text-center mt-1">
+                        <IonSpinner color='dark' />
+                    </div>
+                }
+                <IonImg alt="product" src={image} className="product-card-image" onIonImgDidLoad={()=>setImgLoading(false)} />
             </Link>
             <IonCardHeader className="product-card-header">
                 <IonText color="dark">
