@@ -11,6 +11,7 @@ import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
 import { useLocation } from 'react-router';
 import useSWR from 'swr'
+import MainProductCard from '../../components/MainProductCard';
 
 const PAGE_SIZE = 20;
 
@@ -50,25 +51,11 @@ const Product: React.FC = () => {
             forceOverscroll={false}
             >
                 <CommonHeading text={categoryData ? categoryData.category.name : subCategoryData ? subCategoryData.subCategory.name: 'Our Products'} />
-                <IonGrid>
-                    <IonRow className="ion-align-items-center ion-justify-content-between">
-                        {
-                            (data ? data.flat(): []).map((item, i) => <IonCol
-                                size="6"
-                                size-xl="3"
-                                size-lg="3"
-                                size-md="4"
-                                size-sm="6"
-                                size-xs="6"
-                                key={i}
-                            >
-                                <ProductCard {...item} />
-                            </IonCol>)
-                        }
-                    </IonRow>
-                </IonGrid>
                 {
-                    (isLoading || isCategoryLoading || isSubCategoryLoading) && <LoadingCard itemCount={6} column={6} />
+                    (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
+                }
+                {
+                    (isLoading || isCategoryLoading || isSubCategoryLoading) && <LoadingCard itemCount={3} column={12} />
                 }
                 <IonInfiniteScroll
                     onIonInfinite={(ev) => {

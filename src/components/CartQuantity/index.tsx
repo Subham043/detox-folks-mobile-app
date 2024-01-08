@@ -47,15 +47,15 @@ const CartQuantity: React.FC<CartQuantityType> = ({quantity, min_cart_quantity, 
     }
 
     return (quantity===0 ? <IonButton fill='solid' color="dark" className="add-to-cart-btn" disabled={loading} onClick={()=>incrementQuantity()}>
-                {loading ? <IonSpinner name="dots" color='light' /> : <>
+                {loading ? <IonSpinner name="dots" color='dark' /> : <>
                     <IonIcon slot="start" icon={cartOutline}></IonIcon>
-                    Add To Cart
+                    Add
                 </>}
             </IonButton> : 
             <div className="cart-quantity-holder">
                 <div className="col-cart-quantity-auto">
                     <IonButton color='dark' size="small" className="col-cart-quantity-btn" disabled={loading} onClick={()=>decrementQuantity()}>
-                        {loading ? <IonSpinner name="dots" color='light' /> : '-'}
+                        {loading ? <IonSpinner name="dots" color='dark' /> : '-'}
                     </IonButton>
                 </div>
                 <div className="col-cart-quantity-input">
@@ -63,7 +63,7 @@ const CartQuantity: React.FC<CartQuantityType> = ({quantity, min_cart_quantity, 
                 </div>
                 <div className="col-cart-quantity-auto">
                     <IonButton color='dark' size="small" className="col-cart-quantity-btn" disabled={loading} onClick={()=>incrementQuantity()}>
-                        {loading ? <IonSpinner name="dots" color='light' /> : '+'}
+                        {loading ? <IonSpinner name="dots" color='dark' /> : '+'}
                     </IonButton>
                 </div>
             </div>);

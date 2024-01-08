@@ -3,6 +3,7 @@ import './Home.css';
 import MainHeader from '../../components/MainHeader';
 import CategorySection from '../../components/CategorySection';
 import SpecialProductSection from '../../components/SpecialProductSection';
+import SpecialProductSliderSection from '../../components/SpecialProductSection/SpecialProductSliderSection';
 
 const Home: React.FC = () => {
   return (
@@ -12,10 +13,10 @@ const Home: React.FC = () => {
           fullscreen={false}
           forceOverscroll={false}
         >
-            <CategorySection />
-            <SpecialProductSection slug='is_featured' name='Our Featured Products' />
-            <SpecialProductSection slug='is_new' name='Our New Products' />
-            <SpecialProductSection slug='is_on_sale' name='On Sale Products' />
+            <CategorySection inHomePage={true} />
+            <SpecialProductSliderSection slug='is_featured' name='Our Featured Products' />
+            <SpecialProductSliderSection slug='is_new' name='Our New Products' />
+            <SpecialProductSliderSection slug='is_on_sale' name='On Sale Products' />
         </IonContent>
     </IonPage>
   );

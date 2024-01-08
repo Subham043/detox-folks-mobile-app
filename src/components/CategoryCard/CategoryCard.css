@@ -28,3 +28,19 @@
     height: 100px;
     object-fit: cover;
 }
+
+/* category card 2 css */
+
+.category-card-2 .category-card-image{
+    width: auto;
+    height: 80px;
+    object-fit: cover;
+}
+
+.category-card-2 .category-card-text{
+    font-size: 15px;
+    color: #5c5c5c;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    font-family: system-ui;
+}

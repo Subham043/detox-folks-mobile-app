@@ -3,12 +3,13 @@ import './SpecialProductSection.css';
 import CommonHeading from '../../components/CommonHeading';
 import ProductCard from '../../components/ProductCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { ProductType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
 import ShowMoreButton from '../ShowMoreButton';
+import MainProductCard from '../MainProductCard';
 
 const PAGE_SIZE = 20;
 
@@ -20,9 +21,25 @@ type Props = {
 
 const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) => {
     const axiosPrivate = useAxiosPrivate();
-    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
+    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+
+    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
+
+    const fetcher = async (url: string) => {
+        const res =await axiosPrivate.get(url);
+        setTimeout(async() => {
+          if(productRef && productRef.current){
+            await productRef.current.complete()
+          }
+        }, 500)
+        return res.data.data
+    };
+
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if (previousPageData && previousPageData.length===0) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            setHasNextPage(false);
+            return null;
+        }
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${slug ? `&filter[${slug}]=true` : ''}`;
     }, [slug])
     
@@ -42,35 +59,23 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
     return (
         <>
             <CommonHeading text={name ? name : ''} />
-            <IonGrid>
-                <IonRow className="ion-align-items-center ion-justify-content-between">
-                    {
-                        (data ? data.flat(): []).map((item, i) => <IonCol
-                            size="6"
-                            size-xl="3"
-                            size-lg="3"
-                            size-md="4"
-                            size-sm="6"
-                            size-xs="6"
-                            key={i}
-                        >
-                            <ProductCard {...item} />
-                        </IonCol>)
-                    }
-                </IonRow>
-            </IonGrid>
             {
-                (isLoading) && <LoadingCard itemCount={6} column={6} />
+                (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
+            }
+            {
+                (isLoading) && <LoadingCard itemCount={6} column={12} />
             }
             {
                 inHomePage ? <ShowMoreButton link={`/special-product/${slug}`} /> : 
                 <IonInfiniteScroll
+                    ref={productRef}
                     onIonInfinite={(ev) => {
-                    setSize(size+1);
-                    ev.target.complete()
-                  }}
+                        if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
+                            !isLoading && setSize(size+1);
+                        }
+                    }}
                 >
-                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
+                    {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
                 </IonInfiniteScroll>
             }
         </>

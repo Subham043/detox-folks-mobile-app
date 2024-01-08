@@ -63,3 +63,19 @@
 .Toastify__toast-container--top-center{
     top: var(--ion-safe-area-top);
 }
+
+.page-padding{
+    --padding-start: var(--ion-padding, 16px);   
+    --padding-end: var(--ion-padding, 16px);   
+    --padding-bottom: 0;
+    /* padding-inline-start: var(--padding-start);
+    padding-inline-end: var(--padding-end); */
+    padding-inline-start: 8px;
+    padding-inline-end: 8px;
+    padding-bottom: 0;
+}
+
+.slider-padding{
+    --padding-end: 0;
+    padding-inline-end: 0px;
+}

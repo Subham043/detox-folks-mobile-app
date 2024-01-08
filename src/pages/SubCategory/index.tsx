@@ -11,6 +11,7 @@ import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
 import { useLocation } from 'react-router';
 import useSWR from 'swr'
+import CategoryCard2 from '../../components/CategoryCard/CategoryCard2';
 
 const PAGE_SIZE = 20;
 
@@ -49,18 +50,18 @@ const SubCategory: React.FC = () => {
             >
                 <CommonHeading text={categoryData ? categoryData.category.name : 'Sub Category'} />
                 <IonGrid>
-                    <IonRow className="ion-align-items-center ion-justify-content-center">
+                    <IonRow className="ion-align-items-start ion-justify-content-center">
                         {
                             (data ? data.flat(): []).map((item, i) => <IonCol
                                 size="6"
                                 size-xl="3"
                                 size-lg="3"
                                 size-md="4"
-                                size-sm="6"
-                                size-xs="6"
+                                size-sm="4"
+                                size-xs="4"
                                 key={i}
                             >
-                                <CategoryCard image={item.image} link={`/product?sub_category_slug=${item.slug}`} text={item.name} />
+                                <CategoryCard2 image={item.image} link={`/product?sub_category_slug=${item.slug}`} text={item.name} />
                             </IonCol>)
                         }
                     </IonRow>
