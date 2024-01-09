@@ -12,6 +12,7 @@ import LoadingCard from '../../components/LoadingCard';
 import { useLocation } from 'react-router';
 import useSWR from 'swr'
 import MainProductCard from '../../components/MainProductCard';
+import ViewCartBtn from '../../components/ViewCartBtn';
 
 const PAGE_SIZE = 20;
 
@@ -65,6 +66,7 @@ const Product: React.FC = () => {
                 >
                     <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                 </IonInfiniteScroll>
+                <ViewCartBtn />
             </IonContent>
         </IonPage>
     );

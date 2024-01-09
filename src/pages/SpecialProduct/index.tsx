@@ -4,6 +4,7 @@ import MainHeader from '../../components/MainHeader';
 import SpecialProductSection from '../../components/SpecialProductSection';
 import { RouteComponentProps } from 'react-router';
 import { useCallback } from 'react';
+import ViewCartBtn from '../../components/ViewCartBtn';
 
 interface SpecialProductProps extends RouteComponentProps<{
     slug: "is_featured" | "is_new" | "is_on_sale" | undefined;
@@ -32,6 +33,7 @@ const SpecialProduct: React.FC<SpecialProductProps> = ({match}) => {
             forceOverscroll={false}
             >
                 <SpecialProductSection inHomePage={false} slug={match.params.slug} name={name(match.params.slug)} />
+                <ViewCartBtn />
             </IonContent>
         </IonPage>
     );

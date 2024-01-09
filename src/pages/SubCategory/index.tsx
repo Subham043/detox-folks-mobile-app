@@ -12,6 +12,7 @@ import LoadingCard from '../../components/LoadingCard';
 import { useLocation } from 'react-router';
 import useSWR from 'swr'
 import CategoryCard2 from '../../components/CategoryCard/CategoryCard2';
+import ViewCartBtn from '../../components/ViewCartBtn';
 
 const PAGE_SIZE = 20;
 
@@ -77,6 +78,7 @@ const SubCategory: React.FC = () => {
                 >
                     <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                 </IonInfiniteScroll>
+                <ViewCartBtn />
             </IonContent>
         </IonPage>
     );

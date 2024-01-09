@@ -8,6 +8,7 @@ import ProductPrice from "../ProductPrice";
 import { informationCircle } from "ionicons/icons";
 import BulkOffer from "../BulkOffer";
 import { useState } from "react";
+import CartQuantity2 from "../CartQuantity/CartQuantity2";
 
 
 const MainProductCard: React.FC<ProductType> = ({image,name, id, slug, product_prices, min_cart_quantity, cart_quantity_interval, cart_quantity_specification}) => {
@@ -35,15 +36,13 @@ const MainProductCard: React.FC<ProductType> = ({image,name, id, slug, product_p
                     <div className="page-padding product-card-price-container">
                         <div className="col-auto">
                             <ProductPrice product_prices={product_prices} cart_quantity_specification={cart_quantity_specification} cart_product_item={cart_product_item} />
-                            {/* <IonText color="dark">
-                            </IonText> */}
                             <button className='product-price-modal-btn' onClick={()=>setIsOpen(true)}>
                                 <p>Bulk Offer</p>
                                 <IonIcon icon={informationCircle} className='product-price-icon' />
                             </button>
                         </div>
                         <div className="col-auto cart-quantity-col">
-                            <CartQuantity quantity={quantity} min_cart_quantity={min_cart_quantity} incrementQuantity={incrementQuantity} decrementQuantity={decrementQuantity} changeQuantity={changeQuantity} loading={cartItemLoading} />
+                            <CartQuantity2 quantity={quantity} min_cart_quantity={min_cart_quantity} incrementQuantity={incrementQuantity} decrementQuantity={decrementQuantity} changeQuantity={changeQuantity} loading={cartItemLoading} />
                         </div>
                     </div>
                 </div>
