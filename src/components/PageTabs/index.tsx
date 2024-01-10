@@ -30,6 +30,7 @@ import NoNetwork from "../NoNetwork";
 import Contact from "../../pages/Contact";
 import Cart2 from "../../pages/Cart/Cart2";
 import Product2 from "../../pages/Product/Product2";
+import ProductDetail2 from "../../pages/ProductDetail/ProductDetail2";
 
 const PageTabs: React.FC = () => {
 
@@ -69,7 +70,7 @@ const PageTabs: React.FC = () => {
             <Route exact path="/sub-category" component={SubCategory}></Route>
             <Route exact path="/product" component={Product}></Route>
             <Route exact path="/main-product" component={Product2}></Route>
-            <Route exact path="/product-detail/:slug" component={ProductDetail}></Route>
+            <Route exact path="/product-detail/:slug" component={ProductDetail2}></Route>
             <Route exact path="/search" component={Search}></Route>
             <Route exact path="/cart" component={Cart2}></Route>
             <Route exact path="/special-product/:slug" component={SpecialProduct}></Route>

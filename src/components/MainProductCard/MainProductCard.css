@@ -136,7 +136,7 @@
 
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-card-price small{
     font-size: 17px;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-price-modal-btn{
     --color: white !important;

@@ -9,19 +9,12 @@ const BulkOffer: React.FC<{
     cart_quantity_specification: string,
     cart_product_item: () => CartType[]
 }> = ({product_prices, cart_quantity_specification, cart_product_item}) => {
-    return (product_prices && product_prices.length > 0) && <IonCard className='mb-2 mt-2'>
+    return (product_prices && product_prices.length > 0) && <div className='product-detail-page-main-bulk-factor page-padding mb-2 mt-2'>
         <IonCardHeader className='product-detail-card-header'>
-            {/* <IonText color="dark">
-                <ProductPrice product_prices={product_prices} cart_quantity_specification={cart_quantity_specification} cart_product_item={cart_product_item} />
-            </IonText> */}
             <div className='bulk-offer-wrapper'>
-                <IonText>
-                    <p className="fs-7-note">Note: Prices are inclusive of GST.</p>
-                </IonText>
-                <IonText>
-                    <h6>Bulk Offer :</h6>
-                </IonText>
-                <hr />
+                <div className="cart-total-price-heading">
+                    <h6>Prices are inclusive of GST.</h6>
+                </div>
                 <ul>
                     {
                         product_prices.map((item, i) => <li key={i}>
@@ -41,7 +34,7 @@ const BulkOffer: React.FC<{
                 </ul>
             </div>
         </IonCardHeader>
-    </IonCard>
+    </div>
 }
 
 export default BulkOffer;
