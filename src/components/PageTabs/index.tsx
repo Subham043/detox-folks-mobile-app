@@ -29,6 +29,7 @@ import { Network } from '@capacitor/network';
 import NoNetwork from "../NoNetwork";
 import Contact from "../../pages/Contact";
 import Cart2 from "../../pages/Cart/Cart2";
+import Product2 from "../../pages/Product/Product2";
 
 const PageTabs: React.FC = () => {
 
@@ -67,6 +68,7 @@ const PageTabs: React.FC = () => {
             <Route exact path="/category" component={Category}></Route>
             <Route exact path="/sub-category" component={SubCategory}></Route>
             <Route exact path="/product" component={Product}></Route>
+            <Route exact path="/main-product" component={Product2}></Route>
             <Route exact path="/product-detail/:slug" component={ProductDetail}></Route>
             <Route exact path="/search" component={Search}></Route>
             <Route exact path="/cart" component={Cart2}></Route>
@@ -91,7 +93,7 @@ const PageTabs: React.FC = () => {
               <IonLabel>Home</IonLabel>
             </IonTabButton>
 
-            <IonTabButton className='main-tabs' tab="products" href="/category">
+            <IonTabButton className='main-tabs' tab="products" href="/main-product">
               <IonIcon icon={fileTrayStackedOutline} />
               <IonLabel>Products</IonLabel>
             </IonTabButton>
