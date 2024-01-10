@@ -18,6 +18,16 @@
     font-size: 16px;
 }
 
+.view-cart-checkout-btn-main-container .view-cart-text-icon-holder{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: flex-end;
+}
+.view-cart-checkout-btn-main-container .view-cart-text-icon-holder .svg-icon{
+    font-size: 20px;
+}
+
 .fixed-spacing-2{
     margin-bottom: 25px;
     -webkit-padding-start: var(--ion-padding, 16px);

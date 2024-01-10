@@ -4,7 +4,7 @@ import MainHeader from '../../components/MainHeader';
 import CommonHeading from '../../components/CommonHeading';
 import ProductCard from '../../components/ProductCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { CategoryType, ProductType, SubCategoryType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
@@ -24,10 +24,23 @@ const Product: React.FC = () => {
     const axiosPrivate = useAxiosPrivate();
     const { data:categoryData, isLoading:isCategoryLoading } = useSWR<{category: CategoryType}>(category_slug ? api_routes.categories + `/${category_slug}` : null);
     const { data:subCategoryData, isLoading:isSubCategoryLoading } = useSWR<{subCategory: SubCategoryType}>(sub_category_slug ? api_routes.sub_categories + `/${sub_category_slug}` : null);
-    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
+    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
+    const fetcher = async (url: string) => {
+        const res =await axiosPrivate.get(url);
+        setTimeout(async() => {
+          if(productRef && productRef.current){
+            await productRef.current.complete()
+          }
+        }, 500)
+        return res.data.data
+    };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!categoryData && !subCategoryData) return null;
-        if (previousPageData && previousPageData.length===0) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            setHasNextPage(false);
+            return null;
+        }
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${categoryData ? '&filter[has_categories]='+categoryData.category.id : ''}${subCategoryData ? '&filter[has_sub_categories]='+subCategoryData.subCategory.id : ''}`;
     }, [categoryData, subCategoryData])
     
@@ -59,12 +72,14 @@ const Product: React.FC = () => {
                     (isLoading || isCategoryLoading || isSubCategoryLoading) && <LoadingCard itemCount={3} column={12} />
                 }
                 <IonInfiniteScroll
+                    ref={productRef}
                     onIonInfinite={(ev) => {
-                    setSize(size+1);
-                    ev.target.complete()
-                  }}
+                        if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
+                            !isLoading && setSize(size+1);
+                        }
+                    }}
                 >
-                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
+                    {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
                 </IonInfiniteScroll>
                 <ViewCartBtn />
             </IonContent>

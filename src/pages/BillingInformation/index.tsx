@@ -4,7 +4,7 @@ import './BillingInformation.css';
 import MainHeader from '../../components/MainHeader';
 import { createOutline, peopleCircleOutline, trashOutline } from 'ionicons/icons';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { api_routes } from '../../helper/routes';
 import { BillingInformationType } from '../../helper/types';
 import useSWRInfinite from "swr/infinite";
@@ -27,10 +27,23 @@ const BillingInformation: React.FC = () => {
     });
     const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
+    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
+    const fetcher = async (url: string) => {
+        const res =await axiosPrivate.get(url);
+        setTimeout(async() => {
+          if(productRef && productRef.current){
+            await productRef.current.complete()
+          }
+        }, 500)
+        return res.data.data
+    };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!auth.authenticated) return null;
-        if (previousPageData && previousPageData.length===0) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            setHasNextPage(false);
+            return null;
+        }
         return `${api_routes.billing_information_list}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
     }, [auth.authenticated])
     
@@ -85,57 +98,60 @@ const BillingInformation: React.FC = () => {
                 }}>
                     <IonRefresherContent></IonRefresherContent>
                 </IonRefresher>
-                <CommonHeading text='Billing Information' />
-                <IonList>
+                <div className="mt-1">
+                    <IonList>
+                        {
+                            (data ? data.flat(): []).map((item, i) => 
+                                <IonItemSliding key={item.id}>
+                                    <IonItem>
+                                        <IonIcon aria-hidden="true" icon={peopleCircleOutline} slot="start" className='billing-address-location-icon'></IonIcon>
+                                        <IonRow className="ion-align-items-center ion-justify-content-between w-100">
+                                            <IonCol
+                                                size="12"
+                                                className='text-left'
+                                            >
+                                                <IonLabel className='billing-address-text'>
+                                                    <h6>{item.name}</h6>
+                                                    <p>
+                                                        {item.email}, {item.phone}, {item.gst}
+                                                    </p>
+                                                </IonLabel>
+                                            </IonCol>
+                                        </IonRow>
+                                    </IonItem>
+                                    <IonItemOptions>
+                                        <IonItemOption color='dark' onClick={()=>{
+                                            setModalData({
+                                                isEdit:true,
+                                                data: {...item}
+                                            })
+                                            setIsOpen(true);
+                                        }}>
+                                            <IonIcon slot="icon-only" icon={createOutline} />
+                                        </IonItemOption>
+                                        <IonItemOption color="danger" disabled={deleteLoading} onClick={()=>deleteHandler(item.id)}>
+                                            {deleteLoading ? <IonSpinner color='light' />: <IonIcon slot="icon-only" icon={trashOutline} />}
+                                        </IonItemOption>
+                                    </IonItemOptions>
+                                </IonItemSliding>
+                            )
+                        }
+                    </IonList>
                     {
-                        (data ? data.flat(): []).map((item, i) => 
-                            <IonItemSliding key={item.id}>
-                                <IonItem>
-                                    <IonIcon aria-hidden="true" icon={peopleCircleOutline} slot="start" className='billing-address-location-icon'></IonIcon>
-                                    <IonRow className="ion-align-items-center ion-justify-content-between w-100">
-                                        <IonCol
-                                            size="12"
-                                            className='text-left'
-                                        >
-                                            <IonLabel className='billing-address-text'>
-                                                <h6>{item.name}</h6>
-                                                <p>
-                                                    {item.email}, {item.phone}, {item.gst}
-                                                </p>
-                                            </IonLabel>
-                                        </IonCol>
-                                    </IonRow>
-                                </IonItem>
-                                <IonItemOptions>
-                                    <IonItemOption color='dark' onClick={()=>{
-                                        setModalData({
-                                            isEdit:true,
-                                            data: {...item}
-                                        })
-                                        setIsOpen(true);
-                                    }}>
-                                        <IonIcon slot="icon-only" icon={createOutline} />
-                                    </IonItemOption>
-                                    <IonItemOption color="danger" disabled={deleteLoading} onClick={()=>deleteHandler(item.id)}>
-                                        {deleteLoading ? <IonSpinner color='light' />: <IonIcon slot="icon-only" icon={trashOutline} />}
-                                    </IonItemOption>
-                                </IonItemOptions>
-                            </IonItemSliding>
-                        )
+                        isLoading && <LoadingCard itemCount={6} column={12} height='70px' />
                     }
-                </IonList>
-                {
-                    isLoading && <LoadingCard itemCount={6} column={12} height='70px' />
-                }
-                <IonInfiniteScroll
-                    onIonInfinite={(ev) => {
-                    setSize(size+1);
-                    ev.target.complete()
-                  }}
-                >
-                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-                </IonInfiniteScroll>
-                <div className="cart-fixed-spacing-2"></div>
+                    <IonInfiniteScroll
+                        ref={productRef}
+                        onIonInfinite={(ev) => {
+                            if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
+                                !isLoading && setSize(size+1);
+                            }
+                        }}
+                    >
+                        {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                    </IonInfiniteScroll>
+                    <div className="cart-fixed-spacing-2"></div>
+                </div>
                 <IonModal isOpen={isOpen} onDidDismiss={()=>setIsOpen(false)} id={`billing-address-edit`} className="post-price-modal w-100" initialBreakpoint={1} breakpoints={[0, 1]}>
                     <BillingInformationEdit showModal={setIsOpen} mutate={mutate} {...modalData} />
                 </IonModal>

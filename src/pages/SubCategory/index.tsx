@@ -5,7 +5,7 @@ import CommonHeading from '../../components/CommonHeading';
 import CategoryCard from '../../components/CategoryCard';
 import { CategoryType, SubCategoryType } from '../../helper/types';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
@@ -22,9 +22,22 @@ const SubCategory: React.FC = () => {
     const category_slug = query.get('category_slug')
     const axiosPrivate = useAxiosPrivate();
     const { data:categoryData, isLoading:isCategoryLoading } = useSWR<{category: CategoryType}>(category_slug ? api_routes.categories + `/${category_slug}` : null);
-    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
+    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
+    const fetcher = async (url: string) => {
+        const res =await axiosPrivate.get(url);
+        setTimeout(async() => {
+          if(productRef && productRef.current){
+            await productRef.current.complete()
+          }
+        }, 500)
+        return res.data.data
+    };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if (previousPageData && previousPageData.length===0) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            setHasNextPage(false);
+            return null;
+        }
         return `${api_routes.sub_categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${categoryData ? '&filter[has_categories]='+categoryData.category.id : ''}`;
     }, [categoryData])
 
@@ -46,12 +59,12 @@ const SubCategory: React.FC = () => {
         <IonPage>
             <MainHeader isMainHeader={false} name={categoryData ? categoryData.category.name : 'Sub Category'} />
             <IonContent
-            fullscreen={false}
-            forceOverscroll={false}
+                fullscreen={false}
+                forceOverscroll={false}
             >
                 <CommonHeading text={categoryData ? categoryData.category.name : 'Sub Category'} />
-                <IonGrid>
-                    <IonRow className="ion-align-items-start ion-justify-content-center">
+                <div className='page-padding section-container'>
+                    <IonRow className="ion-align-items-start ion-justify-content-start">
                         {
                             (data ? data.flat(): []).map((item, i) => <IonCol
                                 size="6"
@@ -66,18 +79,20 @@ const SubCategory: React.FC = () => {
                             </IonCol>)
                         }
                     </IonRow>
-                </IonGrid>
-                {
-                    (isLoading || isCategoryLoading) && <LoadingCard itemCount={6} column={6} />
-                }
-                <IonInfiniteScroll
-                    onIonInfinite={(ev) => {
-                    setSize(size+1);
-                    ev.target.complete()
-                  }}
-                >
-                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-                </IonInfiniteScroll>
+                    {
+                        (isLoading || isCategoryLoading) && <LoadingCard itemCount={6} column={4} />
+                    }
+                    <IonInfiniteScroll
+                        ref={productRef}
+                        onIonInfinite={(ev) => {
+                            if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
+                                !isLoading && setSize(size+1);
+                            }
+                        }}
+                    >
+                        {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                    </IonInfiniteScroll>
+                </div>
                 <ViewCartBtn />
             </IonContent>
         </IonPage>

@@ -1,8 +1,9 @@
-import { IonButton, IonCol, IonItemDivider, IonRow } from "@ionic/react";
+import { IonButton, IonCol, IonIcon, IonItemDivider, IonRow } from "@ionic/react";
 import React, { useContext } from "react";
 import { CartContext } from "../../context/CartProvider";
 import './ViewCartBtn.css';
 import { Link } from "react-router-dom";
+import { cartOutline } from "ionicons/icons";
 
 const ViewCartBtn: React.FC = () => {
     const { cart } = useContext(CartContext);
@@ -28,8 +29,9 @@ const ViewCartBtn: React.FC = () => {
                                     size="6"
                                     className='text-right'
                                 >
-                                    <div>
-                                        View Cart
+                                    <div className="view-cart-text-icon-holder">
+                                        <span>View Cart</span>
+                                        <IonIcon icon={cartOutline} className="svg-icon" />
                                     </div>
                                 </IonCol>
                             </IonRow>

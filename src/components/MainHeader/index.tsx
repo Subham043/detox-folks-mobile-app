@@ -13,11 +13,11 @@ type Props = {
 const MainHeader: React.FC<Props> = (props) => {
     const history = useHistory();
 return <IonHeader translucent={true} className='main-header'>
-    <IonToolbar className='main-header-toolbar'>
+    <IonToolbar mode="ios" className='main-header-toolbar'>
         {
             !props.isMainHeader ? <>
                 <IonButtons slot="start">
-                    <IonButton onClick={()=>history.goBack()}>
+                    <IonButton color='dark' onClick={()=>history.goBack()}>
                         <IonIcon icon={arrowBack} />
                     </IonButton>
                 </IonButtons>

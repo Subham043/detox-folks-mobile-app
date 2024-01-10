@@ -1,0 +1,15 @@
+.payment-option-slider .swiper {
+    padding-bottom: 0px;
+}
+.payment-option-slider .swiper-slide {
+    width: 60% !important;
+}
+
+.payment-option-slider .swiper-slide:last-child {
+    --padding-end: var(--ion-padding, 16px);
+    padding-inline-end: 8px;
+}
+
+.payment-option-slider .billing-info-section-card, .payment-option-slider .billing-info-section-card-active{
+    width: 100%;
+}

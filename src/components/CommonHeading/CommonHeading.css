@@ -1,5 +1,6 @@
 .common-heading-text {
     display: flex;
+    font-size: 1.375rem;
 }
 .common-heading-text:before, .common-heading-text:after {
     content: "";

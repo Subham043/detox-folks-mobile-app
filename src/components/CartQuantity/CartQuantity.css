@@ -44,6 +44,9 @@
     width: 100%;
     max-width: 115px;
 }
+.cart-quantity-main-holder-secondary{
+    border: 1px solid #222;
+}
 .cart-quantity-main-holder .cart-quantity-btn-main{
     width: 30px;
     min-height: 30px;

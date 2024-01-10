@@ -46,25 +46,25 @@ const CartQuantity: React.FC<CartQuantityType> = ({quantity, min_cart_quantity, 
         }
     }
 
-    return (quantity===0 ? <IonButton fill='solid' color="dark" className="add-to-cart-btn" disabled={loading} onClick={()=>incrementQuantity()}>
+    return (quantity===0 ? <IonButton fill='solid' color="dark" className="add-to-cart-btn add-to-cart-btn-secondary" disabled={loading} onClick={()=>incrementQuantity()}>
                 {loading ? <IonSpinner name="dots" color='dark' /> : <>
                     <IonIcon slot="start" icon={cartOutline}></IonIcon>
                     Add
                 </>}
             </IonButton> : 
-            <div className="cart-quantity-holder">
+            <div className="cart-quantity-main-holder cart-quantity-main-holder-secondary">
                 <div className="col-cart-quantity-auto">
-                    <IonButton color='dark' size="small" className="col-cart-quantity-btn" disabled={loading} onClick={()=>decrementQuantity()}>
+                    <button color='dark' className="cart-quantity-btn-main cart-quantity-btn-main-minus" disabled={loading} onClick={()=>decrementQuantity()}>
                         {loading ? <IonSpinner name="dots" color='dark' /> : '-'}
-                    </IonButton>
+                    </button>
                 </div>
                 <div className="col-cart-quantity-input">
-                    <IonInput type="number" inputmode="numeric" aria-label="Quantity" value={qnt} className="text-center cart-quantity-text-holder" onIonInput={(e:CustomEvent<SearchbarInputEventDetail>)=>handleChangeQuantity(e.detail.value)} />
+                    <input type="number" inputMode="numeric" aria-label="Quantity" value={qnt} className="cart-quantity-input-main" onChange={(e)=>handleChangeQuantity(e.target.value)} />
                 </div>
                 <div className="col-cart-quantity-auto">
-                    <IonButton color='dark' size="small" className="col-cart-quantity-btn" disabled={loading} onClick={()=>incrementQuantity()}>
+                    <button color='dark' className="cart-quantity-btn-main cart-quantity-btn-main-plus" disabled={loading} onClick={()=>incrementQuantity()}>
                         {loading ? <IonSpinner name="dots" color='dark' /> : '+'}
-                    </IonButton>
+                    </button>
                 </div>
             </div>);
 }

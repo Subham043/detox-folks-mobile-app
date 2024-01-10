@@ -13,7 +13,6 @@ import Cart from "../../pages/Cart";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register";
 import ForgotPassword from "../../pages/ForgotPassword";
-import Profile from "../../pages/Profile";
 import Setting from "../../pages/Setting";
 import Account from "../../pages/Account";
 import { useContext, useEffect, useState } from "react";
@@ -29,6 +28,7 @@ import OrderDetail from "../../pages/OrderDetail";
 import { Network } from '@capacitor/network';
 import NoNetwork from "../NoNetwork";
 import Contact from "../../pages/Contact";
+import Cart2 from "../../pages/Cart/Cart2";
 
 const PageTabs: React.FC = () => {
 
@@ -69,9 +69,8 @@ const PageTabs: React.FC = () => {
             <Route exact path="/product" component={Product}></Route>
             <Route exact path="/product-detail/:slug" component={ProductDetail}></Route>
             <Route exact path="/search" component={Search}></Route>
-            <Route exact path="/cart" component={Cart}></Route>
+            <Route exact path="/cart" component={Cart2}></Route>
             <Route exact path="/special-product/:slug" component={SpecialProduct}></Route>
-            <ProtectedRoute exact path="/profile" component={Profile}></ProtectedRoute>
             <ProtectedRoute exact path="/setting" component={Setting}></ProtectedRoute>
             <ProtectedRoute exact path="/contact" component={Contact}></ProtectedRoute>
             <ProtectedRoute exact path="/account" component={Account}></ProtectedRoute>

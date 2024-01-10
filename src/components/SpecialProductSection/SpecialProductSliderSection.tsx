@@ -1,14 +1,10 @@
-import { IonCol, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonRow } from '@ionic/react';
 import './SpecialProductSection.css';
-import CommonHeading from '../../components/CommonHeading';
-import ProductCard from '../../components/ProductCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback } from 'react';
 import { ProductType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
-import ShowMoreButton from '../ShowMoreButton';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import MainProductCard from '../MainProductCard';
@@ -70,37 +66,6 @@ const SpecialProductSliderSection: React.FC<Props> = ({inHomePage=true, slug, na
                         }
                     </Swiper>
                 </div>
-                {/* <IonGrid>
-                    <IonRow className="ion-align-items-center ion-justify-content-between">
-                        {
-                            (data ? data.flat(): []).map((item, i) => <IonCol
-                                size="6"
-                                size-xl="3"
-                                size-lg="3"
-                                size-md="4"
-                                size-sm="6"
-                                size-xs="6"
-                                key={i}
-                            >
-                                <ProductCard {...item} />
-                            </IonCol>)
-                        }
-                    </IonRow>
-                </IonGrid> */}
-                {/* {
-                    (isLoading) && <LoadingCard itemCount={6} column={6} />
-                }
-                {
-                    inHomePage ? <ShowMoreButton link={`/special-product/${slug}`} /> : 
-                    <IonInfiniteScroll
-                        onIonInfinite={(ev) => {
-                        setSize(size+1);
-                        ev.target.complete()
-                    }}
-                    >
-                        <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-                    </IonInfiniteScroll>
-                } */}
             </div>
         </>
     );
