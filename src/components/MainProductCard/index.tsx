@@ -1,7 +1,5 @@
-import { IonButton, IonCard, IonCardHeader, IonCol, IonIcon, IonImg, IonModal, IonRow, IonSpinner, IonText } from "@ionic/react";
+import { IonIcon, IonImg, IonModal, useIonRouter } from "@ionic/react";
 import './MainProductCard.css';
-import { Link } from "react-router-dom";
-import CartQuantity from "../CartQuantity";
 import { ProductType } from "../../helper/types";
 import { useCart } from "../../hooks/useCart";
 import ProductPrice from "../ProductPrice";
@@ -12,23 +10,16 @@ import CartQuantity2 from "../CartQuantity/CartQuantity2";
 
 
 const MainProductCard: React.FC<ProductType> = ({image,name, id, slug, product_prices, min_cart_quantity, cart_quantity_interval, cart_quantity_specification}) => {
+    const router = useIonRouter();
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [imgLoading, setImgLoading] = useState<boolean>(true);
     const {quantity, cartItemLoading, cart_product_item, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id, product_prices, min_cart_quantity, cart_quantity_interval});
     
     return <>
         <div className="product-card product-card-main">
             <div className="product-main-link">
-                {/* <Link className="no-underline" to={`/product-detail/${slug}`}>
-                    {
-                        imgLoading &&
-                        <div className="text-center mt-1">
-                            <IonSpinner color='dark' />
-                        </div>
-                    }
-                    <p className="product-card-text">{name}</p>
-                </Link> */}
-                <IonImg alt="product" src={image} className="product-card-image" onIonImgDidLoad={()=>setImgLoading(false)} />
+                <button className="product-main-img-btn" onClick={()=>router.push(`/product-detail/${slug}`)}>
+                    <IonImg alt="product" src={image} className="product-card-image" />
+                </button>
                 <div className="product-text-container-gradient">
                     <div className="page-padding product-card-header-container">
                         <h4>{name}</h4>

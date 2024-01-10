@@ -44,7 +44,7 @@ const Product2: React.FC = () => {
             setHasNextPage(false);
             return null;
         }
-        return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}${selectedSubCategory!=='All' ? '&filter[has_sub_categories]='+selectedSubCategory : ''}`;
+        return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=${selectedCategory==='All' ? 'id' : 'name'}${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}${selectedSubCategory!=='All' ? '&filter[has_sub_categories]='+selectedSubCategory : ''}`;
     }, [selectedCategory, subCategoryData])
     
     const {

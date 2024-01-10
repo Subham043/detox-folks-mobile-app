@@ -80,6 +80,11 @@
     flex-direction: column;
     justify-content: flex-end;
 }
+.product-card-main .product-main-link .product-main-img-btn{
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
 
 .product-card-main .product-main-link .product-card-image{
     position: absolute;
