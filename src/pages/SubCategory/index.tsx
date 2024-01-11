@@ -34,7 +34,12 @@ const SubCategory: React.FC = () => {
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            if(productRef && productRef.current){
+                productRef.current.complete()
+            }
+            return null;
+        }
         return `${api_routes.sub_categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${categoryData ? '&filter[has_categories]='+categoryData.category.id : ''}`;
     }, [categoryData])
 

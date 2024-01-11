@@ -36,7 +36,12 @@ const Search: React.FC = () => {
 
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if (search.length===0) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            if(productRef && productRef.current){
+                productRef.current.complete()
+            }
+            return null;
+        }
         return `${api_routes.global_search}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id&filter[search]=${search}`;
     }, [search])
 
@@ -78,7 +83,7 @@ const Search: React.FC = () => {
                     isSearchLoading && <LoadingCard itemCount={6} column={12} />
                 }
                 {
-                    (!isSearchLoading && (searchData ? searchData.flat(): []).length===0) && <NoData message='No data is available!' />
+                    (!isSearchLoading && (searchData ? searchData.flat(): []).length===0 && search.length!==0) && <NoData message='No data is available!' />
                 }
                 <IonInfiniteScroll
                     ref={productRef}

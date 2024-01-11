@@ -29,7 +29,12 @@ const Orders: React.FC = () =>{
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!auth.authenticated) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            if(productRef && productRef.current){
+                productRef.current.complete()
+            }
+            return null;
+        }
         return `${api_routes.place_order_paginate}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
     }, [])
     const {

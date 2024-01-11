@@ -87,7 +87,12 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
       return res.data.data
   };
   const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
+      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+          if(productRef && productRef.current){
+            productRef.current.complete()
+          }
+          return null;
+      }
       return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${getCategoryStr() ? `&filter[has_categories]=${getCategoryStr()}` : ''}${getSubCategoryStr() ? `&filter[has_sub_categories]=${getSubCategoryStr()}` : ''}`;
   }, [productData && productData.product.slug])
   

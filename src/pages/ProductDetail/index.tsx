@@ -13,7 +13,7 @@ import { useCart } from '../../hooks/useCart';
 import ProductPrice from '../../components/ProductPrice';
 import CartQuantity from '../../components/CartQuantity';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
 import NoData from '../../components/NoData';
@@ -69,7 +69,16 @@ const ProductDetailBulkFactor = ({product}:{product:ProductType}) => {
 
 const ProductDetail: React.FC<ProductProps> = ({match}) => {
   const axiosPrivate = useAxiosPrivate();
-  const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
+  const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
+  const fetcher = async (url: string) => {
+      const res =await axiosPrivate.get(url);
+      setTimeout(async() => {
+        if(productRef && productRef.current){
+          await productRef.current.complete()
+        }
+      }, 500)
+      return res.data.data
+  };
   const { data:productData, isLoading:isProductLoading } = useSWR<{product: ProductType}>(api_routes.products + `/${match.params.slug}`);
   const getCategoryStr = () => {
       return productData ? productData.product.categories.map(item => item.id).join('_') : null;
@@ -79,7 +88,12 @@ const ProductDetail: React.FC<ProductProps> = ({match}) => {
       return productData ? productData.product.sub_categories.map(item => item.id).join('_') : null;
   }
   const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-      if (previousPageData && previousPageData.length===0) return null;
+      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+          if(productRef && productRef.current){
+              productRef.current.complete()
+          }
+          return null;
+      }
       return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${getCategoryStr() ? `&filter[has_categories]=${getCategoryStr()}` : ''}${getSubCategoryStr() ? `&filter[has_sub_categories]=${getSubCategoryStr()}` : ''}`;
   }, [productData && productData.product.slug])
   
@@ -170,10 +184,12 @@ const ProductDetail: React.FC<ProductProps> = ({match}) => {
                     (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
                 }
                 <IonInfiniteScroll
+                    ref={productRef}
                     onIonInfinite={(ev) => {
-                    setSize(size+1);
-                    ev.target.complete()
-                  }}
+                        if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
+                            !isLoading && setSize(size+1);
+                        }
+                    }}
                 >
                     <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                 </IonInfiniteScroll>

@@ -36,7 +36,12 @@ const Product2: React.FC = () => {
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            if(productRef && productRef.current){
+                productRef.current.complete()
+            }
+            return null;
+        }
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=${selectedCategory==='All' ? 'id' : 'name'}${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}${selectedSubCategory!=='All' ? '&filter[has_sub_categories]='+selectedSubCategory : ''}`;
     }, [selectedCategory, selectedSubCategory])
     
@@ -194,7 +199,12 @@ const SubCategorySelection:React.FC<{
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!hasSubCategories) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+            if(productRef && productRef.current){
+                productRef.current.complete()
+            }
+            return null;
+        }
         return `${api_routes.sub_categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}`;
     }, [selectedCategory])
 
