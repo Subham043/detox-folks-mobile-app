@@ -13,6 +13,7 @@ import MainProductCard from '../../components/MainProductCard';
 import ViewCartBtn from '../../components/ViewCartBtn';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 const CATEGORY_PAGE_SIZE = 6;
@@ -23,7 +24,6 @@ const Product2: React.FC = () => {
     const sub_category_slug = query.get('sub_category_slug')
     const axiosPrivate = useAxiosPrivate();
 
-    const { data:subCategoryData, isLoading:isSubCategoryLoading } = useSWR<{subCategory: SubCategoryType}>(sub_category_slug ? api_routes.sub_categories + `/${sub_category_slug}` : null);
     const [hasNextPage, setHasNextPage] = useState<boolean>(true);
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -45,7 +45,7 @@ const Product2: React.FC = () => {
             return null;
         }
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=${selectedCategory==='All' ? 'id' : 'name'}${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}${selectedSubCategory!=='All' ? '&filter[has_sub_categories]='+selectedSubCategory : ''}`;
-    }, [selectedCategory, subCategoryData])
+    }, [selectedCategory, selectedSubCategory])
     
     const {
         data,
@@ -74,7 +74,10 @@ const Product2: React.FC = () => {
                             (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
                         }
                         {
-                            (isLoading || isSubCategoryLoading) && <LoadingCard itemCount={3} column={12} />
+                            (isLoading) && <LoadingCard itemCount={3} column={12} height='300px' />
+                        }
+                        {
+                            (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
                         }
                         <IonInfiniteScroll
                             ref={productRef}
@@ -243,6 +246,9 @@ const SubCategorySelection:React.FC<{
     </IonRow>
     {
         (isLoading) && <LoadingCard itemCount={6} column={4} />
+    }
+    {
+        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No sub-category is available!' />
     }
     <IonInfiniteScroll
         ref={productRef}

@@ -13,6 +13,7 @@ import { useLocation } from 'react-router';
 import useSWR from 'swr'
 import CategoryCard2 from '../../components/CategoryCard/CategoryCard2';
 import ViewCartBtn from '../../components/ViewCartBtn';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 
@@ -81,6 +82,9 @@ const SubCategory: React.FC = () => {
                     </IonRow>
                     {
                         (isLoading || isCategoryLoading) && <LoadingCard itemCount={6} column={4} />
+                    }
+                    {
+                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No sub-category is available!' />
                     }
                     <IonInfiniteScroll
                         ref={productRef}

@@ -13,6 +13,7 @@ import { useLocation } from 'react-router';
 import useSWR from 'swr'
 import MainProductCard from '../../components/MainProductCard';
 import ViewCartBtn from '../../components/ViewCartBtn';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 
@@ -69,7 +70,10 @@ const Product: React.FC = () => {
                     (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
                 }
                 {
-                    (isLoading || isCategoryLoading || isSubCategoryLoading) && <LoadingCard itemCount={3} column={12} />
+                    (isLoading || isCategoryLoading || isSubCategoryLoading) && <LoadingCard itemCount={3} column={12} height='300px' />
+                }
+                {
+                    (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
                 }
                 <IonInfiniteScroll
                     ref={productRef}

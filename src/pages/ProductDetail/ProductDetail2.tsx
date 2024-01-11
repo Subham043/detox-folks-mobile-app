@@ -18,6 +18,7 @@ import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
 import CartQuantity2 from '../../components/CartQuantity/CartQuantity2';
 import MainProductCard from '../../components/MainProductCard';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 interface ProductProps extends RouteComponentProps<{
@@ -115,7 +116,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
           forceOverscroll={false}
         >
             {
-              (isProductLoading) && <LoadingCard itemCount={4} column={12} height='200px' />
+              (isProductLoading) && <LoadingCard itemCount={2} column={12} height='150px' />
             }
             {
               productData && <>
@@ -167,7 +168,10 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
                   (data ? data.flat(): []).map((item, i) =><MainProductCard {...item} key={i} />)
                 }
                 {
-                  (isLoading) && <LoadingCard itemCount={3} column={12} />
+                  (isLoading) && <LoadingCard itemCount={3} column={12} height='300px' />
+                }
+                {
+                    (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
                 }
                 <IonInfiniteScroll
                     ref={productRef}

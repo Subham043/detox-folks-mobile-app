@@ -9,7 +9,7 @@ type Props = {
 
 const LoadingCard: React.FC<Props> = ({column=12, itemCount=6, height="110px"}) => {
     const arrayList = Array.from(Array(itemCount).keys());
-    return <IonGrid>
+    return <>
         <IonRow className="ion-align-items-center ion-justify-content-between">
             {
                 arrayList.map((i) => <IonCol
@@ -22,7 +22,7 @@ const LoadingCard: React.FC<Props> = ({column=12, itemCount=6, height="110px"}) 
             </IonCol>)
             }
         </IonRow>
-</IonGrid>
+</>
 }
 
 export default LoadingCard

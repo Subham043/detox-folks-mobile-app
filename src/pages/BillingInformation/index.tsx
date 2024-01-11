@@ -13,6 +13,7 @@ import LoadingCard from '../../components/LoadingCard';
 import { useToast } from '../../hooks/useToast';
 import { useLocation } from 'react-router';
 import BillingInformationEdit from '../../components/BillingInformationEdit';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 
@@ -139,6 +140,9 @@ const BillingInformation: React.FC = () => {
                     </IonList>
                     {
                         isLoading && <LoadingCard itemCount={6} column={12} height='70px' />
+                    }
+                    {
+                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No billing information is available. Please add one!' />
                     }
                     <IonInfiniteScroll
                         ref={productRef}

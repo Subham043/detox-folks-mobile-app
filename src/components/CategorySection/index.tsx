@@ -8,6 +8,7 @@ import useSWRInfinite from "swr/infinite";
 import { CategoryType } from '../../helper/types';
 import CategoryCard2 from '../CategoryCard/CategoryCard2';
 import RowHeading from '../RowHeading';
+import NoData from '../NoData';
 
 const PAGE_SIZE = 20;
 
@@ -67,6 +68,9 @@ const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => 
                 </IonRow>
                 {
                     isLoading && <LoadingCard itemCount={6} column={4} />
+                }
+                {
+                    (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No category is available!' />
                 }
                 {
                     !inHomePage && 

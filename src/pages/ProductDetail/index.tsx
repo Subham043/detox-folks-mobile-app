@@ -16,6 +16,7 @@ import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback } from 'react';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 interface ProductProps extends RouteComponentProps<{
@@ -164,6 +165,9 @@ const ProductDetail: React.FC<ProductProps> = ({match}) => {
                 </IonGrid>
                 {
                   (isLoading) && <LoadingCard itemCount={6} column={6} />
+                }
+                {
+                    (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
                 }
                 <IonInfiniteScroll
                     onIonInfinite={(ev) => {

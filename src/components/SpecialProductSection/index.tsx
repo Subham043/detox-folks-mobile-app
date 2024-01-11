@@ -1,7 +1,6 @@
-import { IonCol, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonRow } from '@ionic/react';
+import { IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/react';
 import './SpecialProductSection.css';
 import CommonHeading from '../../components/CommonHeading';
-import ProductCard from '../../components/ProductCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback, useRef, useState } from 'react';
 import { ProductType } from '../../helper/types';
@@ -10,6 +9,7 @@ import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
 import ShowMoreButton from '../ShowMoreButton';
 import MainProductCard from '../MainProductCard';
+import NoData from '../NoData';
 
 const PAGE_SIZE = 20;
 
@@ -64,6 +64,9 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
             }
             {
                 (isLoading) && <LoadingCard itemCount={6} column={12} />
+            }
+            {
+                (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
             }
             {
                 inHomePage ? <ShowMoreButton link={`/special-product/${slug}`} /> : 

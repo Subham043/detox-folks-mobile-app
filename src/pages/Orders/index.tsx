@@ -10,6 +10,7 @@ import useSWRInfinite from "swr/infinite";
 import { OrderType } from '../../helper/types';
 import LoadingCard from '../../components/LoadingCard';
 import OrderCard from '../../components/OrderCard';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 
@@ -71,6 +72,9 @@ const Orders: React.FC = () =>{
             </div>
             {
                 isLoading && <LoadingCard itemCount={6} column={12} />
+            }
+            {
+                (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No order is available!' />
             }
             <div className="cart-fixed-spacing-2"></div>
             <IonInfiniteScroll

@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import MainProductCard from '../MainProductCard';
 import RowHeading from '../RowHeading';
+import NoData from '../NoData';
 
 const PAGE_SIZE = 20;
 
@@ -45,7 +46,10 @@ const SpecialProductSliderSection: React.FC<Props> = ({inHomePage=true, slug, na
             <div className='page-padding slider-padding section-container'>
                 <div className="main-product-slider">
                     {
-                        (isLoading) && <LoadingCard itemCount={1} column={12} />
+                        (isLoading) && <LoadingCard itemCount={1} column={12} height='300px' />
+                    }
+                    {
+                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
                     }
                     <Swiper
                         modules={[Pagination]}
