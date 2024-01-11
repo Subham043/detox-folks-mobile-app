@@ -134,7 +134,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
                   {
                     productData.product.product_specifications.length>0 &&
                     <div className='page-padding section-container pb-1'>
-                      <div className='specification-heading product-detail-page-main-specification-heading'>
+                      <div className='specification-heading product-detail-page-main-specification-heading mt-1'>
                         <h6><IonIcon icon={starSharp} /><IonIcon icon={starSharp} /><span>Specification</span><IonIcon icon={starSharp} /><IonIcon icon={starSharp} /></h6>
                       </div>
                       <div className='product-detail-page-main-specification'>

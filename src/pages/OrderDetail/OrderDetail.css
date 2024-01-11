@@ -77,3 +77,12 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+.product-detail-page-main-bulk-factor .cart-total-price-heading.cart-total-price-heading-2 {
+    color: #fff;
+    background-color: #222;
+}
+
+.product-detail-page-main-bulk-factor .cart-total-price-heading.cart-total-price-heading-2 h6 {
+    color: #ffffff;
+}

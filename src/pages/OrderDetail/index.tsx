@@ -173,8 +173,10 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                         </div>
                     </IonCard>
                     <IonCard>
-                        <div className='specification-heading mb-1'>
-                            <h6>Payment Information</h6>
+                        <div className="product-detail-page-main-bulk-factor">
+                            <div className="cart-total-price-heading cart-total-price-heading-2">
+                                <h6>Payment Information</h6>
+                            </div>
                         </div>
                         <div>
                             <IonItemDivider className="cart-divider">
@@ -218,8 +220,10 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                         </div>
                     </IonCard>
                     <IonCard className="mt-1">
-                        <div className='specification-heading mb-0'>
-                            <h6>Billing Information</h6>
+                        <div className="product-detail-page-main-bulk-factor">
+                            <div className="cart-total-price-heading cart-total-price-heading-2">
+                                <h6>Billing Information</h6>
+                            </div>
                         </div>
                         <div>
                             <IonItem lines="inset">

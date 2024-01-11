@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { useToast } from '../../hooks/useToast';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IonButton, IonCard, IonCardContent, IonItem, IonList, IonSpinner, IonTextarea } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonItem, IonList, IonSpinner, IonText, IonTextarea } from '@ionic/react';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { api_routes } from '../../helper/routes';
 import Input from '../Input';
@@ -136,35 +136,45 @@ const BillingInformationEdit:React.FC<Props> = (props) => {
         }
     };
 
-    return <IonCard className='address-create-card mt-2 mb-2'>
-        <IonCardContent>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                {
-                    fields.map((item, i) => <IonList className="ion-no-padding" key={i}>
-                        <Input
-                            {...item}
-                            register={register}
-                            errors={errors}
-                        />
-                    </IonList>)
-                }
-                <div className='text-center'>
-                    <IonButton
-                        color="dark"
-                        type="submit"
-                        size='small'
-                        className="mt-1 login-button"
-                    >
-                        {loading ? (
-                            <IonSpinner name="crescent"></IonSpinner>
-                        ) : (
-                            "Save"
-                        )}
-                    </IonButton>
-                </div>
-            </form>
-        </IonCardContent>
-    </IonCard>
+    return <div className='address-create-card mb-2'>
+        <div className="product-detail-page-main-bulk-factor">
+            <div className="page-padding cart-total-price-heading cart-total-price-heading-2">
+                <h6>Billing Information</h6>
+            </div>
+        </div>
+        <div className="page-padding">
+          <div className='billing-info-section'>
+              <IonText>
+                  <p className='billing-info-cart-text'><code>Enter the following information:</code></p>
+              </IonText>
+          </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+              {
+                  fields.map((item, i) => <IonList className="ion-no-padding" key={i}>
+                      <Input
+                          {...item}
+                          register={register}
+                          errors={errors}
+                      />
+                  </IonList>)
+              }
+              <div className='text-center'>
+                  <IonButton
+                      color="dark"
+                      type="submit"
+                      size='small'
+                      className="mt-1 login-button"
+                  >
+                      {loading ? (
+                          <IonSpinner name="crescent"></IonSpinner>
+                      ) : (
+                          "Save"
+                      )}
+                  </IonButton>
+              </div>
+          </form>
+        </div>
+    </div>
 }
 
 export default BillingInformationEdit;
