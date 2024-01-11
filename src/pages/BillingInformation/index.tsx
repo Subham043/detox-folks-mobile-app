@@ -28,7 +28,6 @@ const BillingInformation: React.FC = () => {
     });
     const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);
@@ -41,10 +40,7 @@ const BillingInformation: React.FC = () => {
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!auth.authenticated) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-            setHasNextPage(false);
-            return null;
-        }
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.billing_information_list}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
     }, [auth.authenticated])
     
@@ -152,7 +148,7 @@ const BillingInformation: React.FC = () => {
                             }
                         }}
                     >
-                        {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                        <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                     </IonInfiniteScroll>
                     <div className="cart-fixed-spacing-2"></div>
                 </div>

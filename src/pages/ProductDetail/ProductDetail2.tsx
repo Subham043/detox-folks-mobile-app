@@ -67,7 +67,6 @@ const ProductDetailBulkFactor = ({product}:{product:ProductType}) => {
 
 const ProductDetail2: React.FC<ProductProps> = ({match}) => {
   const axiosPrivate = useAxiosPrivate();
-  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
   const { data:productData, isLoading:isProductLoading } = useSWR<{product: ProductType}>(api_routes.products + `/${match.params.slug}`);
   const getCategoryStr = () => {
@@ -88,10 +87,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
       return res.data.data
   };
   const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-        setHasNextPage(false);
-        return null
-      };
+      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
       return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${getCategoryStr() ? `&filter[has_categories]=${getCategoryStr()}` : ''}${getSubCategoryStr() ? `&filter[has_sub_categories]=${getSubCategoryStr()}` : ''}`;
   }, [productData && productData.product.slug])
   
@@ -181,7 +177,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
                         }
                     }}
                 >
-                  {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                  <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                 </IonInfiniteScroll>
                 <IonItemDivider className="page-padding cart-divider-total w-100" slot="fixed">
                     <IonRow className="w-100 ion-align-items-center ion-justify-content-between">

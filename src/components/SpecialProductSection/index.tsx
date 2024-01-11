@@ -21,7 +21,6 @@ type Props = {
 
 const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) => {
     const axiosPrivate = useAxiosPrivate();
-    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
 
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
 
@@ -36,10 +35,7 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
     };
 
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-            setHasNextPage(false);
-            return null;
-        }
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${slug ? `&filter[${slug}]=true` : ''}`;
     }, [slug])
     
@@ -78,7 +74,7 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
                         }
                     }}
                 >
-                    {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                 </IonInfiniteScroll>
             }
         </>

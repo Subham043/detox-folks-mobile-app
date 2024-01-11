@@ -1,13 +1,14 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonSearchbar, IonToolbar, SearchbarInputEventDetail } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonSearchbar, IonToolbar, SearchbarInputEventDetail } from '@ionic/react';
 import './Search.css';
 import SearchCard from '../../components/SearchCard';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { api_routes } from '../../helper/routes';
 import { GlobalSearchType } from '../../helper/types';
 import LoadingCard from '../../components/LoadingCard';
 import { Virtuoso } from 'react-virtuoso';
 import useSWRInfinite from "swr/infinite";
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
+import NoData from '../../components/NoData';
 
 const PAGE_SIZE = 20;
 
@@ -20,13 +21,22 @@ const Spacing = () => {
 }
 
 const Search: React.FC = () => {
-  const axiosPrivate = useAxiosPrivate();
-  const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
-  const [search, setSearch] = useState<string>("");
+    const axiosPrivate = useAxiosPrivate();
+    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
+    const fetcher = async (url: string) => {
+        const res =await axiosPrivate.get(url);
+        setTimeout(async() => {
+            if(productRef && productRef.current){
+                await productRef.current.complete()
+            }
+        }, 500)
+        return res.data.data
+    };
+    const [search, setSearch] = useState<string>("");
 
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if (search.length===0) return null;
-        if (previousPageData && previousPageData.length===0) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.global_search}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id&filter[search]=${search}`;
     }, [search])
 
@@ -58,16 +68,28 @@ const Search: React.FC = () => {
             <IonContent
             fullscreen={false}
             forceOverscroll={false}
-            scrollY={false}
             >
-                <Virtuoso
-                    data={searchData ? searchData.flat(): []}
-                    overscan={searchData ? searchData.flat().length: PAGE_SIZE}
-                    style={{ flex: 1 }}
-                    atBottomStateChange={(atBottom)=> atBottom && setSize(size+1)}
-                    itemContent={(index, item) => (<SearchCard link={item.search_type=='PRODUCT' ? `/product-detail/${item.slug}` : (item.search_type=='CATEGORY' ? `/product?category_slug=${item.slug}` : `/product?sub_category_slug=${item.slug}`)} image={item.image} text={item.name} type={item.search_type} key={index} />)}
-                    components={{Footer: isSearchLoading ? Footer : Spacing}}
-                />
+                <div className="page-padding">
+                    {
+                        (searchData ? searchData.flat(): []).map((item, index) => <SearchCard link={item.search_type=='PRODUCT' ? `/product-detail/${item.slug}` : (item.search_type=='CATEGORY' ? `/product?category_slug=${item.slug}` : `/product?sub_category_slug=${item.slug}`)} image={item.image} text={item.name} type={item.search_type} key={index} />)
+                    }
+                </div>
+                {
+                    isSearchLoading && <LoadingCard itemCount={6} column={12} />
+                }
+                {
+                    (!isSearchLoading && (searchData ? searchData.flat(): []).length===0) && <NoData message='No data is available!' />
+                }
+                <IonInfiniteScroll
+                    ref={productRef}
+                    onIonInfinite={(ev) => {
+                        if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
+                            !isSearchLoading && setSize(size+1);
+                        }
+                    }}
+                >
+                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
+                </IonInfiniteScroll>
             </IonContent>
         </IonPage>
     );

@@ -17,7 +17,6 @@ const PAGE_SIZE = 20;
 const Orders: React.FC = () =>{
     const axiosPrivate = useAxiosPrivate();
     const {auth} = useContext(AuthContext);
-    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);
@@ -30,10 +29,7 @@ const Orders: React.FC = () =>{
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!auth.authenticated) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-            setHasNextPage(false);
-            return null;
-        }
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.place_order_paginate}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
     }, [])
     const {
@@ -85,7 +81,7 @@ const Orders: React.FC = () =>{
                     }
                 }}
             >
-                {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
             </IonInfiniteScroll>
         </IonContent>
     </IonPage>

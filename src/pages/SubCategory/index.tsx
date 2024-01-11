@@ -23,7 +23,6 @@ const SubCategory: React.FC = () => {
     const category_slug = query.get('category_slug')
     const axiosPrivate = useAxiosPrivate();
     const { data:categoryData, isLoading:isCategoryLoading } = useSWR<{category: CategoryType}>(category_slug ? api_routes.categories + `/${category_slug}` : null);
-    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);
@@ -35,10 +34,7 @@ const SubCategory: React.FC = () => {
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-            setHasNextPage(false);
-            return null;
-        }
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.sub_categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${categoryData ? '&filter[has_categories]='+categoryData.category.id : ''}`;
     }, [categoryData])
 
@@ -94,7 +90,7 @@ const SubCategory: React.FC = () => {
                             }
                         }}
                     >
-                        {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                        <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                     </IonInfiniteScroll>
                 </div>
                 <ViewCartBtn />

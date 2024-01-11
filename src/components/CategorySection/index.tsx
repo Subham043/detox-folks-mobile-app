@@ -14,7 +14,6 @@ const PAGE_SIZE = 20;
 
 const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => {
     const axiosPrivate = useAxiosPrivate();
-    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
 
     const fetcher = async (url: string) => {
@@ -27,10 +26,7 @@ const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => 
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-            setHasNextPage(false);
-            return null;
-        }
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id`;
     }, [])
     
@@ -82,7 +78,7 @@ const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => 
                             }
                         }}
                     >
-                        {hasNextPage && <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>}
+                        <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                     </IonInfiniteScroll>
                 }
             </div>
