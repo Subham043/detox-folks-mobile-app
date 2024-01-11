@@ -57,8 +57,10 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
             setIsOpen(false)
             mutate(api_routes.cart_all)
             history.push(`/order/${response.data?.order?.id}`);
-          }else{
+          }else if(modeOfPayment==='Online - Phonepe'){
             makePayment(response.data?.order?.payment?.phone_pe_payment_link, response.data?.order?.id)
+        }else{
+            makePayment(response.data?.order?.payment?.razorpay_payment_link, response.data?.order?.id)
           }
         } catch (error: any) {
           if (error?.response?.data?.message) {
@@ -116,6 +118,14 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
                                     <IonIcon aria-hidden="true" icon={cardOutline} className='billing-info-section-card-icon'></IonIcon>
                                     <IonLabel className='billing-info-section-card-text'>
                                         <h6>Pay Online - Phonepe</h6>
+                                    </IonLabel>
+                                </div>
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <div className={modeOfPayment==='Online - Razorpay' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Online - Razorpay')}>
+                                    <IonIcon aria-hidden="true" icon={cardOutline} className='billing-info-section-card-icon'></IonIcon>
+                                    <IonLabel className='billing-info-section-card-text'>
+                                        <h6>Pay Online - Razorpay</h6>
                                     </IonLabel>
                                 </div>
                             </SwiperSlide>

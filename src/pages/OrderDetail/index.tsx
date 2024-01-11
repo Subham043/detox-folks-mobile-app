@@ -18,7 +18,7 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
 
     const {auth} = useContext(AuthContext);
     const [imgLoading, setImgLoading] = useState<boolean>(true);
-    const { data:order, isLoading:loading, mutate } = useSWR<{order: OrderType}>(auth.authenticated ? api_routes.place_order_detail + `/${match.params.slug}` : null);
+    const { data:order, isLoading:loading, mutate } = useSWR<{order: OrderType}>(auth.authenticated ? api_routes.place_order_detail_success + `/${match.params.slug}` : null);
 
     return <IonPage>
         <MainHeader isMainHeader={false} name={`Order#${order?.order.id}`} />

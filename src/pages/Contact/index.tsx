@@ -136,6 +136,11 @@ const Contact: React.FC = () => {
             <MainHeader isMainHeader={false} name="Contact Us" />
             <IonContent fullscreen={false} forceOverscroll={false}>
                 <IonCard className="mt-1">
+                    <div className="product-detail-page-main-bulk-factor">
+                        <div className="cart-total-price-heading cart-total-price-heading-2">
+                            <h6>Contact Information</h6>
+                        </div>
+                    </div>
                     <IonItem lines="inset">
                         <IonIcon icon={mailOutline} slot="start" className='order-detail-billing-icon'></IonIcon>
                         <IonLabel>

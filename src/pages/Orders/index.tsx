@@ -35,7 +35,7 @@ const Orders: React.FC = () =>{
             }
             return null;
         }
-        return `${api_routes.place_order_paginate}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
+        return `${api_routes.place_order_paginate_success}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
     }, [])
     const {
         data,
