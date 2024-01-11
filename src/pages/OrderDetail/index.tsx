@@ -39,10 +39,7 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                 loading ? <LoadingCard itemCount={4} column={12} height='170px' /> :
                 order &&
                 <>
-                    <div className='cart-message mt-0'>
-                        <p>You have realized a minimum savings of 20% - 25% on your standard purchase when compared to retail price.</p>
-                    </div>
-                    <div className='order-detail-padding'>
+                    <div className='order-detail-padding mt-1'>
                         <IonRow className="ion-align-items-end ion-justify-content-between w-100">
                             <IonCol
                                 size="8"
@@ -103,9 +100,14 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                             </IonItemDivider>)
                         }
                     </IonCard>
-                    <IonCard>
-                        <div className='cart-total-price-heading'>
-                            <h6>Note: Prices are inclusive of GST.</h6>
+                    <div className='cart-message mt-1'>
+                        <p>You have realized a minimum savings of 20% - 25% on your standard purchase when compared to retail price.</p>
+                    </div>
+                    <IonCard className='mt-1'>
+                        <div className="product-detail-page-main-bulk-factor">
+                            <div className="cart-total-price-heading">
+                                <h6>Prices are inclusive of GST.</h6>
+                            </div>
                         </div>
                         <div>
                             <IonItemDivider className="cart-divider">
@@ -190,7 +192,7 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                                         className='text-right'
                                     >
                                         <IonText>
-                                        <p className='order-detail-price-text'><b>&#8377;{order.order.payment.mode}</b></p>
+                                        <p className='order-detail-price-text'><b>{order.order.payment.mode}</b></p>
                                         </IonText>
                                     </IonCol>
                                 </IonRow>

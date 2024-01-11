@@ -15,13 +15,13 @@ const SpecialProduct: React.FC<SpecialProductProps> = ({match}) => {
     const name = useCallback<(slug:"is_featured" | "is_new" | "is_on_sale" | undefined)=>string>((slug) => {
         switch (slug) {
             case 'is_featured':
-                return "Our Featured Products"
+                return "Exclusive Products"
             case 'is_new':
-                return "Our New Products"
+                return "Eco-Friendly Products"
             case 'is_on_sale':
-                return "On Sale Products"
+                return "On Demand Products"
             default:
-                return "Our Featured Products"
+                return "Exclusive Products"
         }
     }, [match.params.slug]) 
 

@@ -9,6 +9,7 @@ import { Virtuoso } from 'react-virtuoso';
 import useSWRInfinite from "swr/infinite";
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import NoData from '../../components/NoData';
+import ViewCartBtn from '../../components/ViewCartBtn';
 
 const PAGE_SIZE = 20;
 
@@ -65,7 +66,7 @@ const Search: React.FC = () => {
             <IonHeader translucent={true}>
                 <IonToolbar>
                     <IonButtons slot="start">
-                        <IonBackButton></IonBackButton>
+                        <IonBackButton color='dark'></IonBackButton>
                     </IonButtons>
                     <IonSearchbar showClearButton="focus" debounce={500} placeholder="Type to search..." className='search-input' onIonInput={(ev: CustomEvent<SearchbarInputEventDetail>) => searchFieldHandler(ev)} />
                 </IonToolbar>
@@ -73,6 +74,7 @@ const Search: React.FC = () => {
             <IonContent
             fullscreen={false}
             forceOverscroll={false}
+            style={{'--background': '#f2f2f2'}}
             >
                 <div className="page-padding">
                     {
@@ -95,6 +97,7 @@ const Search: React.FC = () => {
                 >
                     <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                 </IonInfiniteScroll>
+                <ViewCartBtn />
             </IonContent>
         </IonPage>
     );

@@ -64,9 +64,8 @@ const SubCategory: React.FC = () => {
                 fullscreen={false}
                 forceOverscroll={false}
             >
-                <CommonHeading text={categoryData ? categoryData.category.name : 'Sub Category'} />
-                <div className='page-padding section-container'>
-                    <IonRow className="ion-align-items-start ion-justify-content-start">
+                <div className='page-padding mt-1'>
+                    <IonRow className="ion-align-items-start ion-justify-content-center">
                         {
                             (data ? data.flat(): []).map((item, i) => <IonCol
                                 size="6"

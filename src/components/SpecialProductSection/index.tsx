@@ -59,7 +59,6 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
     
     return (
         <>
-            <CommonHeading text={name ? name : ''} />
             {
                 (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
             }

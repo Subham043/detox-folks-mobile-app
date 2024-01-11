@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonIcon, IonItem, IonItemDivider, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonText, RefresherEventDetail } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonIcon, IonItem, IonItemDivider, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonText, RefresherEventDetail, useIonRouter } from '@ionic/react';
 import './Cart.css';
 import MainHeader from '../../components/MainHeader';
 import EmptyCart from '../../components/EmptyCart';
@@ -14,7 +14,6 @@ import { BillingAddressResponseType, BillingInformationResponseType, LegalRespon
 import { Browser } from '@capacitor/browser';
 import CartItem2 from '../../components/CartItem/CartItem2';
 import BillingInformationModal from '../../components/BillingInformationModal';
-import { Link } from 'react-router-dom';
 import BillingAddressModal from '../../components/BillingAddressModal';
 import CheckoutModal from '../../components/CheckoutModal';
 
@@ -22,6 +21,7 @@ const Cart2: React.FC = () => {
     const { cart, cartLoading } = useContext(CartContext);
     const { auth } = useContext(AuthContext);
     const location = useLocation();
+    const router = useIonRouter();
     const { mutate } = useSWRConfig();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isBillingInfoOpen, setIsBillingInfoOpen] = useState<boolean>(false);
@@ -101,7 +101,7 @@ const Cart2: React.FC = () => {
                                                 <p><i>Add billing address to place an order</i></p>
                                             </IonLabel>
                                             <div className="delivery-select">
-                                                <Link to='/billing-address'>ADD</Link>
+                                                <button onClick={()=>router.push('/billing-address')}>ADD</button>
                                             </div>
                                         </div>}
                                     </div>
@@ -131,7 +131,7 @@ const Cart2: React.FC = () => {
                                                 <p><i>Add billing information to place an order</i></p>
                                             </IonLabel>
                                             <div className="delivery-select">
-                                                <Link to='/billing-information'>ADD</Link>
+                                                <button onClick={()=>router.push('/billing-information')}>ADD</button>
                                             </div>
                                         </div>}
                                     </div>

@@ -65,8 +65,7 @@ const Orders: React.FC = () =>{
             }}>
                 <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
-            <CommonHeading text='Orders' />
-            <div className="order-card-wrapper">
+            <div className="order-card-wrapper page-padding mt-1 mb-2">
                 {
                     (data ? data.flat(): []).map((item, i) => <OrderCard {...item} key={i} />)
                 }
@@ -77,7 +76,6 @@ const Orders: React.FC = () =>{
             {
                 (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No order is available!' />
             }
-            <div className="cart-fixed-spacing-2"></div>
             <IonInfiniteScroll
                 ref={productRef}
                 onIonInfinite={(ev) => {

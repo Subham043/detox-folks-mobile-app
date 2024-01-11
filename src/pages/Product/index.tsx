@@ -66,7 +66,6 @@ const Product: React.FC = () => {
             fullscreen={false}
             forceOverscroll={false}
             >
-                <CommonHeading text={categoryData ? categoryData.category.name : subCategoryData ? subCategoryData.subCategory.name: 'Our Products'} />
                 {
                     (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
                 }
