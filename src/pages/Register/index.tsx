@@ -4,7 +4,7 @@ import MainHeader from '../../components/MainHeader';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import Input from '../../components/Input';
 import { axiosPublic } from '../../../axios';
@@ -68,7 +68,7 @@ const fields = [
 
 const Register: React.FC = () =>{
     const [loading, setLoading] = useState<boolean>(false);
-
+    const history = useHistory();
     const {toastSuccess, toastError} = useToast();
 
     const {
@@ -143,7 +143,7 @@ const Register: React.FC = () =>{
         forceOverscroll={false}
         >
             <div className='auth-container'>
-                <IonCard className='w-100'>
+                <IonCard className='w-100 auth-card'>
                     <IonCardHeader>
                         <IonText color="dark" className="text-center">
                             <h3>REGISTER</h3>
@@ -152,10 +152,11 @@ const Register: React.FC = () =>{
 
                     <IonCardContent>
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <IonList className="ion-no-padding">
+                            <IonList className="ion-no-padding auth-input-item">
                             {fields.map((item, i) => (
                                 <Input
                                     {...item}
+                                    isAuth={true}
                                     register={register}
                                     errors={errors}
                                     key={i}
@@ -177,19 +178,13 @@ const Register: React.FC = () =>{
                                 </IonButton>
                             </div>
                         </form>
-                        <IonGrid className="mt-1">
-                            <IonRow className="ion-align-items-center ion-justify-content-between">
-                            <IonCol size="12">
-                                <Link className="no-underline login-link-text" to="/login">
-                                    <IonText color="dark">
-                                        <p className="login-link-text text-center">
-                                            <b>Already have an account?</b>
-                                        </p>
-                                    </IonText>
-                                </Link>
-                            </IonCol>
-                            </IonRow>
-                        </IonGrid>
+                        <IonButton fill='clear' className="no-underline text-center w-100" onClick={()=>history.goBack()}>
+                            <IonText color="dark">
+                                <p className="login-link-text text-center">
+                                    <b>Already have an account?</b>
+                                </p>
+                            </IonText>
+                        </IonButton>
                     </IonCardContent>
                 </IonCard>
             </div>

@@ -50,7 +50,7 @@ const cartDefaultValues: CartContextType = {
 
 export const CartContext = createContext<CartContextType>(cartDefaultValues);
 
-export const useCart = () => useContext(CartContext);
+export const useCartContext = () => useContext(CartContext);
 
 const CartProvider: React.FC<ChildrenType> = ({children}) => {
     const { auth } = useAuth();

@@ -2,8 +2,8 @@ import { IonButton, IonCol, IonContent, IonIcon, IonItem, IonItemDivider, IonLab
 import './Cart.css';
 import MainHeader from '../../components/MainHeader';
 import EmptyCart from '../../components/EmptyCart';
-import { CartContext } from '../../context/CartProvider';
-import { useContext, useEffect, useState } from 'react';
+import { useCartContext } from '../../context/CartProvider';
+import { useEffect, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { api_routes } from '../../helper/routes';
 import { useAuth } from '../../context/AuthProvider';
@@ -18,7 +18,7 @@ import BillingAddressModal from '../../components/BillingAddressModal';
 import CheckoutModal from '../../components/CheckoutModal';
 
 const Cart2: React.FC = () => {
-    const { cart, cartLoading } = useContext(CartContext);
+    const { cart, cartLoading } = useCartContext();
     const { auth } = useAuth();
     const location = useLocation();
     const router = useIonRouter();

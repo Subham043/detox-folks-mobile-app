@@ -8,3 +8,9 @@
 .main-input{
     --highlight-color: #222;
 }
+
+.auth-input-item{
+    --background: transparent;
+    background: transparent;
+    --border-color:#222;
+}

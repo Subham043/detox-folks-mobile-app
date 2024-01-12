@@ -13,14 +13,15 @@ type Props = {
     type: any,
     name: any,
     placeholder: string,
+    isAuth?: boolean,
 };
 
-const Input: React.FC<Props> = ({errors, register, label, type, name, placeholder, inputmode}) => {
+const Input: React.FC<Props> = ({errors, register, label, type, name, placeholder, inputmode, isAuth=false}) => {
     const [passwordType, setPasswordType] = useState<boolean>(true);
     if(type==='password'){
         return (
             <>
-                <IonItem className="ion-no-padding">
+                <IonItem className={`ion-no-padding ${isAuth ? 'auth-input-item' : ''}`}>
                     <IonInput 
                         className="ion-no-padding main-input" 
                         label={label} 
@@ -46,7 +47,7 @@ const Input: React.FC<Props> = ({errors, register, label, type, name, placeholde
     
     return (
         <>
-            <IonItem className="ion-no-padding">
+            <IonItem className={`ion-no-padding ${isAuth ? 'auth-input-item' : ''}`}>
                 <IonInput 
                     className="ion-no-padding main-input" 
                     label={label} 

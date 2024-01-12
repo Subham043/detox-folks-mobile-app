@@ -1,8 +1,8 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAxiosPrivate } from "./useAxiosPrivate";
 import { useToast } from "./useToast";
 import { ProductPriceType } from "../helper/types";
-import { CartContext } from "../context/CartProvider";
+import { useCartContext } from "../context/CartProvider";
 import { api_routes } from "../helper/routes";
 import { useAuth } from "../context/AuthProvider";
 
@@ -26,7 +26,7 @@ export function useCart({
 }){
     const [quantity, setQuantity] = useState<number>(0);
     
-    const { cart, cartLoading, updateCart } = useContext(CartContext);
+    const { cart, cartLoading, updateCart } = useCartContext();
     const [cartItemLoading, setCartItemLoading] = useState<boolean>(false);
     const {auth} = useAuth();
     const axiosPrivate = useAxiosPrivate();

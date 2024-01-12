@@ -12,7 +12,7 @@ import {
 } from "@ionic/react";
 import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, mailUnreadOutline, newspaperOutline, peopleCircleOutline } from "ionicons/icons";
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 import { useToast } from "../../hooks/useToast";
 import { api_routes } from "../../helper/routes";
@@ -30,7 +30,6 @@ const Account: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const {toastSuccess, toastError} = useToast();
     const axiosPrivate = useAxiosPrivate();
-    const history = useHistory();
 
     const logoutHandler = async() => {
         setLoading(true);
@@ -38,7 +37,6 @@ const Account: React.FC = () => {
           await axiosPrivate.post(api_routes.logout, {});
           logout();
           toastSuccess('Logged out successfully.');
-          history.push('/login');
         } catch (error: any) {
             toastError('Something went wrong. Please try again later!');
         }finally {

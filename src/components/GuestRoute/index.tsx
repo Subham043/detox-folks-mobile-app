@@ -1,5 +1,6 @@
 import { useAuth } from "../../context/AuthProvider";
-import { Redirect, Route } from "react-router";
+import { Route } from "react-router";
+import Account from "../../pages/Account";
 
 
 const GuestRoute = ({component: Component, ...rest}: any) => {
@@ -10,7 +11,7 @@ const GuestRoute = ({component: Component, ...rest}: any) => {
         !auth.authenticated ? (
             <Component {...props} />
         ) : (
-            <Redirect to="/account" />
+            <Account />
         )
         }
     />

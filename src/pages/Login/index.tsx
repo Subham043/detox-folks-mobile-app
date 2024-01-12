@@ -1,10 +1,10 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonGrid, IonList, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonGrid, IonImg, IonList, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import './Login.css';
 import MainHeader from '../../components/MainHeader';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Input from '../../components/Input';
 import { axiosPublic } from '../../../axios';
@@ -41,13 +41,10 @@ const Login: React.FC = () =>{
     const [loading, setLoading] = useState<boolean>(false);
     const {setAuth} = useAuth();
     const {toastSuccess, toastError} = useToast();
-    const history = useHistory();
     const { mutate } = useSWRConfig()
 
     const {
         handleSubmit,
-        control,
-        setValue,
         register,
         getValues,
         reset,
@@ -73,7 +70,6 @@ const Login: React.FC = () =>{
             user: response.data.user
           }})
           mutate(api_routes.cart_all)
-          history.push('/account');
         } catch (error: any) {
           if (error?.response?.data?.message) {
             toastError(error?.response?.data?.message);
@@ -102,7 +98,7 @@ const Login: React.FC = () =>{
         forceOverscroll={false}
         >
             <div className='auth-container'>
-                <IonCard className='w-100'>
+                <IonCard className='w-100 auth-card'>
                     <IonCardHeader>
                         <IonText color="dark" className="text-center">
                             <h3>LOGIN</h3>
@@ -111,10 +107,11 @@ const Login: React.FC = () =>{
 
                     <IonCardContent>
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <IonList className="ion-no-padding">
+                            <IonList className="ion-no-padding auth-input-item">
                             {fields.map((item, i) => (
                                 <Input
                                     {...item}
+                                    isAuth={true}
                                     register={register}
                                     errors={errors}
                                     key={i}

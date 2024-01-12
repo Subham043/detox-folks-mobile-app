@@ -13,12 +13,12 @@ import Register from "../../pages/Register";
 import ForgotPassword from "../../pages/ForgotPassword";
 import Setting from "../../pages/Setting";
 import Account from "../../pages/Account";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
 import GuestRoute from "../GuestRoute";
 import ProtectedRoute from "../ProtectedRoute";
 import SpecialProduct from "../../pages/SpecialProduct";
-import { CartContext } from "../../context/CartProvider";
+import { useCartContext } from "../../context/CartProvider";
 import BillingAddress from "../../pages/BillingAddress";
 import BillingInformation from "../../pages/BillingInformation";
 import Orders from "../../pages/Orders";
@@ -33,7 +33,7 @@ import ProductDetail2 from "../../pages/ProductDetail/ProductDetail2";
 const PageTabs: React.FC = () => {
 
   const {auth} = useAuth();
-  const { cart } = useContext(CartContext);
+  const { cart } = useCartContext();
   const [hasNetwork, setHasNetwork] = useState<boolean>(true);
 
   

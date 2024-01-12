@@ -1,12 +1,12 @@
 import { IonButton, IonCol, IonIcon, IonItemDivider, IonRow } from "@ionic/react";
-import React, { useContext } from "react";
-import { CartContext } from "../../context/CartProvider";
+import React from "react";
+import { useCartContext } from "../../context/CartProvider";
 import './ViewCartBtn.css';
 import { Link } from "react-router-dom";
 import { cartOutline } from "ionicons/icons";
 
 const ViewCartBtn: React.FC = () => {
-    const { cart } = useContext(CartContext);
+    const { cart } = useCartContext();
     return cart.cart.length>0 ? <>
         <IonItemDivider className="view-cart-checkout-btn-main-container" slot="fixed">
             <Link className="w-100 no-underline" to='/cart'>
