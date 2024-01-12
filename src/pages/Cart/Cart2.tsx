@@ -101,7 +101,7 @@ const Cart2: React.FC = () => {
                                                 <p><i>Add billing address to place an order</i></p>
                                             </IonLabel>
                                             <div className="delivery-select">
-                                                <button onClick={()=>router.push('/billing-address')}>ADD</button>
+                                                <button onClick={()=>router.push('/billing-address')}>Add</button>
                                             </div>
                                         </div>}
                                     </div>
@@ -124,14 +124,14 @@ const Cart2: React.FC = () => {
                                                 {billingInformationData.data.filter(item => item.id===selectedBillingInformationData).length>0 && <p>{billingInformationData.data.filter(item => item.id===selectedBillingInformationData)[0].name}, {billingInformationData.data.filter(item => item.id===selectedBillingInformationData)[0].email}, {billingInformationData.data.filter(item => item.id===selectedBillingInformationData)[0].phone}</p>}
                                             </IonLabel>
                                             <div className="delivery-select">
-                                                <button onClick={()=>setIsBillingInfoOpen(true)}>EDIT</button>
+                                                <button onClick={()=>setIsBillingInfoOpen(true)}>Edit</button>
                                             </div>
                                         </div> : <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
                                                 <p><i>Add billing information to place an order</i></p>
                                             </IonLabel>
                                             <div className="delivery-select">
-                                                <button onClick={()=>router.push('/billing-information')}>ADD</button>
+                                                <button onClick={()=>router.push('/billing-information')}>Add</button>
                                             </div>
                                         </div>}
                                     </div>

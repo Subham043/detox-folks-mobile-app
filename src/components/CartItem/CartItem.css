@@ -69,7 +69,7 @@
     width: 48%;
 }
 .cart-item-container .cart-item-row .cart-item-col .cart-item-img-container{
-    width: 40%;
+    width: auto;
     overflow: hidden;
 }
 .cart-item-container .cart-item-row .cart-item-col .cart-item-text-container{
