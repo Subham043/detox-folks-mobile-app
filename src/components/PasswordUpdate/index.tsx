@@ -1,15 +1,12 @@
 import {
-    IonCard,
     IonButton,
     IonList,
     IonSpinner,
-    IonCardContent,
 } from "@ionic/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import { useState } from "react";
 import { useToast } from "../../hooks/useToast";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 import { api_routes } from "../../helper/routes";
@@ -54,14 +51,11 @@ const schema = yup
 const PasswordUpdate: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
-    const {auth} = useContext(AuthContext);
     const {toastSuccess, toastError} = useToast();
     const axiosPrivate = useAxiosPrivate();
 
     const {
         handleSubmit,
-        control,
-        setValue,
         register,
         getValues,
         reset,

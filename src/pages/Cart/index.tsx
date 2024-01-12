@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCheckbox, IonCol, IonContent, IonIcon, IonItem, IonItemDivider, IonLabel, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
+import { IonButton, IonCard, IonCheckbox, IonCol, IonContent, IonIcon, IonItemDivider, IonLabel, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
 import './Cart.css';
 import MainHeader from '../../components/MainHeader';
 import CommonHeading from '../../components/CommonHeading';
@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import CartItem from '../../components/CartItem';
 import useSWR, { useSWRConfig } from 'swr';
 import { api_routes } from '../../helper/routes';
-import { AuthContext } from '../../context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import { useHistory, useLocation } from 'react-router';
 import LoadingCard from '../../components/LoadingCard';
 import { cardOutline, cashOutline, locationOutline, peopleCircleOutline } from 'ionicons/icons';
@@ -22,7 +22,7 @@ const Cart: React.FC = () => {
     const { toastSuccess, toastError} = useToast();
     const history = useHistory();
     const { cart, cartLoading } = useContext(CartContext);
-    const { auth } = useContext(AuthContext);
+    const { auth } = useAuth();
     const location = useLocation();
     const { mutate } = useSWRConfig();
     const [isOpen, setIsOpen] = useState<boolean>(false);

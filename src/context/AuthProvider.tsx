@@ -1,8 +1,9 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthType, ChildrenType } from "../helper/types";
 import { GetResult, Preferences } from '@capacitor/preferences';
 import { axiosPublic } from "../../axios";
 import { api_routes } from "../helper/routes";
+import { useIonLoading } from "@ionic/react";
 
 const authData = {
   authenticated: false,
@@ -36,18 +37,13 @@ const setAuthLocally = async(data: AType) => {
   });
 }
 
+export const useAuth = () => useContext(AuthContext) as AuthContextType;
 
 const AuthProvider: React.FC<ChildrenType> = ({children}) => {
+    const [present, dismiss] = useIonLoading();
     const [auth, setAuthDetails] = useState<AType>({
       auth:authData
     });
-
-    useEffect(() => {
-      let isMounted = true;
-      isMounted && getAuthFromPreferences();
-      
-      return () => {isMounted=false}
-    }, [])
     
     const getAuthFromPreferences = async() => {
       const ret:GetResult = await Preferences.get({ key: 'auth' });
@@ -58,12 +54,42 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
       const auth:AType = await JSON.parse(ret.value);
       
       if(auth.auth.authenticated){
-        // setAuth({auth:authData})
         await getUserDetails(auth)
         return;
       }
       
     }
+
+    useEffect(() => {
+      let isMounted = true;
+      isMounted && getAuthFromPreferences();
+      
+      return () => {isMounted=false}
+    }, [])
+
+    useEffect(() => {
+      let isMounted = true;
+      const configSetter = async () => {
+        try {
+          await present({
+            message: 'Please wait...',
+          });
+          axiosPublic.interceptors.request.use(
+            config => {
+                if(!config.headers['authorization'] && auth.auth.authenticated===true){
+                  config.headers['authorization'] = `Bearer ${auth.auth.token}`;
+                }
+                return config;
+            },
+            (error) => Promise.reject(error)
+          );
+        } catch (error) {} finally{
+          await dismiss()
+        }
+      }
+      (isMounted && auth.auth.authenticated) && configSetter()
+      return () => {isMounted=false}
+    }, [auth.auth.authenticated])
 
     const getUserDetails = async (auth:AType):Promise<void> => {
       const headers = {
@@ -80,6 +106,15 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
           token_type: auth.auth.token_type,
           user: response.data.user
         }};
+        axiosPublic.interceptors.request.use(
+          config => {
+              if(!config.headers['authorization'] && data.auth.authenticated===true){
+                config.headers['authorization'] = `Bearer ${data.auth.token}`;
+              }
+              return config;
+          },
+          (error) => Promise.reject(error)
+        ); 
         setAuth({...data})
       } catch (error) {}
     }

@@ -6,8 +6,8 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import { useState } from "react";
+import { useAuth } from "../../context/AuthProvider";
 import { useToast } from "../../hooks/useToast";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 import { api_routes } from "../../helper/routes";
@@ -54,7 +54,7 @@ const schema = yup
 const Profile: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
-  const {auth} = useContext(AuthContext);
+  const {auth} = useAuth();
   const {toastSuccess, toastError} = useToast();
   const axiosPrivate = useAxiosPrivate();
 

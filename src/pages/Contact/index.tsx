@@ -14,14 +14,13 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import MainHeader from "../../components/MainHeader";
-import { AuthContext } from "../../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import { useToast } from "../../hooks/useToast";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 import { api_routes } from "../../helper/routes";
 import Input from "../../components/Input";
-import CommonHeading from "../../components/CommonHeading";
 import { callOutline, mailOutline, locationOutline } from "ionicons/icons";
 import './Contact.css'
 import { ErrorMessage } from "@hookform/error-message";
@@ -66,7 +65,7 @@ const schema = yup
 const Contact: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
-    const {auth} = useContext(AuthContext);
+    const {auth} = useAuth();
     const {toastSuccess, toastError} = useToast();
     const axiosPrivate = useAxiosPrivate();
 

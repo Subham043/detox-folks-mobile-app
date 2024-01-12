@@ -1,11 +1,10 @@
 import { IonContent, IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
 import './Orders.css';
 import MainHeader from '../../components/MainHeader';
-import CommonHeading from '../../components/CommonHeading';
 import { api_routes } from '../../helper/routes';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { AuthContext } from '../../context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import useSWRInfinite from "swr/infinite";
 import { OrderType } from '../../helper/types';
 import LoadingCard from '../../components/LoadingCard';
@@ -16,7 +15,7 @@ const PAGE_SIZE = 20;
 
 const Orders: React.FC = () =>{
     const axiosPrivate = useAxiosPrivate();
-    const {auth} = useContext(AuthContext);
+    const {auth} = useAuth();
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);

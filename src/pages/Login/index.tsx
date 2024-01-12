@@ -5,12 +5,12 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
 import { Link, useHistory } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import Input from '../../components/Input';
 import { axiosPublic } from '../../../axios';
 import { api_routes } from '../../helper/routes';
 import { useToast } from '../../hooks/useToast';
-import { AuthContext } from '../../context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import { useSWRConfig } from 'swr';
 
 const schema = yup
@@ -39,7 +39,7 @@ const fields = [
 
 const Login: React.FC = () =>{
     const [loading, setLoading] = useState<boolean>(false);
-    const {setAuth} = useContext(AuthContext);
+    const {setAuth} = useAuth();
     const {toastSuccess, toastError} = useToast();
     const history = useHistory();
     const { mutate } = useSWRConfig()

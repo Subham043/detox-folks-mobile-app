@@ -1,14 +1,13 @@
-import { IonButton, IonCol, IonContent, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonItemDivider, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
-import CommonHeading from '../../components/CommonHeading';
+import { IonButton, IonCol, IonContent, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonItemDivider, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, RefresherEventDetail } from '@ionic/react';
 import './BillingInformation.css';
 import MainHeader from '../../components/MainHeader';
 import { createOutline, peopleCircleOutline, trashOutline } from 'ionicons/icons';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { api_routes } from '../../helper/routes';
 import { BillingInformationType } from '../../helper/types';
 import useSWRInfinite from "swr/infinite";
-import { AuthContext } from '../../context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import LoadingCard from '../../components/LoadingCard';
 import { useToast } from '../../hooks/useToast';
 import { useLocation } from 'react-router';
@@ -20,7 +19,7 @@ const PAGE_SIZE = 20;
 const BillingInformation: React.FC = () => {
 
     const axiosPrivate = useAxiosPrivate();
-    const {auth} = useContext(AuthContext);
+    const {auth} = useAuth();
     const location = useLocation();
     const { toastSuccess, toastError} = useToast();
     const [modalData, setModalData] = useState<any>({

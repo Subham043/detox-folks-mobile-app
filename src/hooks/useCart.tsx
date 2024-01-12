@@ -4,7 +4,7 @@ import { useToast } from "./useToast";
 import { ProductPriceType } from "../helper/types";
 import { CartContext } from "../context/CartProvider";
 import { api_routes } from "../helper/routes";
-import { AuthContext } from "../context/AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 
 type CartInput = {
     product_id: number;
@@ -28,7 +28,7 @@ export function useCart({
     
     const { cart, cartLoading, updateCart } = useContext(CartContext);
     const [cartItemLoading, setCartItemLoading] = useState<boolean>(false);
-    const {auth} = useContext(AuthContext);
+    const {auth} = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const { toastSuccess, toastError } = useToast();
 

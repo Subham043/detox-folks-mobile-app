@@ -2,9 +2,9 @@ import { IonBadge, IonCard, IonCol, IonContent, IonIcon, IonImg, IonItem, IonIte
 import './OrderDetail.css';
 import MainHeader from '../../components/MainHeader';
 import useSWR from 'swr'
-import { OrderResponseType, OrderType } from '../../helper/types';
-import { useContext, useState } from 'react';
-import { AuthContext } from '../../context/AuthProvider';
+import { OrderType } from '../../helper/types';
+import { useState } from 'react';
+import { useAuth } from '../../context/AuthProvider';
 import { api_routes } from '../../helper/routes';
 import { RouteComponentProps } from 'react-router';
 import { callOutline, homeOutline, mailOutline, personOutline } from 'ionicons/icons';
@@ -16,7 +16,7 @@ interface OrderProps extends RouteComponentProps<{
 
 const OrderDetail: React.FC<OrderProps> = ({match}) =>{
 
-    const {auth} = useContext(AuthContext);
+    const {auth} = useAuth();
     const [imgLoading, setImgLoading] = useState<boolean>(true);
     const { data:order, isLoading:loading, mutate } = useSWR<{order: OrderType}>(auth.authenticated ? api_routes.place_order_detail_success + `/${match.params.slug}` : null);
 

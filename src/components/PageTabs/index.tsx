@@ -1,4 +1,4 @@
-import { IonApp, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonPage, IonContent } from "@ionic/react";
+import { IonApp, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { homeOutline, fileTrayStackedOutline, cartOutline, personCircleOutline } from "ionicons/icons";
 import { Route, Redirect } from "react-router";
@@ -8,15 +8,13 @@ import Category from "../../pages/Category";
 import SubCategory from "../../pages/SubCategory";
 import Product from "../../pages/Product";
 import Search from "../../pages/Search";
-import ProductDetail from "../../pages/ProductDetail";
-import Cart from "../../pages/Cart";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register";
 import ForgotPassword from "../../pages/ForgotPassword";
 import Setting from "../../pages/Setting";
 import Account from "../../pages/Account";
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import GuestRoute from "../GuestRoute";
 import ProtectedRoute from "../ProtectedRoute";
 import SpecialProduct from "../../pages/SpecialProduct";
@@ -34,7 +32,7 @@ import ProductDetail2 from "../../pages/ProductDetail/ProductDetail2";
 
 const PageTabs: React.FC = () => {
 
-  const {auth} = useContext(AuthContext);
+  const {auth} = useAuth();
   const { cart } = useContext(CartContext);
   const [hasNetwork, setHasNetwork] = useState<boolean>(true);
 

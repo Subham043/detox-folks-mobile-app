@@ -10,13 +10,13 @@ import {
     IonCol,
     IonButton,
 } from "@ionic/react";
-import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, mailUnreadOutline, newspaperOutline, peopleCircleOutline, personCircleOutline } from "ionicons/icons";
-import { useContext, useState } from "react";
+import { bagCheckOutline, cogOutline, locationOutline, logOutOutline, mailUnreadOutline, newspaperOutline, peopleCircleOutline } from "ionicons/icons";
+import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 import { useToast } from "../../hooks/useToast";
 import { api_routes } from "../../helper/routes";
-import { AuthContext } from "../../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import MainHeader from "../../components/MainHeader";
 import { LegalResponseType } from "../../helper/types";
 import useSWR from 'swr'
@@ -26,7 +26,7 @@ import { Browser } from "@capacitor/browser";
 const Account: React.FC = () => {
 
     const { data } = useSWR<LegalResponseType>(api_routes.legal);
-    const {logout} = useContext(AuthContext);
+    const {logout} = useAuth();
     const [loading, setLoading] = useState<boolean>(false);
     const {toastSuccess, toastError} = useToast();
     const axiosPrivate = useAxiosPrivate();

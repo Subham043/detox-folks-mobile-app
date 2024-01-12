@@ -6,7 +6,7 @@ import { CartContext } from '../../context/CartProvider';
 import { useContext, useEffect, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { api_routes } from '../../helper/routes';
-import { AuthContext } from '../../context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import { useLocation } from 'react-router';
 import LoadingCard from '../../components/LoadingCard';
 import { chevronForwardOutline, locationOutline, newspaperOutline, peopleCircleOutline } from 'ionicons/icons';
@@ -19,7 +19,7 @@ import CheckoutModal from '../../components/CheckoutModal';
 
 const Cart2: React.FC = () => {
     const { cart, cartLoading } = useContext(CartContext);
-    const { auth } = useContext(AuthContext);
+    const { auth } = useAuth();
     const location = useLocation();
     const router = useIonRouter();
     const { mutate } = useSWRConfig();

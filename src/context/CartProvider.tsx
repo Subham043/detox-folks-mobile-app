@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useCallback, useContext, useEffect } from "react";
 import { ChildrenType, CartType as CartDataType, CartChargeType, CartTaxType, CartCouponType } from "../helper/types";
 import { api_routes } from "../helper/routes";
 import useSWR, { useSWRConfig } from 'swr'
-import { AuthContext } from "./AuthProvider";
+import { useAuth } from "./AuthProvider";
+import { axiosPublic } from "../../axios";
 
 export type CartType = {
     cart: CartDataType[];
@@ -49,11 +50,30 @@ const cartDefaultValues: CartContextType = {
 
 export const CartContext = createContext<CartContextType>(cartDefaultValues);
 
-const CartProvider: React.FC<ChildrenType> = ({children}) => {
-    const { auth } = useContext(AuthContext);
-    const { mutate } = useSWRConfig()
+export const useCart = () => useContext(CartContext);
 
-    const { data, isLoading:cartLoading, mutate:updateData } = useSWR<CartType>(auth.authenticated ? api_routes.cart_all : null);
+const CartProvider: React.FC<ChildrenType> = ({children}) => {
+    const { auth } = useAuth();
+    const { mutate } = useSWRConfig();
+
+    const fetcher = useCallback(
+      async (url: string) => {
+        if(auth.authenticated){
+          const headers = {
+            headers: {
+              "Authorization" : `Bearer ${auth.token}`,
+              "Accept": 'application/json'
+            }
+          }
+          const res =  await axiosPublic.get(url,headers)
+          return res.data;
+        }
+        return undefined;
+      },
+      [auth],
+    );
+
+    const { data, isLoading:cartLoading, mutate:updateData } = useSWR<CartType>(auth.authenticated ? api_routes.cart_all : null, fetcher);
     
 
     const updateCart = async (cartData: CartType) => {

@@ -1,10 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { axiosPublic } from "../../axios";
-import { AuthContext } from "../context/AuthProvider";
-import { useSWRConfig } from "swr";
+import { useAuth } from "../context/AuthProvider";
 
 export function useAxiosPrivate(){
-    const {auth} = useContext(AuthContext);
+    const {auth} = useAuth();
     useEffect(() => {
         let isMounted = true;
         if(isMounted){
