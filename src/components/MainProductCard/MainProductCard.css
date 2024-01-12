@@ -104,10 +104,10 @@
 .product-card-main .product-text-container-gradient .product-card-header-container h4{
     color: white;
     margin: 0;
-    font-size: 18px;
+    font-size: 1.1rem;
     font-family: system-ui;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     margin-bottom: 5px;
     margin-top: 20px;
     text-align: left;
@@ -128,21 +128,21 @@
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-card-price{
     margin: 0;
     color: white;
-    font-size: 17px;
+    font-size: 1rem;
     font-family: system-ui;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-card-price small{
-    font-size: 17px;
+    font-size: 1rem;
     text-transform: capitalize;
 }
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-price-modal-btn{
     --color: white !important;
     text-align: left !important;
     width: auto;
-    font-size: 15px;
+    font-size: 0.9rem;
     color: white;
     display: flex;
     align-items: center;

@@ -77,7 +77,7 @@ const Account: React.FC = () => {
                 </Link>
                 <Link className="no-underline" to="/contact">
                     <IonItem lines="full" detail={true}>
-                        <IonLabel>Conact Us</IonLabel>
+                        <IonLabel>Contact Us</IonLabel>
                         <IonIcon icon={mailUnreadOutline} slot="start"></IonIcon>
                     </IonItem>
                 </Link>

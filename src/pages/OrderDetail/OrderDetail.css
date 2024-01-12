@@ -13,7 +13,7 @@
 
 .order-detail-id{
     color: #222;
-    font-size: 20px;
+    font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 5px;
 }
@@ -34,16 +34,16 @@
 .order-detail-price-text {
     color: #222;
     margin: 0;
-    font-size: 15px;
+    font-size: 0.8rem;
     font-family: system-ui;
     font-weight: 400;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 .order-detail-price-text b {
     color: #222;
     margin: 0;
-    font-size: 15px;
+    font-size: 0.8rem;
     font-family: system-ui;
     letter-spacing: 1px;
 }
@@ -85,4 +85,5 @@
 
 .product-detail-page-main-bulk-factor .cart-total-price-heading.cart-total-price-heading-2 h6 {
     color: #ffffff;
+    font-size: 1rem;
 }

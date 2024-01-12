@@ -6,16 +6,16 @@
 }
 
 .billing-address-text h6{
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 500;
     letter-spacing: 1px;
     color: #222;
 }
 
 .billing-address-text p{
-    font-size: 14px;
+    font-size: 0.8rem;
     letter-spacing: 1px;
-    color: #222;
+    color: #3b3b3b;
 }
 
 .billing-address-btn{

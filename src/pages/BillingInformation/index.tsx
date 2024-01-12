@@ -114,7 +114,7 @@ const BillingInformation: React.FC = () => {
                                                 <IonLabel className='billing-address-text'>
                                                     <h6>{item.name}</h6>
                                                     <p>
-                                                        {item.email}, {item.phone}, {item.gst}
+                                                        {item.email}, {item.phone}{item.gst && item.gst.length>0 ? `, ${item.gst}`:''}
                                                     </p>
                                                 </IonLabel>
                                             </IonCol>

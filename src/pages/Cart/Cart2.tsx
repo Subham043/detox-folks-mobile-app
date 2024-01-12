@@ -236,7 +236,7 @@ const Cart2: React.FC = () => {
                                                         <IonRow className="ion-align-items-center ion-justify-content-center p-0 w-100">
                                                             <IonCol
                                                                 size="6"
-                                                                className='text-left'
+                                                                className='text-left p-0'
                                                             >
                                                                 <div>
                                                                     {cart.cart.length} {cart.cart.length===1 ? 'Item' : 'Items'} | &#8377;{cart.total_price}
@@ -244,7 +244,7 @@ const Cart2: React.FC = () => {
                                                             </IonCol>
                                                             <IonCol
                                                                 size="6"
-                                                                className='text-right'
+                                                                className='text-right p-0'
                                                             >
                                                                 <div className="view-cart-text-icon-holder">
                                                                     <span>Checkout</span>

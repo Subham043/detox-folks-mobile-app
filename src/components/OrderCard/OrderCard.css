@@ -21,7 +21,7 @@
 
 .order-card-product-names{
     color: #222;
-    font-size: 16px !important;
+    font-size: 1rem !important;
     margin: 0 !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;

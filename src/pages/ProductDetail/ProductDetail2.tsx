@@ -185,7 +185,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
                   <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
                 </IonInfiniteScroll>
                 <IonItemDivider className="page-padding cart-divider-total w-100" slot="fixed">
-                    <IonRow className="w-100 ion-align-items-center ion-justify-content-between">
+                    <IonRow className="w-100 ion-align-items-center ion-justify-content-between product-detail-main-cart-divider">
                         <IonCol
                             size="6"
                             sizeLg='6'
@@ -193,7 +193,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
                             sizeSm='6'
                             sizeXl='6'
                             sizeXs='6'
-                            className='text-left'
+                            className='text-left p-0'
                         >
                             <IonText color="dark">
                                 <p className="product-detail-price m-0"><ProductDetailPrice product={productData.product} /></p>
@@ -206,7 +206,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
                             sizeSm='5'
                             sizeXl='5'
                             sizeXs='5'
-                            className='text-right product-detail-page-main-cart-quantity-col'
+                            className='text-right product-detail-page-main-cart-quantity-col p-0'
                         >
                             <ProductDetailCartQuantity product={productData.product} />
                         </IonCol>

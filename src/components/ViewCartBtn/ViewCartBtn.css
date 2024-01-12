@@ -15,7 +15,7 @@
 .view-cart-checkout-btn-main-container .pagination-btn{
     width: 100%;
     height: 40px;
-    font-size: 16px;
+    font-size: 0.9rem;
 }
 
 .view-cart-checkout-btn-main-container .view-cart-text-icon-holder{
@@ -25,7 +25,7 @@
     justify-content: flex-end;
 }
 .view-cart-checkout-btn-main-container .view-cart-text-icon-holder .svg-icon{
-    font-size: 20px;
+    font-size: 1.3rem;
 }
 
 .fixed-spacing-2{

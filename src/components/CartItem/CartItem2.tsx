@@ -21,7 +21,7 @@ const CartItem2: React.FC<CartType> = ({ product, product_price, amount }) => {
                     }
                     <IonImg alt="product" className='cart-card-item-img' src={product.image} onIonImgDidLoad={()=>setImgLoading(false)} />
                 </div>
-                <div>
+                <div className="cart-item-text-container">
                     <IonLabel className="cart-card-item-text">
                         <p>{product.name}</p>
                     </IonLabel>
