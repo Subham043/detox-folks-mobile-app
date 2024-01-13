@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import './Map.css';
 import { ENV } from "../../env/env";
 import { Geolocation, Position } from '@capacitor/geolocation';
@@ -6,6 +6,7 @@ import { IonIcon, IonSpinner } from "@ionic/react";
 import { locationOutline } from "ionicons/icons";
 import axios from "axios";
 import { AndroidSettings, IOSSettings, NativeSettings } from "capacitor-native-settings";
+import { MapAddressResponse } from "../../helper/types";
 
 const MAP_SERVICE_SCRIPT = "https://js.api.here.com/v3/3.1/mapsjs-core.js";
 const MAP_SERVICE_SCRIPT2 = "https://js.api.here.com/v3/3.1/mapsjs-service.js";
@@ -30,14 +31,30 @@ const requestPermission:() => Promise<boolean> = async () => {
 let HereMap:any = undefined;
 
 type Props = {
-    
+    currentLocation:  {
+        lat: number;
+        lng: number;
+    } | undefined ;
+    markerLocation:  {
+        lat: number;
+        lng: number;
+    } | undefined ;
+    setCurrentLocation: React.Dispatch<React.SetStateAction<{
+        lat: number;
+        lng: number;
+    } | undefined>>;
+    setMarkerLocation: React.Dispatch<React.SetStateAction<{
+        lat: number;
+        lng: number;
+    } | undefined>>;
+    mapAddress: MapAddressResponse | undefined;
+    setMapAddress: React.Dispatch<React.SetStateAction<MapAddressResponse | undefined>>
 }
 
-const Map = () => {
+const Map:FC<Props> = ({currentLocation, setCurrentLocation, markerLocation, setMarkerLocation, mapAddress, setMapAddress}) => {
     const [permissionDeniedType, setPermissionDeniedType] = useState<'disabled' | 'denied'>('disabled');
     const [locationPermission, setLocationPermission] = useState<boolean>(true);
     const [locationPermissionLoading, setLocationPermissionLoading] = useState<boolean>(true);
-    const [currentLocation, setCurrentLocation] = useState<undefined | Position>();
     const ref = useRef<any>(null);
 
     const isClient = useMemo(() => typeof window !== "undefined", []);
@@ -83,7 +100,8 @@ const Map = () => {
     const setCurrentLocationHandler = async () => {
         try {
             const currentPosition = await getCurrentPosition();
-            setCurrentLocation(currentPosition);
+            setCurrentLocation({lat: currentPosition.coords.latitude, lng: currentPosition.coords.longitude});
+            setMarkerLocation({lat: currentPosition.coords.latitude, lng: currentPosition.coords.longitude});
             setLocationPermission(true);
         } catch (error:any) {
             if(error?.message === 'Location services are not enabled'){
@@ -136,9 +154,25 @@ const Map = () => {
         })()
       return () => {}
     }, [])
+    
+    useEffect(() => {
+        (async () => {
+            try {
+                if(markerLocation){
+                    await reverseGeoCode();
+                }
+            } catch (error) {
+
+            }
+            finally {
+            }
+
+        })()
+      return () => {}
+    }, [markerLocation])
 
   useEffect(() => {
-      if (locationPermission && currentLocation!==undefined && checkScriptLoaded) {
+      if (locationPermission && currentLocation!==undefined && markerLocation!==undefined && checkScriptLoaded) {
         // HereMap = (window as any).H;
         var platform = new HereMap.service.Platform({
             'apikey': ENV.HERE_MAP_APP_KEY
@@ -152,7 +186,7 @@ const Map = () => {
             defaultLayers.vector.normal.map,
             {
                 zoom: 16,
-                center: { lat: currentLocation.coords.latitude, lng: currentLocation.coords.longitude },
+                center: { lat: markerLocation.lat, lng: markerLocation.lng },
                 pixelRatio: window.devicePixelRatio || 1
             }
         );
@@ -172,8 +206,8 @@ const Map = () => {
          *
          * @param  {H.Map} map      A HERE Map instance within the application
          */
-        if(currentLocation){
-            var parisMarker = new HereMap.map.Marker({lat: currentLocation.coords.latitude, lng: currentLocation.coords.longitude}, {
+        if(markerLocation){
+            var parisMarker = new HereMap.map.Marker({lat: markerLocation.lat, lng: markerLocation.lng}, {
                 // mark the object as volatile for the smooth dragging
                 volatility: true
             });
@@ -190,9 +224,7 @@ const Map = () => {
                 var target = ev.target;
                 if (target instanceof HereMap.Map) {
                     parisMarker.setGeometry({lat:target.getViewModel().a.position.lat, lng:target.getViewModel().a.position.lng});
-                    reverseGeoCode(target.getViewModel().a.position.lat, target.getViewModel().a.position.lng)
-                    // console.log({lat:target.getViewModel().a.position.lat, lng:target.getViewModel().a.position.lng});
-                    // console.log(currentLocation);
+                    setMarkerLocation({lat:target.getViewModel().a.position.lat, lng:target.getViewModel().a.position.lng})
                 }
             }, false);
         }
@@ -201,12 +233,16 @@ const Map = () => {
     }
   }, [locationPermission, currentLocation, checkScriptLoaded]);
 
-  const reverseGeoCode = async (lat: number, lng: number) => {
-    try {
-        const resp = await axios.get(`https://revgeocode.search.hereapi.com/v1/revgeocode?apikey=${ENV.HERE_MAP_APP_KEY}&at=${lat},${lng}&lang=en-US`);
-        console.log(resp)
-    } catch (error) {
-        console.log(error);
+  const reverseGeoCode = async () => {
+    if(markerLocation){
+        try {
+            const resp = await axios.get(`https://revgeocode.search.hereapi.com/v1/revgeocode?apikey=${ENV.HERE_MAP_APP_KEY}&at=${markerLocation.lat},${markerLocation.lng}&lang=en-US`);
+            if(resp.data.items && resp.data.items.length>0){
+                setMapAddress(resp.data.items[0])
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
   }
     

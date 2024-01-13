@@ -65,7 +65,7 @@ const Account: React.FC = () => {
                 </Link>
                 <Link className="no-underline" to="/billing-address">
                     <IonItem lines="full" detail={true}>
-                        <IonLabel>Billing Address</IonLabel>
+                        <IonLabel>Delivery Address</IonLabel>
                         <IonIcon icon={locationOutline} slot="start"></IonIcon>
                     </IonItem>
                 </Link>

@@ -254,8 +254,8 @@ const Cart: React.FC = () => {
                                         </div>
                                         <div className='ion-padding billing-info-section'>
                                             <IonText>
-                                                <h5 className='billing-info-cart-heading'>Billing Address</h5>
-                                                <p className='billing-info-cart-text'><code>Pick a billing address</code></p>
+                                                <h5 className='billing-info-cart-heading'>Delivery Address</h5>
+                                                <p className='billing-info-cart-text'><code>Pick a delivery address</code></p>
                                             </IonText>
                                             {
                                                 billingAddressLoading ? <div className='text-left mt-1 mb-1'>

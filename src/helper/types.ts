@@ -472,3 +472,33 @@ export interface RoleType<> {
     created_at: string;
     updated_at: string;
 }
+
+export interface MapAddressResponse<> {
+    address: {
+        label: string, 
+        countryCode: string, 
+        countryName: string, 
+        county: string, 
+        district: string, 
+        postalCode: string, 
+        stateCode: string, 
+        state: string, 
+        city: string, 
+        street: string, 
+        subdistrict: string, 
+    };
+    distance: number;
+    id: string;
+    mapView: {
+        west: number, 
+        south: number, 
+        east: number, 
+        north: number
+    };
+    position: {
+        lat: number, 
+        lng: number
+    };
+    resultType: string
+    title: string;
+}

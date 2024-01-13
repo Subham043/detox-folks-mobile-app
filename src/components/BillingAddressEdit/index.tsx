@@ -10,7 +10,7 @@ import { api_routes } from '../../helper/routes';
 import Input from '../Input';
 import { ErrorMessage } from '@hookform/error-message';
 import { KeyedMutator } from 'swr';
-import { BillingAddressType } from '../../helper/types';
+import { BillingAddressType, MapAddressResponse } from '../../helper/types';
 import Map from '../Map';
 
 type Props = ({
@@ -67,6 +67,9 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
     const [loading, setLoading] = useState<boolean>(false);
     const axiosPrivate = useAxiosPrivate();
     const {toastSuccess, toastError} = useToast();
+    const [currentLocation, setCurrentLocation] = useState<undefined | {lat:number, lng:number}>();
+    const [markerLocation, setMarkerLocation] = useState<undefined | {lat:number, lng:number}>();
+    const [mapAddress, setMapAddress] = useState<undefined | MapAddressResponse>();
 
     const {
         handleSubmit,
@@ -78,24 +81,37 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
+        values: props.isEdit ? {
+          country: props.data.country,
+          state: props.data.state,
+          city: props.data.city,
+          pin: props.data.pin.toString(),
+          address: props.data.address,
+        } : {
+          country: mapAddress ? mapAddress.address.countryName : '',
+          state: mapAddress ? mapAddress.address.state : '',
+          city:  mapAddress ? mapAddress.address.city : '',
+          pin:  mapAddress ? mapAddress.address.postalCode : '',
+          address:  mapAddress ? mapAddress.address.label : '',
+        }
     });
 
-    useEffect(()=>{
-        if(props.isEdit){
-            setValue('country', props.data.country);
-            setValue('state', props.data.state);
-            setValue('city', props.data.city);
-            setValue('pin', props.data.pin.toString());
-            setValue('address', props.data.address);
-        }
+    // useEffect(()=>{
+    //     if(props.isEdit){
+    //         setValue('country', props.data.country);
+    //         setValue('state', props.data.state);
+    //         setValue('city', props.data.city);
+    //         setValue('pin', props.data.pin.toString());
+    //         setValue('address', props.data.address);
+    //     }
 
-    }, [props.isEdit])
+    // }, [props.isEdit])
 
     const onSubmit = async () => {
         setLoading(true);
         try {
-          await axiosPrivate.post(!props.isEdit ? api_routes.billing_address_create : api_routes.billing_address_update+`/${props.isEdit===true ? props.data.id : ''}`, {...getValues(), is_active:true});
-          toastSuccess("Billing Address created successfully.");
+          await axiosPrivate.post(!props.isEdit ? api_routes.billing_address_create : api_routes.billing_address_update+`/${props.isEdit===true ? props.data.id : ''}`, {...getValues(), is_active:true, map_information: mapAddress});
+          toastSuccess("Delivery Address created successfully.");
           reset({
             country: "",
             state: "",
@@ -147,10 +163,10 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
     return <div className='address-create-card mb-2'>
         <div className="product-detail-page-main-bulk-factor">
             <div className="page-padding cart-total-price-heading cart-total-price-heading-2 mb-0">
-                <h6>Billing Address</h6>
+                <h6>Delivery Address</h6>
             </div>
         </div>
-        <Map />
+        <Map currentLocation={currentLocation} setCurrentLocation={setCurrentLocation} markerLocation={markerLocation} setMarkerLocation={setMarkerLocation} mapAddress={mapAddress} setMapAddress={setMapAddress} />
         <div className="page-padding mt-1">
           <div className='billing-info-section'>
               <IonText>

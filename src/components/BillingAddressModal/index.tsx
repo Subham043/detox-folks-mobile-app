@@ -30,8 +30,8 @@ const BillingAddressModal: React.FC<Props> = ({isOpen, setIsOpen, billingAddress
                     <div className="billing-info-modal-header-row">
                         <div className="billing-info-col-auto">
                             <IonText>
-                                <h5 className='billing-info-cart-heading'>Billing Address</h5>
-                                <p className='billing-info-cart-text'><code>Pick a billing address</code></p>
+                                <h5 className='billing-info-cart-heading'>Delivery Address</h5>
+                                <p className='billing-info-cart-text'><code>Pick a delivery address</code></p>
                             </IonText>
                         </div>
                         <button onClick={addBtnHandler} className='billing-info-modal-add-btn'>ADD</button>

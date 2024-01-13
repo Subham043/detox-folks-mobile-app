@@ -98,7 +98,7 @@ const Cart2: React.FC = () => {
                                         </div>:
                                         <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
-                                                <p><i>Add billing address to place an order</i></p>
+                                                <p><i>Add delivery address to place an order</i></p>
                                             </IonLabel>
                                             <div className="delivery-select">
                                                 <button onClick={()=>router.push('/billing-address')}>Add</button>

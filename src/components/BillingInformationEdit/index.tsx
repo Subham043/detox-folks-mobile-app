@@ -78,23 +78,24 @@ const BillingInformationEdit:React.FC<Props> = (props) => {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
-    });
-
-    useEffect(()=>{
-        if(props.isEdit){
-            setValue('name', props.data.name);
-            setValue('email', props.data.email);
-            setValue('gst', props.data.gst);
-            setValue('phone', props.data.phone.toString());
+        values: props.isEdit ? {
+          name: props.data.name,
+          email: props.data.email,
+          gst: props.data.gst,
+          phone: props.data.phone.toString(),
+        } : {
+          name: '',
+          email: '',
+          gst: '',
+          phone: '',
         }
-
-    }, [props.isEdit])
+    });
 
     const onSubmit = async () => {
         setLoading(true);
         try {
           await axiosPrivate.post(!props.isEdit ? api_routes.billing_information_create : api_routes.billing_information_update+`/${props.isEdit===true ? props.data.id : ''}`, {...getValues(), is_active:true});
-          toastSuccess("Billing Address created successfully.");
+          toastSuccess("Delivery Address created successfully.");
           reset({
             name: "",
             email: "",

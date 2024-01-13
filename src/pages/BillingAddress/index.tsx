@@ -88,7 +88,7 @@ const BillingAddress: React.FC = () => {
     
     return (
         <IonPage>
-            <MainHeader isMainHeader={false} name='Billing Address' />
+            <MainHeader isMainHeader={false} name='Delivery Address' />
             <IonContent fullscreen={false} forceOverscroll={false}>
                 <IonRefresher slot="fixed" onIonRefresh={(event: CustomEvent<RefresherEventDetail>)=>{
                     setTimeout(() => {
@@ -142,7 +142,7 @@ const BillingAddress: React.FC = () => {
                         isLoading && <LoadingCard itemCount={6} column={12} height='70px' />
                     }
                     {
-                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No billing address is available. Please add one!' />
+                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No delivery address is available. Please add one!' />
                     }
                     <IonInfiniteScroll
                         ref={productRef}
