@@ -17,11 +17,28 @@ const PreviouslyOrdered: React.FC = () => {
     const axiosPrivate = useAxiosPrivate();
     const {auth} = useAuth();
 
-    const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
+    const fetcher = useCallback(
+        async (url: string) => {
+          if(auth.authenticated){
+            const headers = {
+              headers: {
+                "Authorization" : `Bearer ${auth.token}`,
+                "Accept": 'application/json'
+              }
+            }
+            const res =  await axiosPrivate.get(url,headers)
+            return res.data.data;
+          }
+          return undefined;
+        },
+        [auth],
+    );
+    
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
+        if(!auth.authenticated) return null;
         if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.latest_order_item}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
-    }, [])
+    }, [auth.authenticated])
     
     const {
         data,
