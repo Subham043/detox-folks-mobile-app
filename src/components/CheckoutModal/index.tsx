@@ -1,4 +1,4 @@
-import { IonButton, IonCheckbox, IonIcon, IonLabel, IonModal, IonSpinner, IonText } from '@ionic/react';
+import { IonButton, IonCheckbox, IonIcon, IonLabel, IonModal, IonSpinner, IonText, useIonLoading } from '@ionic/react';
 import './CheckoutModal.css';
 import { useState } from 'react';
 import { useSWRConfig } from 'swr';
@@ -21,6 +21,7 @@ type Props = {
 const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddressData, selectedBillingInformationData}) => {
     const axiosPrivate = useAxiosPrivate();
     const { toastSuccess, toastError} = useToast();
+    const [present, dismiss] = useIonLoading();
     const history = useHistory();
     const { mutate } = useSWRConfig();
     const [loading, setLoading] = useState<boolean>(false);
@@ -75,7 +76,9 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
         await Browser.open({ url });
         Browser.addListener('browserFinished', async ()=>{
           try {
-            setLoading(true);
+            await present({
+                message: 'Verifying Payment...',
+            });
             const response = await axiosPrivate.get(api_routes.place_order_detail+`/${order_id}`);
             if(response.data.order.payment.status!=='PENDING'){
                 toastSuccess('Order placed successfully.');
@@ -86,7 +89,7 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
           } catch (error) {
               console.log(error);
           }finally{
-              setLoading(false);
+            await dismiss();
           }
         });
     }
