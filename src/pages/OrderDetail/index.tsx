@@ -1,14 +1,14 @@
-import { IonBadge, IonCard, IonCol, IonContent, IonIcon, IonImg, IonItem, IonItemDivider, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSpinner, IonText, RefresherEventDetail } from '@ionic/react';
+import { IonBadge, IonCard, IonCol, IonContent, IonIcon, IonItem, IonItemDivider, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonText, RefresherEventDetail } from '@ionic/react';
 import './OrderDetail.css';
 import MainHeader from '../../components/MainHeader';
 import useSWR from 'swr'
 import { OrderType } from '../../helper/types';
-import { useState } from 'react';
 import { useAuth } from '../../context/AuthProvider';
 import { api_routes } from '../../helper/routes';
 import { RouteComponentProps } from 'react-router';
 import { callOutline, homeOutline, mailOutline, personOutline } from 'ionicons/icons';
 import LoadingCard from '../../components/LoadingCard';
+import OrderItem from '../../components/OrderItem';
 
 interface OrderProps extends RouteComponentProps<{
     slug: string;
@@ -17,7 +17,6 @@ interface OrderProps extends RouteComponentProps<{
 const OrderDetail: React.FC<OrderProps> = ({match}) =>{
 
     const {auth} = useAuth();
-    const [imgLoading, setImgLoading] = useState<boolean>(true);
     const { data:order, isLoading:loading, mutate } = useSWR<{order: OrderType}>(auth.authenticated ? api_routes.place_order_detail_success + `/${match.params.slug}` : null);
 
     return <IonPage>
@@ -64,40 +63,7 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                     </div>
                     <IonCard className="cart-card">
                         {
-                            order.order.products.map((item, i) => <IonItemDivider className="cart-divider" key={i}>
-                                <IonRow className="ion-align-items-center ion-justify-content-between w-100">
-                                    <IonCol
-                                        size="7"
-                                        className='text-left'
-                                    >
-                                        <div className='order-item-detail-wrapper'>
-                                            {
-                                                imgLoading &&
-                                                <div className="text-center mt-1">
-                                                    <IonSpinner color='dark' />
-                                                </div>
-                                            }
-                                            <IonImg alt="product" className='cart-card-item-img order-item-img' src={item.image} onIonImgDidLoad={()=>setImgLoading(false)} />
-                                            <IonText color="dark" class='order-item-text'>
-                                                <p className="cart-card-item-text order-item-name">{item.name}</p>
-                                                <p className="cart-card-item-price"><b>&#8377;{item.discount_in_price}</b> / pieces</p>
-                                            </IonText>
-                                        </div>
-                                    </IonCol>
-                                    <IonCol
-                                        size="3"
-                                        className='text-center'
-                                    >
-                                        <p className='order-detail-price-text'>Qty: {item.quantity}</p>
-                                    </IonCol>
-                                    <IonCol
-                                        size="2"
-                                        className='text-right'
-                                    >
-                                        <p className='order-detail-price-text'>&#8377;{item.amount}</p>
-                                    </IonCol>
-                                </IonRow>
-                            </IonItemDivider>)
+                            order.order.products.map((item, i) => <OrderItem {...item} key={i} />)
                         }
                     </IonCard>
                     <div className='cart-message mt-1'>

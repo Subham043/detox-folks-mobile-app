@@ -1,4 +1,4 @@
-import { IonIcon, IonImg, IonModal, useIonRouter } from "@ionic/react";
+import { IonIcon, IonImg, IonModal, IonSpinner, useIonRouter } from "@ionic/react";
 import './MainProductCard.css';
 import { ProductType } from "../../helper/types";
 import { useCart } from "../../hooks/useCart";
@@ -13,12 +13,19 @@ const MainProductCard: React.FC<ProductType> = ({image,name, id, slug, product_p
     const router = useIonRouter();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const {quantity, cartItemLoading, cart_product_item, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id, product_prices, min_cart_quantity, cart_quantity_interval});
+    const [imgLoading, setImgLoading] = useState<boolean>(true);
     
     return <>
         <div className="product-card product-card-main">
             <div className="product-main-link">
                 <button className="product-main-img-btn" onClick={()=>router.push(`/product-detail/${slug}`)}>
-                    <IonImg alt="product" src={image} className="product-card-image" />
+                    {
+                        imgLoading &&
+                        <div className="text-center img-loader">
+                            <IonSpinner color='dark' />
+                        </div>
+                    }
+                    <IonImg alt="product" src={image} className="product-card-image" onIonImgDidLoad={()=>setImgLoading(false)} />
                 </button>
                 <div className="product-text-container-gradient">
                     <div className="page-padding product-card-header-container">

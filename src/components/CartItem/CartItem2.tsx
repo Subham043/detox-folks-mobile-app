@@ -13,13 +13,15 @@ const CartItem2: React.FC<CartType> = ({ product, product_price, amount }) => {
         <div className="cart-item-row">
             <div className="cart-item-col">
                 <div className="cart-item-img-container">
-                    {
-                        imgLoading &&
-                        <div className="text-center mt-1">
-                            <IonSpinner color='dark' />
-                        </div>
-                    }
-                    <IonImg alt="product" className='cart-card-item-img' src={product.image} onIonImgDidLoad={()=>setImgLoading(false)} />
+                    <div className="p-relative">
+                        {
+                            imgLoading &&
+                            <div className="text-center img-loader">
+                                <IonSpinner color='dark' />
+                            </div>
+                        }
+                        <IonImg alt="product" className='cart-card-item-img' src={product.image} onIonImgDidLoad={()=>setImgLoading(false)} />
+                    </div>
                 </div>
                 <div className="cart-item-text-container">
                     <IonLabel className="cart-card-item-text">
