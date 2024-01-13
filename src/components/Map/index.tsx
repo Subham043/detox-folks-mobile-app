@@ -5,6 +5,7 @@ import { Geolocation, Position } from '@capacitor/geolocation';
 import { IonIcon, IonSpinner } from "@ionic/react";
 import { locationOutline } from "ionicons/icons";
 import axios from "axios";
+import { AndroidSettings, IOSSettings, NativeSettings } from "capacitor-native-settings";
 
 const MAP_SERVICE_SCRIPT = "https://js.api.here.com/v3/3.1/mapsjs-core.js";
 const MAP_SERVICE_SCRIPT2 = "https://js.api.here.com/v3/3.1/mapsjs-service.js";
@@ -33,6 +34,7 @@ type Props = {
 }
 
 const Map = () => {
+    const [permissionDeniedType, setPermissionDeniedType] = useState<'disabled' | 'denied'>('disabled');
     const [locationPermission, setLocationPermission] = useState<boolean>(true);
     const [locationPermissionLoading, setLocationPermissionLoading] = useState<boolean>(true);
     const [currentLocation, setCurrentLocation] = useState<undefined | Position>();
@@ -79,9 +81,25 @@ const Map = () => {
     }
 
     const setCurrentLocationHandler = async () => {
-        const currentPosition = await getCurrentPosition();
-        setCurrentLocation(currentPosition);
-        setLocationPermission(true);
+        try {
+            const currentPosition = await getCurrentPosition();
+            setCurrentLocation(currentPosition);
+            setLocationPermission(true);
+        } catch (error:any) {
+            if(error?.message === 'Location services are not enabled'){
+                setPermissionDeniedType('disabled')
+                setLocationPermission(false);
+            }
+        }
+    }
+
+    const openSettingHandler = async() => await openSettings(permissionDeniedType==='denied') 
+
+    const openSettings = (app:boolean = false) => {
+        return NativeSettings.open({
+            optionAndroid: app ? AndroidSettings.ApplicationDetails : AndroidSettings.Location,
+            optionIOS: app ? IOSSettings.App : IOSSettings.LocationServices
+        })
     }
 
     const loadAllScripts = async() => {
@@ -208,11 +226,11 @@ const Map = () => {
                 <>
                     <div className="page-padding mt-1">
                         <div className="delivery-address-card">
-                            <h6><IonIcon icon={locationOutline} className='svg-icon' /> <span>Location Permission</span></h6>
+                            <h6><IonIcon icon={locationOutline} className='svg-icon' /> {permissionDeniedType==='denied' ? <span>Location Permission</span> : <span>Location Service</span>}</h6>
                             <div className="delivery-card-row">
-                                <p className="m-0">Please grant location permission to access current location.</p>
+                                {permissionDeniedType==='denied' ? <p className="m-0">Please grant location permission to access current location.</p> : <p className="m-0">Please enable location services to access current location</p>}
                                 <div className="delivery-select">
-                                    <button onClick={async () => await requestPermissionHandler()}>Allow</button>
+                                    <button onClick={async () => await openSettingHandler()}>Enable</button>
                                 </div>
                             </div>
                         </div>
