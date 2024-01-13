@@ -11,6 +11,7 @@ import Input from '../Input';
 import { ErrorMessage } from '@hookform/error-message';
 import { KeyedMutator } from 'swr';
 import { BillingAddressType } from '../../helper/types';
+import Map from '../Map';
 
 type Props = ({
     isEdit: true;
@@ -145,11 +146,12 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
 
     return <div className='address-create-card mb-2'>
         <div className="product-detail-page-main-bulk-factor">
-            <div className="page-padding cart-total-price-heading cart-total-price-heading-2">
+            <div className="page-padding cart-total-price-heading cart-total-price-heading-2 mb-0">
                 <h6>Billing Address</h6>
             </div>
         </div>
-        <div className="page-padding">
+        <Map />
+        <div className="page-padding mt-1">
           <div className='billing-info-section'>
               <IonText>
                   <p className='billing-info-cart-text'><code>Enter the following information:</code></p>
