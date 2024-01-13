@@ -5,6 +5,7 @@ import CategorySection from '../../components/CategorySection';
 import SpecialProductSliderSection from '../../components/SpecialProductSection/SpecialProductSliderSection';
 import Slider from '../../components/Slider';
 import ViewCartBtn from '../../components/ViewCartBtn';
+import PreviouslyOrdered from '../../components/PreviouslyOrdered';
 
 const images = [
   '/images/b1.webp',
@@ -24,6 +25,7 @@ const Home: React.FC = () => {
             <div className='ion-padding page-padding home-slider'>
               <Slider images={images} />
             </div>
+            <PreviouslyOrdered />
             <CategorySection inHomePage={true} />
             <SpecialProductSliderSection slug='is_featured' name='Exclusive Products' />
             <SpecialProductSliderSection slug='is_new' name='Eco-Friendly Products' />
