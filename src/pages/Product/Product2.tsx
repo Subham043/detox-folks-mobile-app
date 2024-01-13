@@ -7,8 +7,6 @@ import { CategoryType, ProductType, SubCategoryType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
-import { useLocation } from 'react-router';
-import useSWR from 'swr'
 import MainProductCard from '../../components/MainProductCard';
 import ViewCartBtn from '../../components/ViewCartBtn';
 import { Pagination } from 'swiper/modules';
@@ -36,12 +34,12 @@ const Product2: React.FC = () => {
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+        setTimeout(async() => {
             if(productRef && productRef.current){
-                productRef.current.complete()
+              await productRef.current.complete()
             }
-            return null;
-        }
+        }, 500)
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=${selectedCategory==='All' ? 'id' : 'name'}${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}${selectedSubCategory!=='All' ? '&filter[has_sub_categories]='+selectedSubCategory : ''}`;
     }, [selectedCategory, selectedSubCategory])
     
@@ -199,12 +197,12 @@ const SubCategorySelection:React.FC<{
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!hasSubCategories) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+        setTimeout(async() => {
             if(productRef && productRef.current){
-                productRef.current.complete()
+              await productRef.current.complete()
             }
-            return null;
-        }
+        }, 500)
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.sub_categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}`;
     }, [selectedCategory])
 

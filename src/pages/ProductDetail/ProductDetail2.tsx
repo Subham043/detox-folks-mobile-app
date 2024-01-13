@@ -1,17 +1,15 @@
-import { IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonPage, IonRow, IonText} from '@ionic/react';
+import { IonCardHeader, IonCol, IonContent, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonPage, IonRow, IonText} from '@ionic/react';
 import './ProductDetail.css';
 import MainHeader from '../../components/MainHeader';
 import Slider from '../../components/Slider';
 import { checkmarkDoneOutline, informationCircleOutline, starSharp } from 'ionicons/icons';
 import CommonHeading from '../../components/CommonHeading';
-import ProductCard from '../../components/ProductCard';
 import { RouteComponentProps } from 'react-router';
 import useSWR from 'swr'
 import { ProductType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import { useCart } from '../../hooks/useCart';
 import ProductPrice from '../../components/ProductPrice';
-import CartQuantity from '../../components/CartQuantity';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback, useRef, useState } from 'react';
 import useSWRInfinite from "swr/infinite";
@@ -87,12 +85,12 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
       return res.data.data
   };
   const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-          if(productRef && productRef.current){
-            productRef.current.complete()
-          }
-          return null;
+    setTimeout(async() => {
+      if(productRef && productRef.current){
+        await productRef.current.complete()
       }
+    }, 500)
+      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
       return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${getCategoryStr() ? `&filter[has_categories]=${getCategoryStr()}` : ''}${getSubCategoryStr() ? `&filter[has_sub_categories]=${getSubCategoryStr()}` : ''}`;
   }, [productData && productData.product.slug])
   

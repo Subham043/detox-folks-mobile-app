@@ -2,7 +2,7 @@ import { IonCol, IonInfiniteScroll, IonInfiniteScrollContent, IonRow } from '@io
 import './CategorySection.css';
 import LoadingCard from '../../components/LoadingCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import { CategoryType } from '../../helper/types';
@@ -26,12 +26,12 @@ const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => 
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+        setTimeout(async() => {
             if(productRef && productRef.current){
-                productRef.current.complete()
+              await productRef.current.complete()
             }
-            return null;
-        }
+        }, 500)
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id`;
     }, [])
     

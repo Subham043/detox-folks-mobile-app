@@ -1,8 +1,6 @@
-import { IonCol, IonContent, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonRow } from '@ionic/react';
+import { IonContent, IonInfiniteScroll, IonInfiniteScrollContent, IonPage } from '@ionic/react';
 import './Product.css';
 import MainHeader from '../../components/MainHeader';
-import CommonHeading from '../../components/CommonHeading';
-import ProductCard from '../../components/ProductCard';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useCallback, useRef, useState } from 'react';
 import { CategoryType, ProductType, SubCategoryType } from '../../helper/types';
@@ -37,12 +35,12 @@ const Product: React.FC = () => {
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!categoryData && !subCategoryData) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+        setTimeout(async() => {
             if(productRef && productRef.current){
-                productRef.current.complete()
+              await productRef.current.complete()
             }
-            return null;
-        }
+        }, 500)
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${categoryData ? '&filter[has_categories]='+categoryData.category.id : ''}${subCategoryData ? '&filter[has_sub_categories]='+subCategoryData.subCategory.id : ''}`;
     }, [categoryData, subCategoryData])
     

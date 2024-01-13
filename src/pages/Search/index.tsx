@@ -5,7 +5,6 @@ import { useCallback, useRef, useState } from 'react';
 import { api_routes } from '../../helper/routes';
 import { GlobalSearchType } from '../../helper/types';
 import LoadingCard from '../../components/LoadingCard';
-import { Virtuoso } from 'react-virtuoso';
 import useSWRInfinite from "swr/infinite";
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import NoData from '../../components/NoData';
@@ -37,12 +36,12 @@ const Search: React.FC = () => {
 
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if (search.length===0) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+        setTimeout(async() => {
             if(productRef && productRef.current){
-                productRef.current.complete()
+              await productRef.current.complete()
             }
-            return null;
-        }
+        }, 500)
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.global_search}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id&filter[search]=${search}`;
     }, [search])
 

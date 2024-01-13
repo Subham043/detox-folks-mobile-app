@@ -2,7 +2,7 @@ import { IonContent, IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonRe
 import './Orders.css';
 import MainHeader from '../../components/MainHeader';
 import { api_routes } from '../../helper/routes';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useAuth } from '../../context/AuthProvider';
 import useSWRInfinite from "swr/infinite";
@@ -28,12 +28,12 @@ const Orders: React.FC = () =>{
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!auth.authenticated) return null;
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
+        setTimeout(async() => {
             if(productRef && productRef.current){
-                productRef.current.complete()
+              await productRef.current.complete()
             }
-            return null;
-        }
+        }, 500)
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.place_order_paginate_success}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
     }, [])
     const {

@@ -88,12 +88,12 @@ const ProductDetail: React.FC<ProductProps> = ({match}) => {
       return productData ? productData.product.sub_categories.map(item => item.id).join('_') : null;
   }
   const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) {
-          if(productRef && productRef.current){
-              productRef.current.complete()
-          }
-          return null;
+    setTimeout(async() => {
+      if(productRef && productRef.current){
+        await productRef.current.complete()
       }
+  }, 500)
+      if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
       return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${getCategoryStr() ? `&filter[has_categories]=${getCategoryStr()}` : ''}${getSubCategoryStr() ? `&filter[has_sub_categories]=${getSubCategoryStr()}` : ''}`;
   }, [productData && productData.product.slug])
   

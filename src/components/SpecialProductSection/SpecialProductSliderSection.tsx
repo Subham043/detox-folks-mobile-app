@@ -23,7 +23,7 @@ const SpecialProductSliderSection: React.FC<Props> = ({inHomePage=true, slug, na
     const axiosPrivate = useAxiosPrivate();
     const fetcher = (url: string) => axiosPrivate.get(url).then((res) => res.data.data);
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        if (previousPageData && previousPageData.length===0) return null;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${slug ? `&filter[${slug}]=true` : ''}`;
     }, [slug])
     
