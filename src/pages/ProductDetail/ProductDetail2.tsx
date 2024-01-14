@@ -164,7 +164,7 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
                 </div>
                 <CommonHeading text='Related Products' />
                 {
-                  (data ? data.flat(): []).map((item, i) =><MainProductCard {...item} key={i} />)
+                  (data ? data.flat(): []).map((item, i) => item.id !== productData.product.id && <MainProductCard {...item} key={i} />)
                 }
                 {
                   (isLoading) && <LoadingCard itemCount={3} column={12} height='300px' />

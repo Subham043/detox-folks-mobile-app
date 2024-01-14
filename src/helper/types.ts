@@ -328,6 +328,7 @@ export interface BillingAddressType<> {
     address: string;
     country: string;
     pin: number;
+    map_information: MapAddressResponse;
     is_active: boolean;
     created_at: string;
     updated_at: string;
@@ -374,6 +375,7 @@ export interface OrderProductType<> {
     brief_description: string;
     name: string;
     image: string;
+    unit: string;
     created_at: string;
     updated_at: string;
 }

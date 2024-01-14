@@ -23,7 +23,7 @@ const OrderItem: React.FC<OrderProductType> = (props) =>
                     </div>
                     <IonText color="dark" class='order-item-text'>
                         <p className="cart-card-item-text order-item-name">{props.name}</p>
-                        <p className="cart-card-item-price"><b>&#8377;{props.discount_in_price}</b> / pieces</p>
+                        <p className="cart-card-item-price"><b>&#8377;{props.discount_in_price}</b> / {props.unit}</p>
                     </IonText>
                 </div>
             </IonCol>

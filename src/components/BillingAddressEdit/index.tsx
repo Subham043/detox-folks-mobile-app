@@ -82,30 +82,26 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
     } = useForm({
         resolver: yupResolver(schema),
         values: props.isEdit ? {
-          country: props.data.country,
-          state: props.data.state,
-          city: props.data.city,
-          pin: props.data.pin.toString(),
+          country: mapAddress ? mapAddress.address.countryName : props.data.country,
+          state: mapAddress ? mapAddress.address.state : props.data.state,
+          city:  mapAddress ? mapAddress.address.city : props.data.city,
+          pin:  mapAddress ? mapAddress.address.postalCode : props.data.pin.toString(),
           address: props.data.address,
         } : {
           country: mapAddress ? mapAddress.address.countryName : '',
           state: mapAddress ? mapAddress.address.state : '',
           city:  mapAddress ? mapAddress.address.city : '',
           pin:  mapAddress ? mapAddress.address.postalCode : '',
-          address:  mapAddress ? mapAddress.address.label : '',
+          address:  '',
         }
     });
 
-    // useEffect(()=>{
-    //     if(props.isEdit){
-    //         setValue('country', props.data.country);
-    //         setValue('state', props.data.state);
-    //         setValue('city', props.data.city);
-    //         setValue('pin', props.data.pin.toString());
-    //         setValue('address', props.data.address);
-    //     }
+    useEffect(()=>{
+        if(props.isEdit){
+          setMarkerLocation({lat: props.data.map_information.position.lat, lng: props.data.map_information.position.lng})
+        }
 
-    // }, [props.isEdit])
+    }, [props.isEdit])
 
     const onSubmit = async () => {
         setLoading(true);
@@ -166,7 +162,7 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
                 <h6>Delivery Address</h6>
             </div>
         </div>
-        <Map currentLocation={currentLocation} setCurrentLocation={setCurrentLocation} markerLocation={markerLocation} setMarkerLocation={setMarkerLocation} mapAddress={mapAddress} setMapAddress={setMapAddress} />
+        <Map currentLocation={currentLocation} setCurrentLocation={setCurrentLocation} markerLocation={markerLocation} setMarkerLocation={setMarkerLocation} mapAddress={mapAddress} setMapAddress={setMapAddress} isEdit={props.isEdit} />
         <div className="page-padding mt-1">
           <div className='billing-info-section'>
               <IonText>

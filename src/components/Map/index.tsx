@@ -31,6 +31,7 @@ const requestPermission:() => Promise<boolean> = async () => {
 let HereMap:any = undefined;
 
 type Props = {
+    isEdit: boolean;
     currentLocation:  {
         lat: number;
         lng: number;
@@ -51,7 +52,7 @@ type Props = {
     setMapAddress: React.Dispatch<React.SetStateAction<MapAddressResponse | undefined>>
 }
 
-const Map:FC<Props> = ({currentLocation, setCurrentLocation, markerLocation, setMarkerLocation, mapAddress, setMapAddress}) => {
+const Map:FC<Props> = ({currentLocation, setCurrentLocation, markerLocation, setMarkerLocation, mapAddress, setMapAddress, isEdit}) => {
     const [permissionDeniedType, setPermissionDeniedType] = useState<'disabled' | 'denied'>('disabled');
     const [locationPermission, setLocationPermission] = useState<boolean>(true);
     const [locationPermissionLoading, setLocationPermissionLoading] = useState<boolean>(true);
@@ -101,7 +102,9 @@ const Map:FC<Props> = ({currentLocation, setCurrentLocation, markerLocation, set
         try {
             const currentPosition = await getCurrentPosition();
             setCurrentLocation({lat: currentPosition.coords.latitude, lng: currentPosition.coords.longitude});
-            setMarkerLocation({lat: currentPosition.coords.latitude, lng: currentPosition.coords.longitude});
+            if(!isEdit){
+                setMarkerLocation({lat: currentPosition.coords.latitude, lng: currentPosition.coords.longitude});
+            }
             setLocationPermission(true);
         } catch (error:any) {
             if(error?.message === 'Location services are not enabled'){
