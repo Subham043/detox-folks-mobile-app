@@ -24,17 +24,17 @@ interface ProductProps extends RouteComponentProps<{
 }> {}
 
 const ProductDetailCartQuantity = ({product}:{product:ProductType}) => {
-  const {quantity, cartItemLoading, incrementQuantity, decrementQuantity, changeQuantity} = useCart({id:product.id, product_prices:product.product_prices, min_cart_quantity:product.min_cart_quantity, cart_quantity_interval:product.cart_quantity_interval});
+  const {quantity, cartItemLoading, incrementQuantity, decrementQuantity, changeQuantity} = useCart({id:product.id, product, product_prices:product.product_prices, min_cart_quantity:product.min_cart_quantity, cart_quantity_interval:product.cart_quantity_interval});
   return <CartQuantity2 quantity={quantity} min_cart_quantity={product.min_cart_quantity} incrementQuantity={incrementQuantity} decrementQuantity={decrementQuantity} changeQuantity={changeQuantity} loading={cartItemLoading} />
 }
 
 const ProductDetailPrice = ({product}:{product:ProductType}) => {
-  const {cart_product_item} = useCart({id:product.id, product_prices:product.product_prices, min_cart_quantity:product.min_cart_quantity, cart_quantity_interval:product.cart_quantity_interval});
+  const {cart_product_item} = useCart({id:product.id, product, product_prices:product.product_prices, min_cart_quantity:product.min_cart_quantity, cart_quantity_interval:product.cart_quantity_interval});
   return <ProductPrice product_prices={product.product_prices} cart_quantity_specification={product.cart_quantity_specification} cart_product_item={cart_product_item} />
 }
 
 const ProductDetailBulkFactor = ({product}:{product:ProductType}) => {
-  const {cart_product_item} = useCart({id:product.id, product_prices:product.product_prices, min_cart_quantity:product.min_cart_quantity, cart_quantity_interval:product.cart_quantity_interval});
+  const {cart_product_item} = useCart({id:product.id, product, product_prices:product.product_prices, min_cart_quantity:product.min_cart_quantity, cart_quantity_interval:product.cart_quantity_interval});
   return <div className='product-detail-page-main-bulk-factor page-padding mb-1'>
     <IonCardHeader className='product-detail-card-header'>
         <div className='bulk-offer-wrapper'>

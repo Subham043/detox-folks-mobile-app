@@ -28,15 +28,29 @@ const BillingAddress: React.FC = () => {
     const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
-    const fetcher = async (url: string) => {
-        const res =await axiosPrivate.get(url);
-        setTimeout(async() => {
-          if(productRef && productRef.current){
-            await productRef.current.complete()
+    
+    const fetcher = useCallback(
+        async (url: string) => {
+          if(auth.authenticated){
+            const headers = {
+              headers: {
+                "Authorization" : `Bearer ${auth.token}`,
+                "Accept": 'application/json'
+              }
+            }
+            const res =  await axiosPrivate.get(url,headers);
+            setTimeout(async() => {
+                if(productRef && productRef.current){
+                  await productRef.current.complete()
+                }
+            }, 500)
+            return res.data.data;
           }
-        }, 500)
-        return res.data.data
-    };
+          return undefined;
+        },
+        [auth],
+    );
+
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!auth.authenticated) return null;
         setTimeout(async() => {

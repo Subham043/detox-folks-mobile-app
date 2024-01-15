@@ -4,6 +4,7 @@ import { api_routes } from "../helper/routes";
 import useSWR, { useSWRConfig } from 'swr'
 import { useAuth } from "./AuthProvider";
 import { axiosPublic } from "../../axios";
+import { useBasicCartContext } from "./BasicCartProvider";
 
 export type CartType = {
     cart: CartDataType[];
@@ -55,6 +56,7 @@ export const useCartContext = () => useContext(CartContext);
 const CartProvider: React.FC<ChildrenType> = ({children}) => {
     const { auth } = useAuth();
     const { mutate } = useSWRConfig();
+    const {cart:basicCart, updateCart: updateBasicCart} = useBasicCartContext();
 
     const fetcher = useCallback(
       async (url: string) => {
@@ -79,6 +81,8 @@ const CartProvider: React.FC<ChildrenType> = ({children}) => {
     const updateCart = async (cartData: CartType) => {
       if(auth.authenticated){
         updateData(cartData);
+      }else{
+        updateBasicCart(cartData)
       }
     }
     
@@ -88,24 +92,7 @@ const CartProvider: React.FC<ChildrenType> = ({children}) => {
 
     return (
       <CartContext.Provider value={{
-        cart: data ? data : {
-          cart:[], 
-          cart_charges:[], 
-          tax: {
-            id:0,
-            created_at: "",
-            updated_at: "",
-            tax_in_percentage: 0,
-            tax_name: "",
-            tax_slug: "",
-          },
-          coupon_applied: null,
-          cart_subtotal:0, 
-          discount_price: 0, 
-          total_charges: 0, 
-          total_price: 0, 
-          total_tax: 0
-        }, 
+        cart: data ? data : basicCart, 
         updateCart, 
         fetchCart, 
         cartLoading

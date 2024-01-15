@@ -34,15 +34,18 @@ import './theme/global.css';
 import SwrLayout from './layout/SwrLayout';
 import { ToastContainer } from 'react-toastify';
 import CartProvider from './context/CartProvider';
+import BasicCartProvider from './context/BasicCartProvider';
 
 setupIonicReact();
 
 const App: React.FC = () => <AuthProvider>
   <SwrLayout>
-    <CartProvider>
-      <PageTabs />
-      <ToastContainer />
-    </CartProvider>
+    <BasicCartProvider>
+      <CartProvider>
+        <PageTabs />
+        <ToastContainer />
+      </CartProvider>
+    </BasicCartProvider>
   </SwrLayout>
 </AuthProvider>
 

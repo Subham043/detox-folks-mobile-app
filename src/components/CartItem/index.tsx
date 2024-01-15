@@ -7,7 +7,7 @@ import './CartItem.css';
 
 const CartItem: React.FC<CartType> = ({ product, product_price, amount }) => {
     const [imgLoading, setImgLoading] = useState<boolean>(true);
-    const {quantity, cartItemLoading, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id: product.id, product_prices: product.product_prices, min_cart_quantity: product.min_cart_quantity, cart_quantity_interval: product.cart_quantity_interval});
+    const {quantity, cartItemLoading, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id: product.id, product:product, product_prices: product.product_prices, min_cart_quantity: product.min_cart_quantity, cart_quantity_interval: product.cart_quantity_interval});
 
     return <IonItemDivider className="cart-divider">
         <IonRow className="ion-align-items-center ion-justify-content-between w-100">

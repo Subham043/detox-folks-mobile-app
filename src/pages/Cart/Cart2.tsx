@@ -3,7 +3,7 @@ import './Cart.css';
 import MainHeader from '../../components/MainHeader';
 import EmptyCart from '../../components/EmptyCart';
 import { useCartContext } from '../../context/CartProvider';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { api_routes } from '../../helper/routes';
 import { useAuth } from '../../context/AuthProvider';
@@ -16,20 +16,39 @@ import CartItem2 from '../../components/CartItem/CartItem2';
 import BillingInformationModal from '../../components/BillingInformationModal';
 import BillingAddressModal from '../../components/BillingAddressModal';
 import CheckoutModal from '../../components/CheckoutModal';
+import { axiosPublic } from '../../../axios';
 
 const Cart2: React.FC = () => {
+    
     const { cart, cartLoading } = useCartContext();
     const { auth } = useAuth();
     const location = useLocation();
     const router = useIonRouter();
     const { mutate } = useSWRConfig();
+    const fetcher = useCallback(
+        async (url: string) => {
+          if(auth.authenticated){
+            const headers = {
+              headers: {
+                "Authorization" : `Bearer ${auth.token}`,
+                "Accept": 'application/json'
+              }
+            }
+            const res =  await axiosPublic.get(url,headers)
+            return res.data;
+          }
+          return undefined;
+        },
+        [auth],
+    );
+
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isBillingInfoOpen, setIsBillingInfoOpen] = useState<boolean>(false);
     const [isBillingAddressOpen, setIsBillingAddressOpen] = useState<boolean>(false);
     const [selectedBillingInformationData, setSelectedBillingInformationData] = useState<number>(0)
     const [selectedBillingAddressData, setSelectedBillingAddressData] = useState<number>(0)
-    const { data:billingInformationData, isLoading:billingInformationLoading } = useSWR<BillingInformationResponseType>(auth.authenticated ? api_routes.billing_information_all : null);
-    const { data:billingAddressData, isLoading:billingAddressLoading } = useSWR<BillingAddressResponseType>(auth.authenticated ? api_routes.billing_address_all : null);
+    const { data:billingInformationData, isLoading:billingInformationLoading } = useSWR<BillingInformationResponseType>(auth.authenticated ? api_routes.billing_information_all : null, fetcher);
+    const { data:billingAddressData, isLoading:billingAddressLoading } = useSWR<BillingAddressResponseType>(auth.authenticated ? api_routes.billing_address_all : null, fetcher);
     const { data:legalData } = useSWR<LegalResponseType>(api_routes.legal);
     useEffect(()=>{
         let isMounted = true;
@@ -223,6 +242,8 @@ const Cart2: React.FC = () => {
                                 <BillingAddressModal isOpen={isBillingAddressOpen} setIsOpen={setIsBillingAddressOpen} billingAddressData={billingAddressData} billingAddressLoading={billingAddressLoading} selectedBillingAddressData={selectedBillingAddressData} setSelectedBillingAddressData={setSelectedBillingAddressData} />
 
                                 <CheckoutModal isOpen={isOpen} setIsOpen={setIsOpen} selectedBillingAddressData={selectedBillingAddressData} selectedBillingInformationData={selectedBillingInformationData} />
+
+                                <div className="cart-fixed-spacing-2"></div>
                                 
                                 {((billingAddressData && billingAddressData.data.length>0) && (billingInformationData && billingInformationData.data.length>0)) && <>
                                     <IonItemDivider className="view-cart-checkout-btn-main-container" slot="fixed">
@@ -258,7 +279,6 @@ const Cart2: React.FC = () => {
                                             </IonRow>
                                         </div>
                                     </IonItemDivider>
-                                    <div className="cart-fixed-spacing-2"></div>
                                 </>}
                             </>
                         }

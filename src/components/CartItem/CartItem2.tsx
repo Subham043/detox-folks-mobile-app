@@ -7,7 +7,7 @@ import './CartItem.css';
 
 const CartItem2: React.FC<CartType> = ({ product, product_price, amount }) => {
     const [imgLoading, setImgLoading] = useState<boolean>(true);
-    const {quantity, cartItemLoading, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id: product.id, product_prices: product.product_prices, min_cart_quantity: product.min_cart_quantity, cart_quantity_interval: product.cart_quantity_interval});
+    const {quantity, cartItemLoading, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id: product.id, product:product, product_prices: product.product_prices, min_cart_quantity: product.min_cart_quantity, cart_quantity_interval: product.cart_quantity_interval});
 
     return <div className="cart-item-container">
         <div className="cart-item-row">
