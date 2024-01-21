@@ -84,7 +84,7 @@ const Search: React.FC = () => {
                     isSearchLoading && <LoadingCard itemCount={6} column={12} />
                 }
                 {
-                    (!isSearchLoading && (searchData ? searchData.flat(): []).length===0 && search.length!==0) && <NoData message='No data is available!' />
+                    (!isSearchLoading && searchData && searchData.flat().length===0 && search.length!==0) && <NoData message='No data is available!' />
                 }
                 <IonInfiniteScroll
                     ref={productRef}

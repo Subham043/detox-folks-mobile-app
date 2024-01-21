@@ -38,6 +38,8 @@
 }
 
 .main-product-slider.main-previous-order-slider .cart-item-container .cart-item-row .cart-item-img-container .cart-card-item-img {
-    height: 50px;
+    height: auto;
     width: 50px;
+    object-fit: contain;
+    object-position: left;
 }

@@ -73,7 +73,7 @@ const Product2: React.FC = () => {
                             (isLoading) && <LoadingCard itemCount={3} column={12} height='300px' />
                         }
                         {
-                            (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
+                            (!isLoading && data && data.flat().length===0) && <NoData message='No product is available!' />
                         }
                         <IonInfiniteScroll
                             ref={productRef}
@@ -245,7 +245,7 @@ const SubCategorySelection:React.FC<{
         (isLoading) && <LoadingCard itemCount={6} column={4} />
     }
     {
-        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No sub-category is available!' />
+        (!isLoading && data && data.flat().length===0) && <NoData message='No sub-category is available!' />
     }
     <IonInfiniteScroll
         ref={productRef}

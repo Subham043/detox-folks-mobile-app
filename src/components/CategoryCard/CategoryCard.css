@@ -33,7 +33,7 @@
 
 .category-card-2 .category-card-image{
     width: auto;
-    height: 80px;
+    height: auto;
     object-fit: cover;
 }
 

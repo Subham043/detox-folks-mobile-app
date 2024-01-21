@@ -1,20 +1,14 @@
 import { useAuth } from "../../context/AuthProvider";
-import { Route } from "react-router";
-import Account from "../../pages/Account";
+import { Redirect, Route, RouteProps } from "react-router";
 
 
-const GuestRoute = ({component: Component, ...rest}: any) => {
+const GuestRoute = ({component: Component, ...rest}: RouteProps) => {
     const {auth} = useAuth();
-    return <Route
-        {...rest}
-        render={(props) =>
-        !auth.authenticated ? (
-            <Component {...props} />
-        ) : (
-            <Account />
-        )
-        }
-    />
+    const { path, exact } = {...rest};
+    return !auth.authenticated ? <Route exact={exact} path={path} component={Component}></Route> : 
+    <Route exact={exact} path={path}>
+        <Redirect to="/account" />
+    </Route>;
     
 }
 export default GuestRoute

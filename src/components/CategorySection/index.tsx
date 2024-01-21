@@ -71,7 +71,7 @@ const CategorySection: React.FC<{inHomePage?:boolean}> = ({inHomePage=true}) => 
                     isLoading && <LoadingCard itemCount={6} column={4} />
                 }
                 {
-                    (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No category is available!' />
+                    (!isLoading && data && data.flat().length===0) && <NoData message='No category is available!' />
                 }
                 {
                     !inHomePage && 

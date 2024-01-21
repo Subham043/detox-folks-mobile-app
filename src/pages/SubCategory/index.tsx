@@ -82,7 +82,7 @@ const SubCategory: React.FC = () => {
                         (isLoading || isCategoryLoading) && <LoadingCard itemCount={6} column={4} />
                     }
                     {
-                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No sub-category is available!' />
+                        (!isLoading && data && data.flat().length===0) && <NoData message='No sub-category is available!' />
                     }
                     <IonInfiniteScroll
                         ref={productRef}

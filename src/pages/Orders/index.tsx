@@ -73,7 +73,7 @@ const Orders: React.FC = () =>{
                 isLoading && <LoadingCard itemCount={6} column={12} />
             }
             {
-                (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No order is available!' />
+                (!isLoading && data && data.flat().length===0) && <NoData message='No order is available!' />
             }
             <IonInfiniteScroll
                 ref={productRef}

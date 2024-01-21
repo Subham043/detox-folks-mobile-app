@@ -65,7 +65,7 @@ const SpecialProductSection: React.FC<Props> = ({inHomePage=true, slug, name}) =
                 (isLoading) && <LoadingCard itemCount={6} column={12} />
             }
             {
-                (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
+                (!isLoading && data && data.flat().length===0) && <NoData message='No product is available!' />
             }
             {
                 inHomePage ? <ShowMoreButton link={`/special-product/${slug}`} /> : 

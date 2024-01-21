@@ -49,7 +49,7 @@ const SpecialProductSliderSection: React.FC<Props> = ({inHomePage=true, slug, na
                         (isLoading) && <LoadingCard itemCount={1} column={12} height='300px' />
                     }
                     {
-                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
+                        (!isLoading && data && data.flat().length===0) && <NoData message='No product is available!' />
                     }
                     <Swiper
                         modules={[Pagination]}

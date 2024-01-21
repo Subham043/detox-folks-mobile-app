@@ -99,4 +99,6 @@
 .cart-item-container .cart-item-row .cart-item-col .cart-item-img-container .cart-card-item-img{
     height: auto;
     width: 60px;
+    object-fit: cover;
+    object-position: center;
 }

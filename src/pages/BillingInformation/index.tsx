@@ -156,7 +156,7 @@ const BillingInformation: React.FC = () => {
                         isLoading && <LoadingCard itemCount={6} column={12} height='70px' />
                     }
                     {
-                        (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No billing information is available. Please add one!' />
+                        (!isLoading && data && data.flat().length===0) && <NoData message='No billing information is available. Please add one!' />
                     }
                     <IonInfiniteScroll
                         ref={productRef}

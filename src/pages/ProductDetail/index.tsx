@@ -181,7 +181,7 @@ const ProductDetail: React.FC<ProductProps> = ({match}) => {
                   (isLoading) && <LoadingCard itemCount={6} column={6} />
                 }
                 {
-                    (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
+                    (!isLoading && data && data.flat().length===0) && <NoData message='No product is available!' />
                 }
                 <IonInfiniteScroll
                     ref={productRef}

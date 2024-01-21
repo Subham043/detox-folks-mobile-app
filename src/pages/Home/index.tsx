@@ -8,10 +8,11 @@ import ViewCartBtn from '../../components/ViewCartBtn';
 import PreviouslyOrdered from '../../components/PreviouslyOrdered';
 
 const images = [
-  '/images/b1.webp',
-  '/images/b2.webp',
-  '/images/b3.webp',
-  '/images/b4.webp',
+  '/images/banner-5.jpg',
+  '/images/banner-4.jpg',
+  '/images/banner-1.jpg',
+  '/images/banner-2.jpg',
+  '/images/banner-3.jpg',
 ];
 
 const Home: React.FC = () => {
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
           fullscreen={false}
           forceOverscroll={false}
         >
-            <div className='ion-padding page-padding home-slider'>
+            <div className='home-slider'>
               <Slider images={images} />
             </div>
             <PreviouslyOrdered />

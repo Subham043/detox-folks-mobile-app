@@ -41,7 +41,7 @@ const Login: React.FC = () =>{
     const [loading, setLoading] = useState<boolean>(false);
     const {setAuth} = useAuth();
     const {toastSuccess, toastError} = useToast();
-    const { mutate } = useSWRConfig()
+    const { mutate } = useSWRConfig();
 
     const {
         handleSubmit,

@@ -71,7 +71,7 @@ const Product: React.FC = () => {
                     (isLoading || isCategoryLoading || isSubCategoryLoading) && <LoadingCard itemCount={3} column={12} height='300px' />
                 }
                 {
-                    (!isLoading && (data ? data.flat(): []).length===0) && <NoData message='No product is available!' />
+                    (!isLoading && data && data.flat().length===0) && <NoData message='No product is available!' />
                 }
                 <IonInfiniteScroll
                     ref={productRef}

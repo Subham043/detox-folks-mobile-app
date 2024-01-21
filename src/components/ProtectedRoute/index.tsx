@@ -1,20 +1,14 @@
 import { useAuth } from "../../context/AuthProvider";
-import { Redirect, Route } from "react-router";
-import Login from "../../pages/Login";
+import { Redirect, Route, RouteProps } from "react-router";
 
 
-const ProtectedRoute = ({component: Component, ...rest}: any) => {
+const ProtectedRoute = ({component: Component, ...rest}: RouteProps) => {
     const {auth} = useAuth();
-    return <Route
-        {...rest}
-        render={(props) =>
-        auth.authenticated ? (
-            <Component {...props} />
-            ) : (
-            <Login />
-        )
-        }
-    />
+    const { path, exact } = {...rest};
+    return auth.authenticated ? <Route exact={exact} path={path} component={Component}></Route> : 
+    <Route exact={exact} path={path}>
+        <Redirect to="/login" />
+    </Route>;
     
 }
 export default ProtectedRoute
