@@ -1,14 +1,14 @@
 import { useAuth } from "../../context/AuthProvider";
-import { Redirect, Route, RouteProps } from "react-router";
+import { Route, RouteProps } from "react-router";
+import Login from "../../pages/Login";
+import { AuthType } from "../../helper/types";
 
 
-const ProtectedRoute = ({component: Component, ...rest}: RouteProps) => {
-    const {auth} = useAuth();
-    const { path, exact } = {...rest};
-    return auth.authenticated ? <Route exact={exact} path={path} component={Component}></Route> : 
-    <Route exact={exact} path={path}>
-        <Redirect to="/login" />
-    </Route>;
+const ProtectedRoute = ({component: Component, ...rest}: RouteProps & AuthType) => {
+    const { path, exact, authenticated } = {...rest};
+    console.log(authenticated);
+    
+    return <Route exact={exact} path={path} component={authenticated ? Component : Login}></Route>;
     
 }
 export default ProtectedRoute

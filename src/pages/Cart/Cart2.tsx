@@ -105,7 +105,7 @@ const Cart2: React.FC = () => {
                             <EmptyCart /> :
                             <>
                                 <div className="page-padding mt-1">
-                                    <div className="delivery-address-card">
+                                    {auth.authenticated && <div className="delivery-address-card">
                                         <h6><IonIcon icon={locationOutline} className='svg-icon' /> <span>Delivery Address</span></h6>
                                         {(!billingAddressLoading && billingAddressData && billingAddressData.data.length>0) ? <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
@@ -123,7 +123,7 @@ const Cart2: React.FC = () => {
                                                 <button onClick={()=>router.push('/billing-address')}>Add</button>
                                             </div>
                                         </div>}
-                                    </div>
+                                    </div>}
 
                                     <div className="delivery-address-card-no-padding mt-1">
                                         {
@@ -136,7 +136,7 @@ const Cart2: React.FC = () => {
                                 </div>
                                 <div className="page-padding">
 
-                                    <div className="delivery-address-card mt-1">
+                                    {auth.authenticated && <div className="delivery-address-card mt-1">
                                         <h6><IonIcon icon={peopleCircleOutline} className='svg-icon' /> <span>Billing Information</span></h6>
                                         {(!billingInformationLoading && billingInformationData && billingInformationData.data.length>0) ? <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
@@ -153,7 +153,7 @@ const Cart2: React.FC = () => {
                                                 <button onClick={()=>router.push('/billing-information')}>Add</button>
                                             </div>
                                         </div>}
-                                    </div>
+                                    </div>}
 
                                     <div className="delivery-address-card-no-padding mt-1">
                                         <div className='cart-total-price-heading'>
@@ -280,6 +280,39 @@ const Cart2: React.FC = () => {
                                         </div>
                                     </IonItemDivider>
                                 </>}
+                                {!auth.authenticated && <IonItemDivider className="view-cart-checkout-btn-main-container" slot="fixed">
+                                    <div className="w-100 no-underline">
+                                        <IonRow className="ion-align-items-center ion-justify-content-center p-0 w-100">
+                                            <IonCol
+                                                size="12"
+                                                className='text-right'
+                                            >
+                                                <IonButton className="pagination-btn m-0" fill='solid' color="dark" onClick={()=>router.push('/account')}>
+                                                    <IonRow className="ion-align-items-center ion-justify-content-center p-0 w-100">
+                                                        <IonCol
+                                                            size="6"
+                                                            className='text-left p-0'
+                                                        >
+                                                            <div>
+                                                                {cart.cart.length} {cart.cart.length===1 ? 'Item' : 'Items'} | &#8377;{cart.total_price}
+                                                            </div>
+                                                        </IonCol>
+                                                        <IonCol
+                                                            size="6"
+                                                            className='text-right p-0'
+                                                        >
+                                                            <div className="view-cart-text-icon-holder">
+                                                                <span>Login</span>
+                                                                <IonIcon icon={chevronForwardOutline} className="svg-icon" />
+                                                            </div>
+                                                        </IonCol>
+                                                    </IonRow>
+                                                        
+                                                </IonButton>
+                                            </IonCol>
+                                        </IonRow>
+                                    </div>
+                                </IonItemDivider>}
                             </>
                         }
                     </>

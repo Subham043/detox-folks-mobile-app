@@ -35,7 +35,6 @@ const PageTabs: React.FC = () => {
   const {auth} = useAuth();
   const { cart } = useCartContext();
   const [hasNetwork, setHasNetwork] = useState<boolean>(true);
-
   
   useEffect(()=>{
     let isMounted = true;
@@ -72,16 +71,26 @@ const PageTabs: React.FC = () => {
             <Route exact path="/search" component={Search}></Route>
             <Route exact path="/cart" component={Cart2}></Route>
             <Route exact path="/special-product/:slug" component={SpecialProduct}></Route>
-            <ProtectedRoute exact path="/setting" component={Setting}></ProtectedRoute>
-            <ProtectedRoute exact path="/contact" component={Contact}></ProtectedRoute>
-            <ProtectedRoute exact path="/account" component={Account}></ProtectedRoute>
-            <ProtectedRoute exact path="/billing-address" component={BillingAddress}></ProtectedRoute>
-            <ProtectedRoute exact path="/billing-information" component={BillingInformation}></ProtectedRoute>
-            <ProtectedRoute exact path="/orders" component={Orders}></ProtectedRoute>
-            <ProtectedRoute exact path="/order/:slug" component={OrderDetail}></ProtectedRoute>
+            <Route exact path="/register" component={Register}></Route>
+            <Route exact path="/forgot-password" component={ForgotPassword}></Route>
+            {/* <Route exact path="/login" component={!auth.authenticated ? Login : Account}></Route> */}
+            <Route exact path="/account" component={auth.authenticated ? Account : Login}></Route>
+            <Route exact path="/setting" component={Setting}></Route>
+            <Route exact path="/contact" component={Contact}></Route>
+            <Route exact path="/billing-address" component={BillingAddress}></Route>
+            <Route exact path="/billing-information" component={BillingInformation}></Route>
+            <Route exact path="/orders" component={Orders}></Route>
+            <Route exact path="/order/:slug" component={OrderDetail}></Route>
+            {/* <ProtectedRoute exact path="/account" component={Account} {...auth}></ProtectedRoute>
+            <ProtectedRoute exact path="/setting" component={Setting} {...auth}></ProtectedRoute>
+            <ProtectedRoute exact path="/contact" component={Contact} {...auth}></ProtectedRoute>
+            <ProtectedRoute exact path="/billing-address" component={BillingAddress} {...auth}></ProtectedRoute>
+            <ProtectedRoute exact path="/billing-information" component={BillingInformation} {...auth}></ProtectedRoute>
+            <ProtectedRoute exact path="/orders" component={Orders} {...auth}></ProtectedRoute>
+            <ProtectedRoute exact path="/order/:slug" component={OrderDetail} {...auth}></ProtectedRoute>
             <GuestRoute exact path="/login" component={Login}></GuestRoute>
             <GuestRoute exact path="/register" component={Register}></GuestRoute>
-            <GuestRoute exact path="/forgot-password" component={ForgotPassword}></GuestRoute>
+            <GuestRoute exact path="/forgot-password" component={ForgotPassword}></GuestRoute> */}
             <Route exact path="/">
               <Redirect to="/home" />
             </Route>
@@ -105,7 +114,7 @@ const PageTabs: React.FC = () => {
               <IonLabel>Cart</IonLabel>
             </IonTabButton>
 
-            <IonTabButton className='main-tabs' tab={auth.authenticated ? "account" : "login"} href={auth.authenticated ? "/account" : "/login"}>
+            <IonTabButton className='main-tabs' tab="account" href="/account">
               <IonIcon icon={personCircleOutline} />
               <IonLabel>Account</IonLabel>
             </IonTabButton>
