@@ -1,15 +1,12 @@
-import { IonButton, IonCheckbox, IonIcon, IonLabel, IonModal, IonSpinner, IonText, useIonLoading } from '@ionic/react';
+import { IonButton, IonCheckbox, IonImg, IonLabel, IonLoading, IonModal, IonSpinner, IonText } from '@ionic/react';
 import './CheckoutModal.css';
 import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { api_routes } from '../../helper/routes';
 import { useHistory } from 'react-router';
-import { cardOutline, cashOutline } from 'ionicons/icons';
 import { useToast } from '../../hooks/useToast';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { Browser } from '@capacitor/browser';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
 
 type Props = {
     isOpen: boolean;
@@ -21,13 +18,13 @@ type Props = {
 const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddressData, selectedBillingInformationData}) => {
     const axiosPrivate = useAxiosPrivate();
     const { toastSuccess, toastError} = useToast();
-    const [present, dismiss] = useIonLoading();
     const history = useHistory();
     const { mutate } = useSWRConfig();
     const [loading, setLoading] = useState<boolean>(false);
+    const [verifyLoading, setVerifyLoading] = useState<boolean>(false);
     const [acceptTerms, setAcceptTerms] = useState<boolean>(true);
     const [includeGst, setIncludeGst] = useState<boolean>(false);
-    const [modeOfPayment, setModeOfPayment] = useState<string>('Online - Phonepe');
+    const [modeOfPayment, setModeOfPayment] = useState<string>('Online - PayU');
 
     const placeOrderHandler = async (data: any) => {
         if(selectedBillingAddressData===0){
@@ -60,8 +57,12 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
             history.push(`/order/${response.data?.order?.id}`);
           }else if(modeOfPayment==='Online - Phonepe'){
             makePayment(response.data?.order?.payment?.phone_pe_payment_link, response.data?.order?.id)
-        }else{
+          }else if(modeOfPayment==='Online - Razorpay'){
             makePayment(response.data?.order?.payment?.razorpay_payment_link, response.data?.order?.id)
+          }else if(modeOfPayment==='Online - PayU'){
+            makePayment(response.data?.order?.payment?.payu_payment_link, response.data?.order?.id)
+          }else if(modeOfPayment==='Online - CashFree'){
+            makePayment(response.data?.order?.payment?.cashfree_payment_link, response.data?.order?.id)
           }
         } catch (error: any) {
           if (error?.response?.data?.message) {
@@ -76,9 +77,7 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
         await Browser.open({ url });
         Browser.addListener('browserFinished', async ()=>{
           try {
-            await present({
-                message: 'Verifying Payment...',
-            });
+            setVerifyLoading(true);
             const response = await axiosPrivate.get(api_routes.place_order_detail+`/${order_id}`);
             if(response.data.order.payment.status!=='PENDING'){
                 toastSuccess('Order placed successfully.');
@@ -89,7 +88,7 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
           } catch (error) {
               console.log(error);
           }finally{
-            await dismiss();
+            setVerifyLoading(false);
           }
         });
     }
@@ -103,44 +102,56 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
                         <p className='billing-info-cart-text'><code>Pick a payment option</code></p>
                     </IonText>
                 </div>
-                <div className='page-padding billing-info-section'>
-                    <div className="payment-option-slider">
-                        <Swiper
-                            modules={[Pagination]}
-                            autoplay={false}
-                            keyboard={false}
-                            slidesPerView={'auto'}
-                            centeredSlides={false}
-                            pagination={false}
-                            spaceBetween={10}
-                            scrollbar={false}
-                            zoom={false}
-                        >
-                            <SwiperSlide>
-                                <div className={modeOfPayment==='Online - Phonepe' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Online - Phonepe')}>
-                                    <IonIcon aria-hidden="true" icon={cardOutline} className='billing-info-section-card-icon'></IonIcon>
-                                    <IonLabel className='billing-info-section-card-text'>
-                                        <h6>Pay Online - Phonepe</h6>
-                                    </IonLabel>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className={modeOfPayment==='Online - Razorpay' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Online - Razorpay')}>
-                                    <IonIcon aria-hidden="true" icon={cardOutline} className='billing-info-section-card-icon'></IonIcon>
-                                    <IonLabel className='billing-info-section-card-text'>
-                                        <h6>Pay Online - Razorpay</h6>
-                                    </IonLabel>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className={modeOfPayment==='Cash On Delivery' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Cash On Delivery')}>
-                                    <IonIcon aria-hidden="true" icon={cashOutline} className='billing-info-section-card-icon'></IonIcon>
-                                    <IonLabel className='billing-info-section-card-text'>
-                                        <h6>Cash On Delivery</h6>
-                                    </IonLabel>
-                                </div>
-                            </SwiperSlide>
-                        </Swiper>
+                <div className='page-padding checkout-modal billing-info-section'>
+                    <div className={modeOfPayment==='Online - PayU' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Online - PayU')}>
+                        <IonImg
+                            src='/images/payu.webp'
+                            alt="Sliders"
+                            className='billing-info-section-card-img'
+                        ></IonImg>
+                        <IonLabel className='billing-info-section-card-text'>
+                            <h6>Pay Online - PayU</h6>
+                        </IonLabel>
+                    </div>
+                    <div className={modeOfPayment==='Online - CashFree' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Online - CashFree')}>
+                        <IonImg
+                            src='/images/cashfree.webp'
+                            alt="Sliders"
+                            className='billing-info-section-card-img'
+                        ></IonImg>
+                        <IonLabel className='billing-info-section-card-text'>
+                            <h6>Pay Online - CashFree</h6>
+                        </IonLabel>
+                    </div>
+                    <div className={modeOfPayment==='Online - Phonepe' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Online - Phonepe')}>
+                        <IonImg
+                            src='/images/phonepe.webp'
+                            alt="Sliders"
+                            className='billing-info-section-card-img'
+                        ></IonImg>
+                        <IonLabel className='billing-info-section-card-text'>
+                            <h6>Pay Online - Phonepe</h6>
+                        </IonLabel>
+                    </div>
+                    <div className={modeOfPayment==='Online - Razorpay' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Online - Razorpay')}>
+                        <IonImg
+                            src='/images/razorpay.webp'
+                            alt="Sliders"
+                            className='billing-info-section-card-img'
+                        ></IonImg>
+                        <IonLabel className='billing-info-section-card-text'>
+                            <h6>Pay Online - Razorpay</h6>
+                        </IonLabel>
+                    </div>
+                    <div className={modeOfPayment==='Cash On Delivery' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>setModeOfPayment('Cash On Delivery')}>
+                        <IonImg
+                            src='/images/money.webp'
+                            alt="Sliders"
+                            className='billing-info-section-card-img'
+                        ></IonImg>
+                        <IonLabel className='billing-info-section-card-text'>
+                            <h6>Cash On Delivery</h6>
+                        </IonLabel>
                     </div>
                 </div>
                 <div className='page-padding billing-info-section'>
@@ -160,6 +171,7 @@ const CheckoutModal: React.FC<Props> = ({isOpen, setIsOpen, selectedBillingAddre
                     </IonButton>
                 </div>
             </div>
+            <IonLoading isOpen={verifyLoading} message="Verifying Payment..." spinner="crescent" />
         </IonModal>
     );
 };

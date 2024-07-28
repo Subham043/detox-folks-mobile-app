@@ -10,6 +10,9 @@ import { Pagination } from 'swiper/modules';
 import './PreviouslyOrdered.css';
 import PreviouseOrderItem from '../PreviousOrderItem';
 import { useAuth } from '../../context/AuthProvider';
+import { Link } from 'react-router-dom';
+import { IonIcon } from '@ionic/react';
+import { chevronForwardOutline } from 'ionicons/icons';
 
 const PAGE_SIZE = 20;
 
@@ -56,7 +59,8 @@ const PreviouslyOrdered: React.FC = () => {
     return (
         (auth.authenticated && (data ? data.flat(): []).length>0) && <>
             <div className="page-padding row-header">
-                <h3>Previously Ordered Items</h3>
+                <h3>Recently Ordered</h3>
+                <Link to='/recently-ordered'><span>Show More</span> <IonIcon icon={chevronForwardOutline} /></Link>
             </div>
             <div className='page-padding slider-padding'>
                 <div className="main-product-slider main-previous-order-slider">

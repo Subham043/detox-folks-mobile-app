@@ -12,6 +12,7 @@ type Props = {
 const CategoryCard: React.FC<Props> = ({text, image, link}) => 
 {
     const [imgLoading, setImgLoading] = useState<boolean>(true);
+    const [imgError, setImgLoadingError] = useState<boolean>(false);
     return <Link className="no-underline" to={link}>
         <IonCard className="category-card">
             {
@@ -20,7 +21,7 @@ const CategoryCard: React.FC<Props> = ({text, image, link}) =>
                     <IonSpinner color='dark' />
                 </div>
             }
-            <IonImg alt="category" src={image} class="category-card-image" onIonImgDidLoad={()=>setImgLoading(false)} />
+            <IonImg alt="category" src={imgError ? '/images/category-all.webp' : image} class="category-card-image" onIonError={()=>{setImgLoading(false); setImgLoadingError(true)}} onIonImgDidLoad={()=>setImgLoading(false)} />
             <IonCardHeader className="category-card-header">
                 <IonText color="dark">
                     <p className="category-card-text">{text}</p>

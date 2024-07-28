@@ -14,6 +14,7 @@ const MainProductCard: React.FC<ProductType> = (props) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const {quantity, cartItemLoading, cart_product_item, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id:props.id, product:props, product_prices:props.product_prices, min_cart_quantity:props.min_cart_quantity, cart_quantity_interval:props.cart_quantity_interval});
     const [imgLoading, setImgLoading] = useState<boolean>(true);
+    const [imgError, setImgLoadingError] = useState<boolean>(false);
     
     return <>
         <div className="product-card product-card-main">
@@ -25,7 +26,7 @@ const MainProductCard: React.FC<ProductType> = (props) => {
                             <IonSpinner color='dark' />
                         </div>
                     }
-                    <IonImg alt="product" src={props.image} className="product-card-image" onIonImgDidLoad={()=>setImgLoading(false)} />
+                    <IonImg alt="product" src={imgError ? '/images/category-all.webp' : props.image} className="product-card-image" onIonError={()=>{setImgLoading(false); setImgLoadingError(true)}} onIonImgDidLoad={()=>setImgLoading(false)} />
                 </button>
                 <div className="product-text-container-gradient">
                     <div className="page-padding product-card-header-container">

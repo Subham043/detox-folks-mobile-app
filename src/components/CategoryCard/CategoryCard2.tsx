@@ -12,13 +12,14 @@ type Props = {
 const CategoryCard2: React.FC<Props> = ({text, image, link}) => 
 {
     const [imgLoading, setImgLoading] = useState<boolean>(true);
+    const [imgError, setImgLoadingError] = useState<boolean>(false);
     return <Link className="no-underline" to={link}>
         <div className="category-card-2">
             <div className="p-relative">
                 {imgLoading && <div className="text-center img-loader">
                     <IonSpinner color='dark' />
                 </div>}
-                <IonImg alt="category" src={image} class="category-card-image" onIonImgDidLoad={()=>setImgLoading(false)} />
+                <IonImg alt="category" src={imgError ? '/images/category-all.webp' : image} class="category-card-image" onIonError={()=>{setImgLoading(false); setImgLoadingError(true)}} onIonImgDidLoad={()=>setImgLoading(false)} />
             </div>
             <IonCardHeader className="category-card-header">
                 <IonText color="dark">

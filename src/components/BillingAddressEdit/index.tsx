@@ -4,14 +4,14 @@ import * as yup from "yup";
 import { useToast } from '../../hooks/useToast';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IonButton, IonCard, IonCardContent, IonItem, IonList, IonSpinner, IonText, IonTextarea } from '@ionic/react';
+import { IonButton, IonItem, IonList, IonSpinner, IonText, IonTextarea } from '@ionic/react';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { api_routes } from '../../helper/routes';
 import Input from '../Input';
 import { ErrorMessage } from '@hookform/error-message';
 import { KeyedMutator } from 'swr';
 import { BillingAddressType, MapAddressResponse } from '../../helper/types';
-import Map from '../Map';
+// import Map from '../Map';
 
 type Props = ({
     isEdit: true;
@@ -67,9 +67,9 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
     const [loading, setLoading] = useState<boolean>(false);
     const axiosPrivate = useAxiosPrivate();
     const {toastSuccess, toastError} = useToast();
-    const [currentLocation, setCurrentLocation] = useState<undefined | {lat:number, lng:number}>();
-    const [markerLocation, setMarkerLocation] = useState<undefined | {lat:number, lng:number}>();
-    const [mapAddress, setMapAddress] = useState<undefined | MapAddressResponse>();
+    // const [currentLocation, setCurrentLocation] = useState<undefined | {lat:number, lng:number}>();
+    // const [markerLocation, setMarkerLocation] = useState<undefined | {lat:number, lng:number}>();
+    // const [mapAddress, setMapAddress] = useState<undefined | MapAddressResponse>();
 
     const {
         handleSubmit,
@@ -82,31 +82,31 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
     } = useForm({
         resolver: yupResolver(schema),
         values: props.isEdit ? {
-          country: mapAddress ? mapAddress.address.countryName : props.data.country,
-          state: mapAddress ? mapAddress.address.state : props.data.state,
-          city:  mapAddress ? mapAddress.address.city : props.data.city,
-          pin:  mapAddress ? mapAddress.address.postalCode : props.data.pin.toString(),
+          country: props.data.country,
+          state: props.data.state,
+          city:  props.data.city,
+          pin:  props.data.pin.toString(),
           address: props.data.address,
         } : {
-          country: mapAddress ? mapAddress.address.countryName : '',
-          state: mapAddress ? mapAddress.address.state : '',
-          city:  mapAddress ? mapAddress.address.city : '',
-          pin:  mapAddress ? mapAddress.address.postalCode : '',
+          country: '',
+          state: '',
+          city:  '',
+          pin:  '',
           address:  '',
         }
     });
 
-    useEffect(()=>{
-        if(props.isEdit){
-          setMarkerLocation({lat: props.data.map_information.position.lat, lng: props.data.map_information.position.lng})
-        }
+    // useEffect(()=>{
+    //     if(props.isEdit){
+    //       setMarkerLocation({lat: props.data.map_information.position.lat, lng: props.data.map_information.position.lng})
+    //     }
 
-    }, [props.isEdit])
+    // }, [props.isEdit])
 
     const onSubmit = async () => {
         setLoading(true);
         try {
-          await axiosPrivate.post(!props.isEdit ? api_routes.billing_address_create : api_routes.billing_address_update+`/${props.isEdit===true ? props.data.id : ''}`, {...getValues(), is_active:true, map_information: mapAddress});
+          await axiosPrivate.post(!props.isEdit ? api_routes.billing_address_create : api_routes.billing_address_update+`/${props.isEdit===true ? props.data.id : ''}`, {...getValues(), is_active:true});
           toastSuccess("Delivery Address created successfully.");
           reset({
             country: "",
@@ -162,7 +162,7 @@ const BillingAddressEdit:React.FC<Props> = (props) => {
                 <h6>Delivery Address</h6>
             </div>
         </div>
-        <Map currentLocation={currentLocation} setCurrentLocation={setCurrentLocation} markerLocation={markerLocation} setMarkerLocation={setMarkerLocation} mapAddress={mapAddress} setMapAddress={setMapAddress} isEdit={props.isEdit} />
+        {/* <Map currentLocation={currentLocation} setCurrentLocation={setCurrentLocation} markerLocation={markerLocation} setMarkerLocation={setMarkerLocation} mapAddress={mapAddress} setMapAddress={setMapAddress} isEdit={props.isEdit} /> */}
         <div className="page-padding mt-1">
           <div className='billing-info-section'>
               <IonText>

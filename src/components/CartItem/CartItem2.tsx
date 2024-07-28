@@ -7,6 +7,7 @@ import './CartItem.css';
 
 const CartItem2: React.FC<CartType> = ({ product, product_price, amount }) => {
     const [imgLoading, setImgLoading] = useState<boolean>(true);
+    const [imgError, setImgLoadingError] = useState<boolean>(false);
     const {quantity, cartItemLoading, incrementQuantity, changeQuantity, decrementQuantity} = useCart({id: product.id, product:product, product_prices: product.product_prices, min_cart_quantity: product.min_cart_quantity, cart_quantity_interval: product.cart_quantity_interval});
 
     return <div className="cart-item-container">
@@ -20,7 +21,7 @@ const CartItem2: React.FC<CartType> = ({ product, product_price, amount }) => {
                                 <IonSpinner color='dark' />
                             </div>
                         }
-                        <IonImg alt="product" className='cart-card-item-img' src={product.image} onIonImgDidLoad={()=>setImgLoading(false)} />
+                        <IonImg alt="product" className='cart-card-item-img' src={imgError ? '/images/category-all.webp' : product.image} onIonError={()=>{setImgLoading(false); setImgLoadingError(true)}} onIonImgDidLoad={()=>setImgLoading(false)} />
                     </div>
                 </div>
                 <div className="cart-item-text-container">

@@ -1,44 +1,41 @@
-import { IonCardHeader, IonCol, IonContent, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonCardHeader, IonCol, IonContent, IonImg, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import './Product.css';
 import MainHeader from '../../components/MainHeader';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { CategoryType, ProductType, SubCategoryType } from '../../helper/types';
 import { api_routes } from '../../helper/routes';
 import useSWRInfinite from "swr/infinite";
 import LoadingCard from '../../components/LoadingCard';
 import MainProductCard from '../../components/MainProductCard';
 import ViewCartBtn from '../../components/ViewCartBtn';
-import { Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import NoData from '../../components/NoData';
+import './Product2.css'
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const PAGE_SIZE = 20;
-const CATEGORY_PAGE_SIZE = 6;
+const CATEGORY_PAGE_SIZE = 10;
+const SUB_CATEGORY_PAGE_SIZE = 10;
 
 const Product2: React.FC = () => {
     const axiosPrivate = useAxiosPrivate();
 
-    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedSubCategory, setSelectedSubCategory] = useState<string>('All');
     const [hasSubCategories, setHasSubCategories] = useState<boolean>(false);
+    const productRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if(productRef && productRef.current){
+            productRef.current.scrollTo(0, 0);
+        }
+    }, [selectedCategory, selectedSubCategory])
     
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);
-        setTimeout(async() => {
-          if(productRef && productRef.current){
-            await productRef.current.complete()
-          }
-        }, 500)
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
-        setTimeout(async() => {
-            if(productRef && productRef.current){
-              await productRef.current.complete()
-            }
-        }, 500)
         if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.products}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=${selectedCategory==='All' ? 'id' : 'name'}${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}${selectedSubCategory!=='All' ? '&filter[has_sub_categories]='+selectedSubCategory : ''}`;
     }, [selectedCategory, selectedSubCategory])
@@ -60,33 +57,41 @@ const Product2: React.FC = () => {
         <IonPage>
             <MainHeader isMainHeader={true} />
             <IonContent
-            fullscreen={false}
-            forceOverscroll={false}
+                fullscreen={false}
+                forceOverscroll={false}
             >
-                <CategorySelectionSlider selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} setHasSubCategories={setHasSubCategories} setSelectedSubCategory={setSelectedSubCategory} />
-                {
-                    hasSubCategories ? <SubCategorySelection selectedCategory={selectedCategory} setHasSubCategories={setHasSubCategories} setSelectedSubCategory={setSelectedSubCategory} hasSubCategories={hasSubCategories} /> :<>
+                <div className='product-2-content-wrapper'>
+                    <div className='product-2-category-content-wrapper' id="categoryScrollableDiv">
+                        <CategorySelectionSlider selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} setHasSubCategories={setHasSubCategories} setSelectedSubCategory={setSelectedSubCategory} />
+                    </div>
+                    <div className='product-2-product-content-wrapper' id="productScrollableDiv" ref={productRef}>
                         {
-                            (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
-                        }
-                        {
-                            (isLoading) && <LoadingCard itemCount={3} column={12} height='300px' />
-                        }
-                        {
-                            (!isLoading && data && data.flat().length===0) && <NoData message='No product is available!' />
-                        }
-                        <IonInfiniteScroll
-                            ref={productRef}
-                            onIonInfinite={(ev) => {
-                                if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
-                                    !isLoading && setSize(size+1);
+                            hasSubCategories ? <SubCategorySelection selectedCategory={selectedCategory} setHasSubCategories={setHasSubCategories} setSelectedSubCategory={setSelectedSubCategory} hasSubCategories={hasSubCategories} /> :<>
+                            {
+                                (isLoading && data===undefined) && <LoadingCard itemCount={3} column={12} height='300px' />
+                            }
+                            <InfiniteScroll
+                                dataLength={(!isLoading && data && data.length>0) ? data.flat().length : 0}
+                                next={() => {
+                                    !isLoading ? setSize(size+1) : null
+                                }}
+                                hasMore={true}
+                                loader={isLoading ? <LoadingCard itemCount={3} column={12} height='300px' /> : null}
+                                scrollableTarget="productScrollableDiv"
+                                style={{height:'100%'}}
+                            >
+                                {
+                                    (data ? data.flat(): []).map((item, i) => <MainProductCard {...item} key={i} />)
                                 }
-                            }}
-                        >
-                            <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-                        </IonInfiniteScroll>
-                    </>
-                }
+                                {
+                                    (!isLoading && data && data.flat().length===0) && <NoData message='No product is available!' />
+                                }
+                            </InfiniteScroll>
+                            </>
+                        }
+                    </div>
+                </div>
+                
                 <ViewCartBtn />
             </IonContent>
         </IonPage>
@@ -140,42 +145,42 @@ const CategorySelectionSlider:React.FC<{
         }
     }
 
-    return <div className='page-padding slider-padding billing-info-section category-selection-section'>
-        <div className="payment-option-slider">
+    return (
+        <>
             {
-                (isCategoryLoading) ? <LoadingCard itemCount={3} column={4} height='30px' /> : 
-                <Swiper
-                    modules={[Pagination]}
-                    autoplay={false}
-                    keyboard={false}
-                    slidesPerView={'auto'}
-                    centeredSlides={false}
-                    pagination={false}
-                    spaceBetween={10}
-                    scrollbar={false}
-                    zoom={false}
-                    onSlideNextTransitionEnd={(swiper)=>((categoryData ? categoryData.flat() : []).length>0 && (swiper.activeIndex+1)>=((categoryData ? categoryData.flat() : []).length/2)) && setCategorySize(categorySize+1)}
-                >
-                    <SwiperSlide>
-                        <div className={selectedCategory==='All' ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>categorySelectionHandler('All')}>
-                            <IonLabel className='billing-info-section-card-text'>
-                                <h6>All</h6>
-                            </IonLabel>
-                        </div>
-                    </SwiperSlide>
-                    {
-                        (categoryData ? categoryData.flat(): []).map((item, i) => <SwiperSlide key={i}>
-                            <div className={selectedCategory===item.id.toString() ? 'billing-info-section-card-active' : 'billing-info-section-card'} onClick={()=>categorySelectionHandler(item)}>
-                                <IonLabel className='billing-info-section-card-text'>
-                                    <h6>{item.name}</h6>
-                                </IonLabel>
-                            </div>
-                        </SwiperSlide>)
-                    }
-                </Swiper>
+                (isCategoryLoading && categoryData===undefined) && <LoadingCard itemCount={8} column={12} />
             }
-        </div>
-    </div>
+            <InfiniteScroll
+                dataLength={(!isCategoryLoading && categoryData && categoryData.length>0) ? categoryData.flat().length : 0}
+                next={() => {
+                    !isCategoryLoading ? setCategorySize(categorySize+1) : null
+                }}
+                hasMore={true}
+                loader={isCategoryLoading ? <LoadingCard itemCount={8} column={12} /> : null}
+                scrollableTarget="categoryScrollableDiv"
+                style={{height:'100%'}}
+            >
+                <div className={selectedCategory==='All' ? 'single-category-item-container single-category-item-container-active' : 'single-category-item-container'} onClick={()=>categorySelectionHandler('All')}>
+                    <IonImg
+                        src='/images/category-all.webp'
+                        alt="Sliders"
+                        class='single-category-item-image'
+                    />
+                    <p className='single-category-item-name'>All</p>
+                </div>
+                {
+                    ((!isCategoryLoading && categoryData && categoryData.length>0) ? categoryData.flat(): []).map((item, i) => <div className={selectedCategory===item.id.toString() ? 'single-category-item-container single-category-item-container-active' : 'single-category-item-container'} key={i} onClick={()=>categorySelectionHandler(item)}>
+                        <IonImg
+                            src={item.image}
+                            alt="Sliders"
+                            class='single-category-item-image'
+                        />
+                        <p className='single-category-item-name'>{item.name}</p>
+                    </div>)
+                }
+            </InfiniteScroll>
+        </>
+    )
 };
 
 const SubCategorySelection:React.FC<{
@@ -185,25 +190,14 @@ const SubCategorySelection:React.FC<{
     setHasSubCategories: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({setHasSubCategories, setSelectedSubCategory, selectedCategory, hasSubCategories}) =>{
     const axiosPrivate = useAxiosPrivate();
-    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);
-        setTimeout(async() => {
-          if(productRef && productRef.current){
-            await productRef.current.complete()
-          }
-        }, 500)
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!hasSubCategories) return null;
-        setTimeout(async() => {
-            if(productRef && productRef.current){
-              await productRef.current.complete()
-            }
-        }, 500)
-        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
-        return `${api_routes.sub_categories}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}`;
+        if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<SUB_CATEGORY_PAGE_SIZE)) return null;
+        return `${api_routes.sub_categories}?total=${SUB_CATEGORY_PAGE_SIZE}&page=${pageIndex+1}&sort=id${selectedCategory!=='All' ? '&filter[has_categories]='+selectedCategory : ''}`;
     }, [selectedCategory])
 
     
@@ -225,39 +219,43 @@ const SubCategorySelection:React.FC<{
         setHasSubCategories(false);
     }
 
-    return <div className='page-padding mt-1'>
-    <IonRow className="ion-align-items-start ion-justify-content-center">
+    return <div className='page-padding mt-1 subcategory-content-wrapper'>
         {
-            (data ? data.flat(): []).map((item, i) => <IonCol
-                size="6"
-                size-xl="3"
-                size-lg="3"
-                size-md="4"
-                size-sm="4"
-                size-xs="4"
-                key={i}
-            >
-                <SubCategoryCard {...item} subCategorySelectionHandler={subCategorySelectionHandler} />
-            </IonCol>)
+            (isLoading && data===undefined) &&  <LoadingCard itemCount={8} column={6} height='160px' />
         }
-    </IonRow>
-    {
-        (isLoading) && <LoadingCard itemCount={6} column={4} />
-    }
-    {
-        (!isLoading && data && data.flat().length===0) && <NoData message='No sub-category is available!' />
-    }
-    <IonInfiniteScroll
-        ref={productRef}
-        onIonInfinite={(ev) => {
-            if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
-                !isLoading && setSize(size+1);
-            }
-        }}
-    >
-        <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-    </IonInfiniteScroll>
-</div>
+        <div className='subcategory-content-wrapper-container' id="subCategoryScrollableDiv">
+            <InfiniteScroll
+                dataLength={(!isLoading && data && data.length>0) ? data.flat().length : 0}
+                next={() => {
+                    console.log('called')
+                    !isLoading ? setSize(size+1) : null
+                }}
+                hasMore={true}
+                loader={isLoading ? <LoadingCard itemCount={3} column={12} height='300px' /> : null}
+                scrollableTarget="productScrollableDiv"
+                style={{height:'100%'}}
+            >
+                <IonRow className="ion-align-items-start ion-justify-content-between subcategory-content-wrapper-container">
+                    {
+                        (data ? data.flat(): []).map((item, i) => <IonCol
+                            size="6"
+                            size-xl="6"
+                            size-lg="6"
+                            size-md="6"
+                            size-sm="6"
+                            size-xs="6"
+                            key={i}
+                        >
+                            <SubCategoryCard {...item} subCategorySelectionHandler={subCategorySelectionHandler} />
+                        </IonCol>)
+                    }
+                </IonRow>
+                {
+                    (!isLoading && data && data.flat().length===0) && <NoData message='No sub-category is available!' />
+                }
+            </InfiniteScroll>
+        </div>
+    </div>
 }
 
 const SubCategoryCard: React.FC<SubCategoryType & {subCategorySelectionHandler: (subCategory: SubCategoryType)=>void}> = (props) => 

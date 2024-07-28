@@ -109,13 +109,13 @@ const ProductDetail2: React.FC<ProductProps> = ({match}) => {
 
   return (
     <IonPage>
-        <MainHeader isMainHeader={false} name={productData ? productData.product.name : 'Product'} />
+        <MainHeader isMainHeader={false} name={productData ? productData.product.name : ''} />
         <IonContent
           fullscreen={false}
           forceOverscroll={false}
         >
             {
-              (isProductLoading) && <LoadingCard itemCount={2} column={12} height='150px' />
+              (isProductLoading) && <LoadingCard itemCount={4} column={12} height='250px' />
             }
             {
               productData && <>

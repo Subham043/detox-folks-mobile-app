@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthType, ChildrenType } from "../helper/types";
 import { GetResult, Preferences } from '@capacitor/preferences';
 import { axiosPublic } from "../../axios";
 import { api_routes } from "../helper/routes";
-import { useIonLoading } from "@ionic/react";
+import { IonLoading } from "@ionic/react";
 
 const authData = {
   authenticated: false,
@@ -40,7 +40,7 @@ const setAuthLocally = async(data: AType) => {
 export const useAuth = () => useContext(AuthContext) as AuthContextType;
 
 const AuthProvider: React.FC<ChildrenType> = ({children}) => {
-    const [present, dismiss] = useIonLoading();
+    const [loading, setLoading] = useState(false);
     const [auth, setAuthDetails] = useState<AType>({
       auth:authData
     });
@@ -71,9 +71,7 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
       let isMounted = true;
       const configSetter = async () => {
         try {
-          await present({
-            message: 'Please wait...',
-          });
+          setLoading(true);
           axiosPublic.interceptors.request.use(
             config => {
                 if(!config.headers['authorization'] && auth.auth.authenticated===true){
@@ -84,7 +82,7 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
             (error) => Promise.reject(error)
           );
         } catch (error) {} finally{
-          await dismiss()
+          setLoading(false);
         }
       }
       (isMounted && auth.auth.authenticated) && configSetter()
@@ -134,6 +132,7 @@ const AuthProvider: React.FC<ChildrenType> = ({children}) => {
     return (
       <AuthContext.Provider value={{...auth, setAuth, logout}}>
           {children}
+          <IonLoading isOpen={loading} message="Please wait..." spinner="crescent" />
       </AuthContext.Provider>
     );
 }

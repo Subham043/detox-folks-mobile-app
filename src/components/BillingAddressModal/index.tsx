@@ -18,7 +18,7 @@ const BillingAddressModal: React.FC<Props> = ({isOpen, setIsOpen, billingAddress
         setIsOpen(false);
         router.push('/billing-address')
     }
-    const selectionHandler = (id:number) => {
+    const selectionHandler: (id:number)=>void = (id:number) => {
         setSelectedBillingAddressData(id)
         setIsOpen(false);
     }

@@ -57,7 +57,7 @@ const SubCategory: React.FC = () => {
 
     return (
         <IonPage>
-            <MainHeader isMainHeader={false} name={categoryData ? categoryData.category.name : 'Sub Category'} />
+            <MainHeader isMainHeader={false} name={categoryData ? categoryData.category.name : ''} />
             <IonContent
                 fullscreen={false}
                 forceOverscroll={false}

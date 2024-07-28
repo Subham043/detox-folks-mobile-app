@@ -1,14 +1,17 @@
-import { IonBadge, IonCard, IonCol, IonContent, IonIcon, IonItem, IonItemDivider, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonText, RefresherEventDetail } from '@ionic/react';
+import { IonBadge, IonButton, IonButtons, IonCard, IonCol, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonLabel, IonModal, IonPage, IonRefresher, IonRefresherContent, IonRow, IonText, IonTitle, IonToolbar, RefresherEventDetail } from '@ionic/react';
 import './OrderDetail.css';
 import MainHeader from '../../components/MainHeader';
 import useSWR from 'swr'
 import { OrderType } from '../../helper/types';
 import { useAuth } from '../../context/AuthProvider';
 import { api_routes } from '../../helper/routes';
-import { RouteComponentProps } from 'react-router';
-import { callOutline, homeOutline, mailOutline, personOutline } from 'ionicons/icons';
+import { RouteComponentProps, useHistory } from 'react-router';
+import { arrowBack, callOutline, chatbubbleEllipsesOutline, homeOutline, mailOutline, personOutline, searchOutline } from 'ionicons/icons';
 import LoadingCard from '../../components/LoadingCard';
 import OrderItem from '../../components/OrderItem';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import OrderHelp from '../../components/OrderHelp';
 
 interface OrderProps extends RouteComponentProps<{
     slug: string;
@@ -17,10 +20,24 @@ interface OrderProps extends RouteComponentProps<{
 const OrderDetail: React.FC<OrderProps> = ({match}) =>{
 
     const {auth} = useAuth();
+    const history = useHistory();
+    const [isOpen, setIsOpen] = useState(false);
     const { data:order, isLoading:loading, mutate } = useSWR<{order: OrderType}>(auth.authenticated ? api_routes.place_order_detail_success + `/${match.params.slug}` : null);
 
     return <IonPage>
-        <MainHeader isMainHeader={false} name={`Order#${order?.order.id}`} />
+        <IonHeader translucent={true} className='main-header'>
+            <IonToolbar mode="ios" className='main-header-toolbar'>
+                <IonButtons slot="start">
+                    <IonButton color='dark' onClick={()=>history.goBack()}>
+                        <IonIcon icon={arrowBack} />
+                    </IonButton>
+                </IonButtons>
+                <IonTitle>{order ? `Order#${order?.order.id}` : ''}</IonTitle>
+                {order && <IonButtons slot="end">
+                    <IonButton className='main-header-button order-detail-help-button' color='dark' onClick={()=>setIsOpen(true)}><span>Help</span> <IonIcon icon={chatbubbleEllipsesOutline} /></IonButton>
+                </IonButtons>}
+            </IonToolbar>
+        </IonHeader>
         <IonContent
         fullscreen={false}
         forceOverscroll={false}
@@ -96,26 +113,28 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                                     </IonCol>
                                 </IonRow>
                             </IonItemDivider>
-                            <IonItemDivider className="cart-divider">
-                                <IonRow className="ion-align-items-center ion-justify-content-between w-100">
-                                    <IonCol
-                                        size="6"
-                                        className='text-left'
-                                    >
-                                        <IonText>
-                                        <p className='order-detail-price-text'>Delivery Charges</p>
-                                        </IonText>
-                                    </IonCol>
-                                    <IonCol
-                                        size="6"
-                                        className='text-right'
-                                    >
-                                        <IonText>
-                                        <p className='order-detail-price-text'><b>Free</b></p>
-                                        </IonText>
-                                    </IonCol>
-                                </IonRow>
-                            </IonItemDivider>
+                            {
+                                order.order.charges.map((item, i)=> (<IonItemDivider className="cart-divider" key={i}>
+                                    <IonRow className="ion-align-items-center ion-justify-content-between w-100">
+                                        <IonCol
+                                            size="6"
+                                            className='text-left'
+                                        >
+                                            <IonText>
+                                            <p className='order-detail-price-text'>{item.charges_name}</p>
+                                            </IonText>
+                                        </IonCol>
+                                        <IonCol
+                                            size="6"
+                                            className='text-right'
+                                        >
+                                            <IonText>
+                                            <p className='order-detail-price-text'><b>₹{item.total_charge_in_amount}</b></p>
+                                            </IonText>
+                                        </IonCol>
+                                    </IonRow>
+                                </IonItemDivider>))
+                            }
                             <IonItemDivider className="cart-divider">
                                 <IonRow className="ion-align-items-center ion-justify-content-between w-100">
                                     <IonCol
@@ -218,6 +237,9 @@ const OrderDetail: React.FC<OrderProps> = ({match}) =>{
                             </IonItem>
                         </div>
                     </IonCard>
+                    <IonModal isOpen={isOpen} onDidDismiss={()=>setIsOpen(false)} id={`order-help-main-modal`} className="post-price-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
+                        <OrderHelp id={order.order.id} showModal={setIsOpen} />
+                    </IonModal>
                 </>
             }
         </IonContent>

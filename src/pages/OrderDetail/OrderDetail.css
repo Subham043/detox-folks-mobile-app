@@ -53,7 +53,7 @@
     align-items: center;
     justify-content: flex-start;
     flex-wrap: nowrap;
-    gap: 10px;
+    /* gap: 10px; */
 }
 
 .order-item-img{
@@ -86,4 +86,12 @@
 .product-detail-page-main-bulk-factor .cart-total-price-heading.cart-total-price-heading-2 h6 {
     color: #ffffff;
     font-size: 1rem;
+}
+
+.order-detail-help-button{
+    font-size: 1rem;
+}
+
+.order-detail-help-button span{
+    margin-right: 5px;
 }

@@ -129,21 +129,21 @@
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-card-price{
     margin: 0;
     color: white;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-family: system-ui;
     font-weight: 800;
     letter-spacing: 1px;
 }
 
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-card-price small{
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-transform: capitalize;
 }
 .product-card-main .product-text-container-gradient .product-card-price-container .col-auto .product-price-modal-btn{
     --color: white !important;
     text-align: left !important;
     width: auto;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: white;
     display: flex;
     align-items: center;

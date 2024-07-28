@@ -1,8 +1,8 @@
-import { IonContent, IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
+import { IonContent, IonPage, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
 import './Orders.css';
 import MainHeader from '../../components/MainHeader';
 import { api_routes } from '../../helper/routes';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useAuth } from '../../context/AuthProvider';
 import useSWRInfinite from "swr/infinite";
@@ -10,29 +10,19 @@ import { OrderType } from '../../helper/types';
 import LoadingCard from '../../components/LoadingCard';
 import OrderCard from '../../components/OrderCard';
 import NoData from '../../components/NoData';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const PAGE_SIZE = 20;
 
 const Orders: React.FC = () =>{
     const axiosPrivate = useAxiosPrivate();
     const {auth} = useAuth();
-    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);
-        setTimeout(async() => {
-          if(productRef && productRef.current){
-            await productRef.current.complete()
-          }
-        }, 500)
         return res.data.data
     };
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if(!auth.authenticated) return null;
-        setTimeout(async() => {
-            if(productRef && productRef.current){
-              await productRef.current.complete()
-            }
-        }, 500)
         if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.place_order_paginate_success}?total=${PAGE_SIZE}&page=${pageIndex+1}`;
     }, [])
@@ -64,27 +54,28 @@ const Orders: React.FC = () =>{
             }}>
                 <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
-            <div className="order-card-wrapper page-padding mt-1 mb-2">
-                {
-                    (data ? data.flat(): []).map((item, i) => <OrderCard {...item} key={i} />)
-                }
-            </div>
             {
-                isLoading && <LoadingCard itemCount={6} column={12} />
+                (isLoading && data===undefined) && <LoadingCard itemCount={6} column={12} />
             }
             {
                 (!isLoading && data && data.flat().length===0) && <NoData message='No order is available!' />
             }
-            <IonInfiniteScroll
-                ref={productRef}
-                onIonInfinite={(ev) => {
-                    if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
-                        !isLoading && setSize(size+1);
+            <div className="order-card-wrapper scroll-freeze page-padding mt-1" id='orderScrollableDiv'>
+                <InfiniteScroll
+                    dataLength={(!isLoading && data && data.length>0) ? data.flat().length : 0}
+                    next={() => {
+                        !isLoading ? setSize(size+1) : null
+                    }}
+                    hasMore={true}
+                    loader={isLoading ? <LoadingCard itemCount={6} column={12} /> : null}
+                    scrollableTarget="orderScrollableDiv"
+                    style={{height:'100%'}}
+                >    
+                    {
+                        (data ? data.flat(): []).map((item, i) => <OrderCard {...item} key={i} />)
                     }
-                }}
-            >
-                <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-            </IonInfiniteScroll>
+                </InfiniteScroll>
+            </div>
         </IonContent>
     </IonPage>
 }

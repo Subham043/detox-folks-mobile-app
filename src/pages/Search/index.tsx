@@ -1,7 +1,7 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonSearchbar, IonToolbar, SearchbarInputEventDetail } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonSearchbar, IonToolbar, SearchbarInputEventDetail } from '@ionic/react';
 import './Search.css';
 import SearchCard from '../../components/SearchCard';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { api_routes } from '../../helper/routes';
 import { GlobalSearchType } from '../../helper/types';
 import LoadingCard from '../../components/LoadingCard';
@@ -9,38 +9,20 @@ import useSWRInfinite from "swr/infinite";
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import NoData from '../../components/NoData';
 import ViewCartBtn from '../../components/ViewCartBtn';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const PAGE_SIZE = 20;
 
-const Footer = () => {
-    return <LoadingCard />
-}
-
-const Spacing = () => {
-    return <div className='pb-1' />
-}
-
 const Search: React.FC = () => {
     const axiosPrivate = useAxiosPrivate();
-    const productRef = useRef<HTMLIonInfiniteScrollElement | null>(null);
     const fetcher = async (url: string) => {
         const res =await axiosPrivate.get(url);
-        setTimeout(async() => {
-            if(productRef && productRef.current){
-                await productRef.current.complete()
-            }
-        }, 500)
         return res.data.data
     };
     const [search, setSearch] = useState<string>("");
 
     const getKey = useCallback((pageIndex:any, previousPageData:any) => {
         if (search.length===0) return null;
-        setTimeout(async() => {
-            if(productRef && productRef.current){
-              await productRef.current.complete()
-            }
-        }, 500)
         if ((previousPageData && previousPageData.length===0) || (previousPageData && previousPageData.length<PAGE_SIZE)) return null;
         return `${api_routes.global_search}?total=${PAGE_SIZE}&page=${pageIndex+1}&sort=id&filter[search]=${search}`;
     }, [search])
@@ -75,27 +57,28 @@ const Search: React.FC = () => {
             forceOverscroll={false}
             style={{'--background': '#f2f2f2'}}
             >
-                <div className="page-padding">
-                    {
-                        (searchData ? searchData.flat(): []).map((item, index) => <SearchCard link={item.search_type=='PRODUCT' ? `/product-detail/${item.slug}` : (item.search_type=='CATEGORY' ? `/product?category_slug=${item.slug}` : `/product?sub_category_slug=${item.slug}`)} image={item.image} text={item.name} type={item.search_type} key={index} />)
-                    }
-                </div>
                 {
-                    isSearchLoading && <LoadingCard itemCount={6} column={12} />
+                    (isSearchLoading && search.length!==0) && <LoadingCard itemCount={6} column={12} />
                 }
                 {
                     (!isSearchLoading && searchData && searchData.flat().length===0 && search.length!==0) && <NoData message='No data is available!' />
                 }
-                <IonInfiniteScroll
-                    ref={productRef}
-                    onIonInfinite={(ev) => {
-                        if (ev.target.scrollTop + ev.target.offsetHeight>= ev.target.scrollHeight ){
-                            !isSearchLoading && setSize(size+1);
+                <div className="page-padding scroll-freeze" id="searchScrollableDiv">
+                    <InfiniteScroll
+                        dataLength={(!isSearchLoading && searchData && searchData.length>0) ? searchData.flat().length : 0}
+                        next={() => {
+                            !isSearchLoading ? setSize(size+1) : null
+                        }}
+                        hasMore={true}
+                        loader={isSearchLoading ? <LoadingCard itemCount={6} column={12} /> : null}
+                        scrollableTarget="searchScrollableDiv"
+                        style={{height:'100%'}}
+                    >
+                        {
+                            (searchData ? searchData.flat(): []).map((item, index) => <SearchCard link={item.search_type=='PRODUCT' ? `/product-detail/${item.slug}` : (item.search_type=='CATEGORY' ? `/product?category_slug=${item.slug}` : `/product?sub_category_slug=${item.slug}`)} image={item.image} text={item.name} type={item.search_type} key={index} />)
                         }
-                    }}
-                >
-                    <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-                </IonInfiniteScroll>
+                    </InfiniteScroll>
+                </div>
                 <ViewCartBtn />
             </IonContent>
         </IonPage>

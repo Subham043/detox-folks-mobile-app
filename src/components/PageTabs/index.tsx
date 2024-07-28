@@ -15,8 +15,6 @@ import Setting from "../../pages/Setting";
 import Account from "../../pages/Account";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
-import GuestRoute from "../GuestRoute";
-import ProtectedRoute from "../ProtectedRoute";
 import SpecialProduct from "../../pages/SpecialProduct";
 import { useCartContext } from "../../context/CartProvider";
 import BillingAddress from "../../pages/BillingAddress";
@@ -29,6 +27,7 @@ import Contact from "../../pages/Contact";
 import Cart2 from "../../pages/Cart/Cart2";
 import Product2 from "../../pages/Product/Product2";
 import ProductDetail2 from "../../pages/ProductDetail/ProductDetail2";
+import PreviouslyOrderedProduct from "../../pages/PreviouslyOrderedProduct";
 
 const PageTabs: React.FC = () => {
 
@@ -73,7 +72,6 @@ const PageTabs: React.FC = () => {
             <Route exact path="/special-product/:slug" component={SpecialProduct}></Route>
             <Route exact path="/register" component={Register}></Route>
             <Route exact path="/forgot-password" component={ForgotPassword}></Route>
-            {/* <Route exact path="/login" component={!auth.authenticated ? Login : Account}></Route> */}
             <Route exact path="/account" component={auth.authenticated ? Account : Login}></Route>
             <Route exact path="/setting" component={Setting}></Route>
             <Route exact path="/contact" component={Contact}></Route>
@@ -81,16 +79,7 @@ const PageTabs: React.FC = () => {
             <Route exact path="/billing-information" component={BillingInformation}></Route>
             <Route exact path="/orders" component={Orders}></Route>
             <Route exact path="/order/:slug" component={OrderDetail}></Route>
-            {/* <ProtectedRoute exact path="/account" component={Account} {...auth}></ProtectedRoute>
-            <ProtectedRoute exact path="/setting" component={Setting} {...auth}></ProtectedRoute>
-            <ProtectedRoute exact path="/contact" component={Contact} {...auth}></ProtectedRoute>
-            <ProtectedRoute exact path="/billing-address" component={BillingAddress} {...auth}></ProtectedRoute>
-            <ProtectedRoute exact path="/billing-information" component={BillingInformation} {...auth}></ProtectedRoute>
-            <ProtectedRoute exact path="/orders" component={Orders} {...auth}></ProtectedRoute>
-            <ProtectedRoute exact path="/order/:slug" component={OrderDetail} {...auth}></ProtectedRoute>
-            <GuestRoute exact path="/login" component={Login}></GuestRoute>
-            <GuestRoute exact path="/register" component={Register}></GuestRoute>
-            <GuestRoute exact path="/forgot-password" component={ForgotPassword}></GuestRoute> */}
+            <Route exact path="/recently-ordered" component={PreviouslyOrderedProduct}></Route>
             <Route exact path="/">
               <Redirect to="/home" />
             </Route>

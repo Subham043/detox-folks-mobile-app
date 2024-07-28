@@ -106,22 +106,25 @@ const Cart2: React.FC = () => {
                             <>
                                 <div className="page-padding mt-1">
                                     {auth.authenticated && <div className="delivery-address-card">
-                                        <h6><IonIcon icon={locationOutline} className='svg-icon' /> <span>Delivery Address</span></h6>
+                                        <div className='delivery-address-header'>
+                                            <h6><IonIcon icon={locationOutline} className='svg-icon' /> <span>Delivery Address</span></h6>
+                                            <div className="delivery-select">
+                                                {
+                                                    (!billingAddressLoading && billingAddressData && billingAddressData.data.length>0) ?
+                                                    <button onClick={()=>setIsBillingAddressOpen(true)}>Change</button> :
+                                                    <button onClick={()=>router.push('/billing-address')}>Add</button>
+                                                }
+                                            </div>
+                                        </div>
                                         {(!billingAddressLoading && billingAddressData && billingAddressData.data.length>0) ? <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
                                                 {billingAddressData.data.filter(item => item.id===selectedBillingAddressData).length>0 && <p>{billingAddressData.data.filter(item => item.id===selectedBillingAddressData)[0].address}, {billingAddressData.data.filter(item => item.id===selectedBillingAddressData)[0].city}, {billingAddressData.data.filter(item => item.id===selectedBillingAddressData)[0].state} - {billingAddressData.data.filter(item => item.id===selectedBillingAddressData)[0].pin}, {billingAddressData.data.filter(item => item.id===selectedBillingAddressData)[0].country}</p>}
                                             </IonLabel>
-                                            <div className="delivery-select">
-                                                <button onClick={()=>setIsBillingAddressOpen(true)}>Edit</button>
-                                            </div>
                                         </div>:
                                         <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
                                                 <p><i>Add delivery address to place an order</i></p>
                                             </IonLabel>
-                                            <div className="delivery-select">
-                                                <button onClick={()=>router.push('/billing-address')}>Add</button>
-                                            </div>
                                         </div>}
                                     </div>}
 
@@ -137,21 +140,24 @@ const Cart2: React.FC = () => {
                                 <div className="page-padding">
 
                                     {auth.authenticated && <div className="delivery-address-card mt-1">
-                                        <h6><IonIcon icon={peopleCircleOutline} className='svg-icon' /> <span>Billing Information</span></h6>
+                                        <div className='delivery-address-header'>
+                                            <h6><IonIcon icon={peopleCircleOutline} className='svg-icon' /> <span>Billing Information</span></h6>
+                                            <div className="delivery-select">
+                                                {
+                                                    (!billingInformationLoading && billingInformationData && billingInformationData.data.length>0) ?
+                                                    <button onClick={()=>setIsBillingInfoOpen(true)}>Change</button>:
+                                                    <button onClick={()=>router.push('/billing-information')}>Add</button>
+                                                }
+                                            </div>
+                                        </div>
                                         {(!billingInformationLoading && billingInformationData && billingInformationData.data.length>0) ? <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
                                                 {billingInformationData.data.filter(item => item.id===selectedBillingInformationData).length>0 && <p>{billingInformationData.data.filter(item => item.id===selectedBillingInformationData)[0].name}, {billingInformationData.data.filter(item => item.id===selectedBillingInformationData)[0].email}, {billingInformationData.data.filter(item => item.id===selectedBillingInformationData)[0].phone}</p>}
                                             </IonLabel>
-                                            <div className="delivery-select">
-                                                <button onClick={()=>setIsBillingInfoOpen(true)}>Edit</button>
-                                            </div>
                                         </div> : <div className="delivery-card-row">
                                             <IonLabel className="delivery-detail">
                                                 <p><i>Add billing information to place an order</i></p>
                                             </IonLabel>
-                                            <div className="delivery-select">
-                                                <button onClick={()=>router.push('/billing-information')}>Add</button>
-                                            </div>
                                         </div>}
                                     </div>}
 
@@ -180,26 +186,38 @@ const Cart2: React.FC = () => {
                                                     </IonCol>
                                                 </IonRow>
                                             </div>
-                                            <div className="cart-divider">
-                                                <IonRow className="ion-align-items-center ion-justify-content-between w-100">
-                                                    <IonCol
-                                                        size="6"
-                                                        className='text-left'
-                                                    >
-                                                        <IonText>
-                                                        <p className='cart-text'>Delivery Charges</p>
-                                                        </IonText>
-                                                    </IonCol>
-                                                    <IonCol
-                                                        size="6"
-                                                        className='text-right'
-                                                    >
-                                                        <IonText>
-                                                        <p className='cart-text'><b>Free</b></p>
-                                                        </IonText>
-                                                    </IonCol>
-                                                </IonRow>
-                                            </div>
+                                            {
+                                                cart.cart_charges.map((item, i) => (<div className="cart-divider" key={i}>
+                                                    <IonRow className="ion-align-items-center ion-justify-content-between w-100">
+                                                        <IonCol
+                                                            size="6"
+                                                            className='text-left'
+                                                        >
+                                                            <IonText>
+                                                            <p className='cart-text'>{item.charges_name} {item.is_percentage && <>({item.charges_in_amount}%)</>}</p>
+                                                            </IonText>
+                                                        </IonCol>
+                                                        <IonCol
+                                                            size="6"
+                                                            className='text-right'
+                                                        >
+                                                            <IonText>
+                                                            <p className='cart-text'><b>&#8377;{item.total_charge_in_amount}</b></p>
+                                                            </IonText>
+                                                        </IonCol>
+                                                    </IonRow>
+                                                    {(cart.cart_subtotal<item.include_charges_for_cart_price_below) && <IonRow className="ion-align-items-center ion-justify-content-between w-100">
+                                                        <IonCol
+                                                            size="10"
+                                                            className='text-left'
+                                                        >
+                                                            <IonText>
+                                                            {(cart.cart_subtotal<item.include_charges_for_cart_price_below) && <p className="m-0 cart-charge-info">Add items worth <b>₹{(item.include_charges_for_cart_price_below-cart.cart_subtotal).toFixed(2)}</b> to avoid {item.charges_name}.</p>}
+                                                            </IonText>
+                                                        </IonCol>
+                                                    </IonRow>}
+                                                </div>))
+                                            }
                                             <div className="cart-divider">
                                                 <IonRow className="ion-align-items-center ion-justify-content-between w-100">
                                                     <IonCol

@@ -352,7 +352,6 @@ const Cart: React.FC = () => {
                         }
                     </>
                 }
-                
             </IonContent>
         </IonPage>
     );
